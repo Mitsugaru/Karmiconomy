@@ -1,0 +1,15 @@
+name: Karmiconomy
+main: com.mitsugaru.Karmiconomy.Karmiconomy
+description: Economy suppliment plugin, to provide payments based on actions.
+version: 0.01
+author: Mitsugaru
+depend: [Vault]
+
+commands:
+  kc:
+    description: Root command
+
+permissions:
+  Karmiconomy.admin:
+    description: Administrate plugin
+    default: op
