@@ -6,7 +6,7 @@ author: Mitsugaru
 depend: [Vault]
 
 commands:
-  kc:
+  kcon:
     description: Root command
 
 permissions:

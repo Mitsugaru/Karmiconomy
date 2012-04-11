@@ -125,7 +125,8 @@ public class KarmiconomyListener implements Listener
 				&& event.getPlayer() != null)
 		{
 			final Player player = event.getPlayer();
-			// TODO pay on ignite
+			// TODO THIS IS NOT FOR PLAYERS?
+			//may just get rid of this event
 			// pay by type
 			if(config.debugEvents)
 			{
@@ -182,7 +183,7 @@ public class KarmiconomyListener implements Listener
 				{
 					for(Map.Entry<Enchantment, Integer> entry : event.getEnchantsToAdd().entrySet())
 					{
-						details.put("Enchantment / Level: ", entry.getKey().getName() + "/" + entry.getValue().toString());
+						details.put("Enchantment/Level", entry.getKey().getName() + "/" + entry.getValue().toString());
 					}
 				}
 				debugEvent(event, details);
@@ -266,7 +267,8 @@ public class KarmiconomyListener implements Listener
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void tame(final EntityTameEvent event)
 	{
-		if (!event.isCancelled() && config.tame && event.getOwner() != null)
+		//Move config check inside if
+		if (!event.isCancelled() && (config.tameOcelot || config.tameWolf) && event.getOwner() != null)
 		{
 			if (event.getOwner() instanceof Player)
 			{
@@ -470,7 +472,7 @@ public class KarmiconomyListener implements Listener
 				details.put("Player", player.getName());
 				if(event.getItemDrop() != null)
 				{
-					details.put("Item", event.getItemDrop().toString());
+					details.put("Item", event.getItemDrop().getItemStack().toString());
 				}
 				debugEvent(event, details);
 			}
@@ -490,6 +492,7 @@ public class KarmiconomyListener implements Listener
 				details.put("Player", player.getName());
 				if(event.getEgg() != null)
 				{
+					//TODO pay for specifics
 					details.put("Egg", event.getEgg().toString());
 				}
 				debugEvent(event, details);
@@ -500,7 +503,8 @@ public class KarmiconomyListener implements Listener
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void gameMode(final PlayerGameModeChangeEvent event)
 	{
-		if (!event.isCancelled() && config.gameMode
+		//TODO move config check inside if
+		if (!event.isCancelled() && (config.gameModeCreative || config.gameModeSurvival)
 				&& event.getPlayer() != null)
 		{
 			final Player player = event.getPlayer();

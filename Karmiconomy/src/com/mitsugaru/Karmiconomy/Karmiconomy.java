@@ -42,11 +42,14 @@ public class Karmiconomy extends JavaPlugin
 
 		// Setup economy
 		setupEconomy();
+		
+		//Setup commander
+		commander = new Commander(this);
+		getCommand("kcon").setExecutor(commander);
 		// Setup listener
 		KarmiconomyListener listener = new KarmiconomyListener(this);
 		this.getServer().getPluginManager().registerEvents(listener, this);
-
-		
+		getLogger().info(TAG + " Enabled v" + getDescription().getVersion());
 	}
 
 	private void setupEconomy()
