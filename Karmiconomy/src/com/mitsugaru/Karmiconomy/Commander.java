@@ -50,11 +50,7 @@ public class Commander implements CommandExecutor
 		limit = config.listlimit;
 		time = 0;
 	}
-
-	// TODO refactor parsing the input string for when adding/taking items
-	// and player has specified the item. Throw it into a method for
-	// ks take and ks admin add to utilize, as well as chest access
-	// Probably make a separate karma class to handle this all
+	
 	/**
 	 * Command handler
 	 */
@@ -133,6 +129,18 @@ public class Commander implements CommandExecutor
 							+ " Lack permission: KarmicShare.commands.list");
 				}
 			}
+			else if(com.equals("reload"))
+			{
+				if(perm.checkPermission(sender, "Karmiconomy.admin"))
+				{
+					config.reloadConfig();
+				}
+				else
+				{
+					sender.sendMessage(ChatColor.RED + Karmiconomy.TAG
+							+ " Lack permission: Karmiconomy.admin");
+				}
+			}
 		}
 		if (config.debugTime)
 		{
@@ -186,21 +194,7 @@ public class Commander implements CommandExecutor
 		sender.sendMessage(ChatColor.GREEN + "Coded by Mitsugaru");
 		sender.sendMessage(ChatColor.BLUE + "===========" + ChatColor.GRAY
 				+ "Config" + ChatColor.BLUE + "===========");
-		sender.sendMessage(ChatColor.GRAY + "Effects: " + config.effects);
-		sender.sendMessage(ChatColor.GRAY + "Chests: " + config.chests);
-		sender.sendMessage(ChatColor.GRAY + "Karma enabled: "
-				+ !config.karmaDisabled);
-		sender.sendMessage(ChatColor.GRAY + "Static karma: "
-				+ config.statickarma);
-		sender.sendMessage(ChatColor.GRAY + "Karma lower-upper limit: "
-				+ config.lower + " :: " + config.upper);
-		sender.sendMessage(ChatColor.GRAY + "Karma lower/upper %: "
-				+ config.lowerPercent * 100 + "% / " + config.upperPercent
-				* 100 + "%");
-		sender.sendMessage(ChatColor.GRAY + "Default karma: "
-				+ config.playerKarmaDefault);
-		sender.sendMessage(ChatColor.GRAY + "Default karma rate: "
-				+ config.karmaChange);
+		//sender.sendMessage(ChatColor.GRAY + "Effects: " + config.effects);
 	}
 
 	private void debugTime(CommandSender sender, long time)
