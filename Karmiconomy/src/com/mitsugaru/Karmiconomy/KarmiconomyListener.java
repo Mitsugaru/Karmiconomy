@@ -1,5 +1,7 @@
 package com.mitsugaru.Karmiconomy;
 
+import net.milkbowl.vault.economy.Economy;
+
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -28,6 +30,7 @@ import org.bukkit.event.player.PlayerGameModeChangeEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.event.player.PlayerToggleSprintEvent;
 import org.bukkit.event.vehicle.VehicleEnterEvent;
@@ -35,12 +38,12 @@ import org.bukkit.event.vehicle.VehicleExitEvent;
 
 public class KarmiconomyListener implements Listener
 {
-	private Karmiconomy plugin;
+	private Economy eco;
 	private Config config;
 
 	public KarmiconomyListener(Karmiconomy plugin)
 	{
-		this.plugin = plugin;
+		this.eco = plugin.getEconomy();
 		this.config = plugin.getPluginConfig();
 	}
 
@@ -96,7 +99,7 @@ public class KarmiconomyListener implements Listener
 			{
 				final Player player = (Player) event.getWhoClicked();
 				// TODO pay on craft
-				//pay by type
+				// pay by type
 			}
 		}
 	}
@@ -109,7 +112,7 @@ public class KarmiconomyListener implements Listener
 		{
 			final Player player = event.getEnchanter();
 			// TODO pay on enchant
-			//pay by type
+			// pay by type
 		}
 	}
 
@@ -127,12 +130,11 @@ public class KarmiconomyListener implements Listener
 			}
 		}
 	}
-	
+
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void enterPortal(final EntityPortalEnterEvent event)
 	{
-		if (config.portalEnter
-				&& event.getEntity() != null)
+		if (config.portalEnter && event.getEntity() != null)
 		{
 			if (event.getEntity() instanceof Player)
 			{
@@ -142,7 +144,7 @@ public class KarmiconomyListener implements Listener
 			}
 		}
 	}
-	
+
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void shootBow(final EntityShootBowEvent event)
 	{
@@ -158,208 +160,221 @@ public class KarmiconomyListener implements Listener
 			}
 		}
 	}
-	
+
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void tame(final EntityTameEvent event)
 	{
-		if(!event.isCancelled() && config.tame && event.getOwner() != null)
+		if (!event.isCancelled() && config.tame && event.getOwner() != null)
 		{
-			if(event.getOwner() instanceof Player)
+			if (event.getOwner() instanceof Player)
 			{
 				final Player player = (Player) event.getEntity();
-				//TODO pay on tame
-				//check entity tamed
+				// TODO pay on tame
+				// check entity tamed
 			}
 		}
 	}
-	
+
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void paintingPlace(final PaintingPlaceEvent event)
 	{
-		if(!event.isCancelled() && config.paintingPlace && event.getPlayer() != null)
+		if (!event.isCancelled() && config.paintingPlace
+				&& event.getPlayer() != null)
 		{
 			final Player player = event.getPlayer();
-			//TODO pay on place
-			//TODO also need to get painting break
+			// TODO pay on place
+			// TODO also need to get painting break
 		}
 	}
-	
+
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void bedEnter(final PlayerBedEnterEvent event)
 	{
-		if(!event.isCancelled() && config.bedEnter && event.getPlayer() != null)
+		if (!event.isCancelled() && config.bedEnter
+				&& event.getPlayer() != null)
 		{
 			final Player player = event.getPlayer();
-			//TODO pay on enter
+			// TODO pay on enter
 		}
 	}
-	
+
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void bedLeave(final PlayerBedLeaveEvent event)
 	{
-		if(config.bedLeave && event.getPlayer() != null)
+		if (config.bedLeave && event.getPlayer() != null)
 		{
 			final Player player = event.getPlayer();
-			//TODO pay on leave
+			// TODO pay on leave
 		}
 	}
-	
+
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void bucketEmpty(final PlayerBucketEmptyEvent event)
 	{
-		if(!event.isCancelled() && config.bucketEmpty && event.getPlayer() != null)
+		if (!event.isCancelled() && config.bucketEmpty
+				&& event.getPlayer() != null)
 		{
 			final Player player = event.getPlayer();
-			//TODO pay on empty
+			// TODO pay on empty
 		}
 	}
-	
+
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void bucketFill(final PlayerBucketFillEvent event)
 	{
-		if(!event.isCancelled() && config.bucketFill && event.getPlayer() != null)
+		if (!event.isCancelled() && config.bucketFill
+				&& event.getPlayer() != null)
 		{
 			final Player player = event.getPlayer();
-			//TODO pay on empty
+			// TODO pay on empty
 		}
 	}
-	
+
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void worldChange(final PlayerChangedWorldEvent event)
 	{
-		if(config.worldChange && event.getPlayer() != null)
+		if (config.worldChange && event.getPlayer() != null)
 		{
 			final Player player = event.getPlayer();
-			//TODO pay on change
+			// TODO pay on change
 		}
 	}
-	
+
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void playerDeath(final PlayerDeathEvent event)
 	{
-		if(config.death && event.getEntity() != null)
+		if (config.death && event.getEntity() != null)
 		{
 			final Player player = event.getEntity();
-			//TODO pay on death
+			// TODO pay on death
 		}
 	}
 	
+	@EventHandler(priority = EventPriority.MONITOR)
+	public void playerRespawn(final PlayerRespawnEvent event)
+	{
+		if(config.respawn && event.getPlayer() != null)
+		{
+			final Player player =  event.getPlayer();
+		}
+	}
+
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void itemDrop(final PlayerDropItemEvent event)
 	{
-		if(!event.isCancelled() && config.itemDrop && event.getPlayer() != null)
+		if (!event.isCancelled() && config.itemDrop
+				&& event.getPlayer() != null)
 		{
 			final Player player = event.getPlayer();
-			//TODO pay on drop
+			// TODO pay on drop
 		}
 	}
-	
+
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void eggThrow(final PlayerEggThrowEvent event)
 	{
-		if(config.eggThrow && event.getPlayer() != null)
+		if (config.eggThrow && event.getPlayer() != null)
 		{
 			final Player player = event.getPlayer();
-			//TODO pay on throw
+			// TODO pay on throw
 		}
 	}
-	
+
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void gameMode(final PlayerGameModeChangeEvent event)
 	{
-		if(!event.isCancelled() && config.gameMode && event.getPlayer() != null)
+		if (!event.isCancelled() && config.gameMode
+				&& event.getPlayer() != null)
 		{
 			final Player player = event.getPlayer();
-			//TODO pay on mode
+			// TODO pay on mode
 		}
 	}
-	
+
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void join(final PlayerJoinEvent event)
 	{
-		if(config.join && event.getPlayer() != null)
+		if (config.join && event.getPlayer() != null)
 		{
 			final Player player = event.getPlayer();
-			//TODO pay on join
+			// TODO pay on join
 		}
 	}
-	
+
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void kick(final PlayerKickEvent event)
 	{
-		if(config.kick && event.getPlayer() != null)
+		if (config.kick && event.getPlayer() != null)
 		{
 			final Player player = event.getPlayer();
-			//TODO pay on kick
+			// TODO pay on kick
 		}
 	}
-	
+
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void quit(final PlayerQuitEvent event)
 	{
-		if(config.quit && event.getPlayer() != null)
+		if (config.quit && event.getPlayer() != null)
 		{
 			final Player player = event.getPlayer();
-			//TODO pay on quit
+			// TODO pay on quit
 		}
 	}
-	
+
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void sneak(final PlayerToggleSneakEvent event)
 	{
-		if(!event.isCancelled() && event.isSneaking() && config.sneak && event.getPlayer() != null)
+		if (!event.isCancelled() && event.isSneaking() && config.sneak
+				&& event.getPlayer() != null)
 		{
 			final Player player = event.getPlayer();
-			//TODO pay on sneak
+			// TODO pay on sneak
 		}
 	}
-	
+
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void sprint(final PlayerToggleSprintEvent event)
 	{
-		if(!event.isCancelled() && event.isSprinting() && config.sprint && event.getPlayer() != null)
+		if (!event.isCancelled() && event.isSprinting() && config.sprint
+				&& event.getPlayer() != null)
 		{
 			final Player player = event.getPlayer();
-			//TODO pay on sneak
+			// TODO pay on sneak
 		}
 	}
-	
+
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void vehicleEnter(final VehicleEnterEvent event)
 	{
-		if(!event.isCancelled() && config.vehicleEnter && event.getEntered() != null)
+		if (!event.isCancelled() && config.vehicleEnter
+				&& event.getEntered() != null)
 		{
-			if(event.getEntered() instanceof Player)
+			if (event.getEntered() instanceof Player)
 			{
 				final Player player = (Player) event.getEntered();
-				//TODO pay on enter
+				// TODO pay on enter
 			}
 		}
 	}
-	
+
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void vehicleExit(final VehicleExitEvent event)
 	{
-		if(!event.isCancelled() && config.vehicleExit && event.getExited() != null)
+		if (!event.isCancelled() && config.vehicleExit
+				&& event.getExited() != null)
 		{
-			if(event.getExited() instanceof Player)
+			if (event.getExited() instanceof Player)
 			{
 				final Player player = (Player) event.getExited();
-				//TODO pay on enter
+				// TODO pay on enter
 			}
 		}
 	}
-	
-	//TODO use all events, and perhaps make all players get affected due to event?
-	
+
+	// TODO use all events, and perhaps make all players get affected due to
+	// event?
+
 	/**
-	 * Missing events:
-	 * ExpChange
-	 * Fish
-	 * LevelChange
-	 * Move
-	 * Pickup
-	 * Shear
-	 * SignChange
+	 * Missing events: ExpChange Fish LevelChange Move Pickup Shear SignChange
 	 */
 }
