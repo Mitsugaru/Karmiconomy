@@ -26,12 +26,17 @@ public class Config
 			bedLeave, bucketEmpty, bucketFill, worldChange, death, respawn,
 			itemDrop, eggThrow, gameMode, kick, join, quit, sneak, sprint,
 			vehicleEnter, vehicleExit;
-	public int listlimit, chatLimit;
+	public int listlimit, bedEnterLimit, bedLeaveLimit, blockDestroyLimit,
+			blockIgniteLimit, blockPlaceLimit, shootBowLimit, bucketEmptyLimit,
+			bucketFillLimit, craftLimit, enchantLimit, itemDropLimit,
+			eggThrowLimmit, chatLimit, deathLimit, gameModeLimit, kickLimit,
+			joinLimit, quitLimit, respawnLimit, sneakLimit, sprintLimit,
+			vehicleEnterLimit, vehicleExitLimit, paintingPlaceLimit;
 	public double bedEnterPay, bedLeavePay, blockDestroyPay, blockIgnitePay,
 			blockPlacePay, shootBowPay, bucketEmptyPay, bucketFillPay,
 			craftPay, enchantPay, itemDropPay, eggThrowPay, chatPay, deathPay,
 			gameModePay, kickPay, joinPay, quitPay, respawnPay, sneakPay,
-			sprintPay, vehicleEnterPay, vehicleExitPay, paintinPlacePay,
+			sprintPay, vehicleEnterPay, vehicleExitPay, paintingPlacePay,
 			tamePay, protalCreatePay, protalEnterPay;
 	private final Map<Item, KCItemInfo> values = new HashMap<Item, KCItemInfo>();
 
@@ -148,7 +153,7 @@ public class Config
 		defaults.put("mysql.database", "minecraft");
 		defaults.put("mysql.user", "username");
 		defaults.put("mysql.password", "pass");
-		defaults.put("mysql.tablePrefix", "kj_");
+		defaults.put("mysql.tablePrefix", "kcon_");
 		defaults.put("mysql.import", false);
 		defaults.put("debug.events", false);
 		defaults.put("debug.time", false);
