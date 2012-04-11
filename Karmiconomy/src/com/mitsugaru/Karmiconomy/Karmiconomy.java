@@ -43,6 +43,9 @@ public class Karmiconomy extends JavaPlugin
 		// Setup economy
 		setupEconomy();
 		
+		//Set permission handler
+		perm = new PermCheck(this);
+		
 		//Setup commander
 		commander = new Commander(this);
 		getCommand("kcon").setExecutor(commander);
