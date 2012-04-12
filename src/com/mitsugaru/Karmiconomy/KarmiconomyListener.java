@@ -42,6 +42,8 @@ import org.bukkit.event.player.PlayerToggleSprintEvent;
 import org.bukkit.event.vehicle.VehicleEnterEvent;
 import org.bukkit.event.vehicle.VehicleExitEvent;
 
+import com.mitsugaru.Karmiconomy.DatabaseHandler.Field;
+
 public class KarmiconomyListener implements Listener
 {
 	private Karmiconomy plugin;
@@ -73,9 +75,15 @@ public class KarmiconomyListener implements Listener
 					sendLackMessage(player, DenyType.MONEY, "chat");
 				}
 			}
-			if(config.chatDenyLimit)
+			if(config.chatDenyLimit && (config.chatLimit >= 0))
 			{
 				//TODO deny by player limit
+				final int limit = db.getData(Field.CHAT, player.getName(), null);
+				if(limit >= config.chatLimit)
+				{
+					event.setCancelled(true);
+					sendLackMessage(player, DenyType.LIMIT, "chat");
+				}
 			}
 			if (config.debugEvents && event.isCancelled())
 			{
@@ -1143,17 +1151,17 @@ public class KarmiconomyListener implements Listener
 	private void sendLackMessage(Player player, DenyType type, String action)
 	{
 		final StringBuilder sb = new StringBuilder();
-		sb.append(ChatColor.RED + Karmiconomy.TAG + " Lack ");
+		sb.append(ChatColor.RED + Karmiconomy.TAG);
 		switch(type)
 		{
 			case MONEY:
-				sb.append("money ");
+				sb.append(" Lack money ");
 				break;
 			case LIMIT:
-				sb.append("limit ");
+				sb.append(" Hit limit ");
 				break;
 			default:
-				sb.append("<reason> ");
+				sb.append(" Unknown DenyType ");
 				break;
 		}
 		sb.append("for action: " + ChatColor.GOLD + action);

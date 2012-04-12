@@ -3,6 +3,8 @@ package com.mitsugaru.Karmiconomy;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
+import org.bukkit.inventory.ItemStack;
+
 import lib.Mitsugaru.SQLibrary.MySQL;
 import lib.Mitsugaru.SQLibrary.SQLite;
 import lib.Mitsugaru.SQLibrary.Database.Query;
@@ -152,6 +154,59 @@ public class DatabaseHandler {
 			e.printStackTrace();
 		}
 		return id;
+	}
+	
+	public int getData(Field field, String name, ItemStack item)
+	{
+		int data = -1;
+		final int id = getPlayerId(name);
+		if(id == -1)
+		{
+			plugin.getLogger().warning("Player '" + name + "' not found in master database!");
+			//TODO make entries?
+		}
+		try
+		{
+			Query query = null;
+			if(field.getTable() == Table.DATA)
+			{
+				//Handle data specific stuff
+				query = select("SELECT * FROM " + field.getTable().getName() + " WHERE id='" + id + "';");
+				if(query.getResult().next())
+				{
+					data = query.getResult().getInt(field.getColumnName());
+					if(query.getResult().wasNull())
+					{
+						data = -1;
+						plugin.getLogger().warning("Null field '" + field + "' for player '" + name +"'");
+					}
+				}
+			}
+			else if(field.getTable() == Table.ITEMS)
+			{
+				if(item != null)
+				{
+					//TODO handle items specific stuff
+					//TODO check against potions / whatever
+				}
+				else
+				{
+					plugin.getLogger().warning("ItemStack cannot be null for field: " + field);
+				}
+			}
+			else
+			{
+				plugin.getLogger().warning("Unhandled table '" + field.getTable().getName() + "' for field '" + field + "'");
+			}
+			if(query != null)
+			{
+				query.closeQuery();
+			}
+		}catch (SQLException e) {
+			plugin.getLogger().warning("SQL Exception on Import");
+			e.printStackTrace();
+		}
+		return data;
 	}
 
 	// TODO make method to get limit field for specified player
