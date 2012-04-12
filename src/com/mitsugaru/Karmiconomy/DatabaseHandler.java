@@ -52,7 +52,7 @@ public class DatabaseHandler {
 						Karmiconomy.TAG + " Created items table");
 				mysql.createTable("CREATE TABLE "
 						+ Table.ITEMS.getName()
-						+ " (row INT UNSIGNED NOT NULL AUTO_INCREMENT, id INT UNSIGNED NOT NULL, itemid SMALLINT UNSIGNED NOT NULL, data TINYTEXT, durability TINYTEXT, place INT NOT NULL, destroy INT NOT NULL, craft INT NOT NULL, enchant INT NOT NULL, drop INT NOT NULL, PRIMARY KEY(row))");
+						+ " (row INT UNSIGNED NOT NULL AUTO_INCREMENT, id INT UNSIGNED NOT NULL, itemid SMALLINT UNSIGNED NOT NULL, data TINYTEXT, durability TINYTEXT, place INT NOT NULL, destroy INT NOT NULL, craft INT NOT NULL, enchant INT NOT NULL, playerDrop INT NOT NULL, PRIMARY KEY(row))");
 			}
 			if (!mysql.checkTable(Table.COMMAND.getName())) {
 				plugin.getLogger().info(
@@ -66,7 +66,7 @@ public class DatabaseHandler {
 						.info(Karmiconomy.TAG + " Created data table");
 				mysql.createTable("CREATE TABLE "
 						+ Table.DATA.getName()
-						+ " (id INT UNSIGNED NOT NULL, bedenter INT NOT NULL, bedleave INT NOT NULL, bowshoot INT NOT NULL, chat INT NOT NULL, death INT NOT NULL, creative INT NOT NULL, survival INT NOT NULL, join INT NOT NULL, kick INT NOT NULL, quit INT NOT NULL, respawn INT NOT NULL, worldchange INT NOT NULL, portalcreate INT NOT NULL, portalenter INT NOT NULL, tameocelot INT NOT NULL, tamewolf INT NOT NULL, PRIMARY KEY (id));");
+						+ " (id INT UNSIGNED NOT NULL, bedenter INT NOT NULL, bedleave INT NOT NULL, bowshoot INT NOT NULL, chat INT NOT NULL, death INT NOT NULL, creative INT NOT NULL, survival INT NOT NULL, playerJoin INT NOT NULL, kick INT NOT NULL, quit INT NOT NULL, respawn INT NOT NULL, worldchange INT NOT NULL, portalcreate INT NOT NULL, portalenter INT NOT NULL, tameocelot INT NOT NULL, tamewolf INT NOT NULL, PRIMARY KEY (id));");
 			}
 		} else {
 			// Connect to sql database
@@ -86,7 +86,7 @@ public class DatabaseHandler {
 						Karmiconomy.TAG + " Created items table");
 				sqlite.createTable("CREATE TABLE "
 						+ Table.ITEMS.getName()
-						+ " (row INTEGER PRIMARY KEY, id INTEGER NOT NULL, itemid INTEGER NOT NULL, data TEXT NOT NULL, durability TEXT NOT NULL, place INTEGER NOT NULL, destroy INTEGER NOT NULL, craft INTEGER NOT NULL, enchant INTEGER NOT NULL, drop INTEGER NOT NULL)");
+						+ " (row INTEGER PRIMARY KEY, id INTEGER NOT NULL, itemid INTEGER NOT NULL, data TEXT NOT NULL, durability TEXT NOT NULL, place INTEGER NOT NULL, destroy INTEGER NOT NULL, craft INTEGER NOT NULL, enchant INTEGER NOT NULL, playerDrop INTEGER NOT NULL)");
 			}
 			if (!sqlite.checkTable(Table.COMMAND.getName())) {
 				plugin.getLogger().info(
@@ -100,7 +100,7 @@ public class DatabaseHandler {
 						.info(Karmiconomy.TAG + " Created data table");
 				sqlite.createTable("CREATE TABLE "
 						+ Table.DATA.getName()
-						+ " (id INTEGER PRIMARY KEY, bedenter INTEGER NOT NULL, bedleave INTEGER NOT NULL, bowshoot INTEGER NOT NULL, chat INTEGER NOT NULL, death INTEGER NOT NULL, creative INTEGER NOT NULL, survival INTEGER NOT NULL, join INTEGER NOT NULL, kick INTEGER NOT NULL, quit INTEGER NOT NULL, respawn INTEGER NOT NULL, worldchange INTEGER NOT NULL, portalcreate INTEGER NOT NULL, portalenter INTEGER NOT NULL, tameocelot INTEGER NOT NULL, tamewolf INTEGER NOT NULL);");
+						+ " (id INTEGER PRIMARY KEY, bedenter INTEGER NOT NULL, bedleave INTEGER NOT NULL, bowshoot INTEGER NOT NULL, chat INTEGER NOT NULL, death INTEGER NOT NULL, creative INTEGER NOT NULL, survival INTEGER NOT NULL, playerJoin INTEGER NOT NULL, kick INTEGER NOT NULL, quit INTEGER NOT NULL, respawn INTEGER NOT NULL, worldchange INTEGER NOT NULL, portalcreate INTEGER NOT NULL, portalenter INTEGER NOT NULL, tameocelot INTEGER NOT NULL, tamewolf INTEGER NOT NULL);");
 			}
 		}
 	}
@@ -203,9 +203,9 @@ public class DatabaseHandler {
 					// Add player data table
 					standardQuery("INSERT INTO "
 							+ Table.DATA.getName()
-							+ " (id, bedenter, bedleave, bowshoot, chat, death, creative, survival, join, kick, quit, respawn, worldchange, portalcreate, portalenter, tameocelot, tamewolf) VALUES('"
+							+ " (id, bedenter, bedleave, bowshoot, chat, death, creative, survival, playerJoin, playerDrop, kick, quit, respawn, worldchange, portalcreate, portalenter, tameocelot, tamewolf) VALUES('"
 							+ generatedId
-							+ "','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0');");
+							+ "','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0');");
 				} else {
 					plugin.getLogger().warning(
 							"Player '" + name
@@ -237,7 +237,7 @@ public class DatabaseHandler {
 			// Reset player values in data table
 			standardQuery("UPDATE "
 					+ Table.DATA.getName()
-					+ " SET bedenter='0', bedleave='0', bowshoot='0', chat='0', death='0', creative='0', survival='0', join='0', kick='0', quit='0', respawn='0', worldchange='0', portalcreate='0', portalenter='0', tameocelot='0', tamewolf='0' WHERE id='"
+					+ " SET bedenter='0', bedleave='0', bowshoot='0', chat='0', death='0', creative='0', survival='0', playerJoin='0', playerDrop='0', kick='0', quit='0', respawn='0', worldchange='0', portalcreate='0', portalenter='0', tameocelot='0', tamewolf='0' WHERE id='"
 					+ id + "');");
 			// TODO drop everything in items for player id
 			// TODO same for commands
@@ -366,10 +366,10 @@ public class DatabaseHandler {
 		BOW_SHOOT(Table.DATA, "bowshoot"), BED_ENTER(Table.DATA, "bedenter"), BED_LEAVE(
 				Table.DATA, "bedleave"), BLOCK_PLACE(Table.ITEMS, "place"), BLOCK_DESTROY(
 				Table.ITEMS, "destroy"), ITEM_CRAFT(Table.ITEMS, "craft"), ITEM_ENCHANT(
-				Table.ITEMS, "enchant"), ITEM_DROP(Table.ITEMS, "drop"), CHAT(
+				Table.ITEMS, "enchant"), ITEM_DROP(Table.ITEMS, "playerDrop"), CHAT(
 				Table.DATA, "chat"), COMMAND(Table.COMMAND, "command"), DEATH(
 				Table.DATA, "death"), CREATIVE(Table.DATA, "creative"), SURVIVAL(
-				Table.DATA, "survival"), JOIN(Table.DATA, "join"), KICK(
+				Table.DATA, "survival"), JOIN(Table.DATA, "playerJoin"), KICK(
 				Table.DATA, "kick"), QUIT(Table.DATA, "quit"), RESPAWN(
 				Table.DATA, "respawn"), PORTAL_CREATE(Table.DATA,
 				"portalcreate"), PORTAL_ENTER(Table.DATA, "portalenter"), TAME_OCELOT(
