@@ -5,6 +5,7 @@ import java.util.Map;
 
 import net.milkbowl.vault.economy.Economy;
 
+import org.bukkit.ChatColor;
 import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -62,8 +63,20 @@ public class KarmiconomyListener implements Listener
 				&& event.getPlayer() != null)
 		{
 			final Player player = event.getPlayer();
-			// TODO deny if lack money
-			if (config.debugEvents)
+			if(config.chatDenyPay)
+			{
+				final double balance = eco.getBalance(player.getName());
+				if(config.chatPay > balance)
+				{
+					event.setCancelled(true);
+					sendLackMessage(player, DenyType.MONEY, "chat");
+				}
+			}
+			if(config.chatDenyLimit)
+			{
+				//TODO deny by player limit
+			}
+			if (config.debugEvents && event.isCancelled())
 			{
 				final Map<String, String> details = new HashMap<String, String>();
 				details.put("Player", player.getName());
@@ -1124,6 +1137,31 @@ public class KarmiconomyListener implements Listener
 		{
 			plugin.getLogger().info(entry.getKey() + " : " + entry.getValue());
 		}
+	}
+	
+	private void sendLackMessage(Player player, DenyType type, String action)
+	{
+		final StringBuilder sb = new StringBuilder();
+		sb.append(ChatColor.RED + Karmiconomy.TAG + " Lack ");
+		switch(type)
+		{
+			case MONEY:
+				sb.append("money ");
+				break;
+			case LIMIT:
+				sb.append("limit ");
+				break;
+			default:
+				sb.append("<reason> ");
+				break;
+		}
+		sb.append("for action: " + ChatColor.GOLD + action);
+		player.sendMessage(sb.toString());
+	}
+	
+	private enum DenyType
+	{
+		MONEY, LIMIT;
 	}
 
 	// TODO use all events, and perhaps make all players get affected due to

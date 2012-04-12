@@ -451,7 +451,7 @@ public class Config
 	 */
 	private void boundsCheck()
 	{
-		// necessary?
+		// TODO format all doubles to 2 decimal places
 	}
 
 	/**
