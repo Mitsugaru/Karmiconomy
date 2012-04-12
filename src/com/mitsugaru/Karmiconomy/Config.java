@@ -52,8 +52,9 @@ public class Config {
 			vehicleExit, vehicleExitDenyPay, vehicleExitDenyLimit,
 			blockPlaceStatic, blockDestroyStatic, craftItemStatic,
 			enchantItemStatic, itemDropStatic, commandStatic/*
-											 * ,blockIgnite , blockIgniteValid
-											 */;
+															 * ,blockIgnite ,
+															 * blockIgniteValid
+															 */;
 	public int listlimit, bedEnterLimit, bedLeaveLimit, blockDestroyLimit,
 	/* blockIgniteLimit, */blockPlaceLimit, shootBowLimit,
 			bucketEmptyLavaLimit, bucketEmptyWaterLimit, bucketFillLavaLimit,
@@ -456,20 +457,27 @@ public class Config {
 		bucketEmptyLavaPay = config.getDouble("bucket.empty.lava.pay", 0.1);
 		// Fill lava
 		bucketFillLava = config.getBoolean("bucket.fill.lava.enabled", false);
-		bucketFillLavaDenyPay = config.getBoolean("bucket.fill.lava.denyOnLackPay", false);
-		bucketFillLavaDenyLimit = config.getBoolean("bucket.fill.lava.denyOnLimit", false);
+		bucketFillLavaDenyPay = config.getBoolean(
+				"bucket.fill.lava.denyOnLackPay", false);
+		bucketFillLavaDenyLimit = config.getBoolean(
+				"bucket.fill.lava.denyOnLimit", false);
 		bucketFillLavaLimit = config.getInt("bucket.fill.lava.limit", 100);
 		bucketFillLavaPay = config.getDouble("bucket.fill.lava.pay", 0.1);
 		// Empty water
-		bucketEmptyWater = config.getBoolean("bucket.empty.water.enabled", false);
-		bucketEmptyWaterDenyPay = config.getBoolean("bucket.empty.water.denyOnLackPay", false);
-		bucketEmptyWaterDenyLimit = config.getBoolean("bucket.empty.water.denyOnLimit", false);
+		bucketEmptyWater = config.getBoolean("bucket.empty.water.enabled",
+				false);
+		bucketEmptyWaterDenyPay = config.getBoolean(
+				"bucket.empty.water.denyOnLackPay", false);
+		bucketEmptyWaterDenyLimit = config.getBoolean(
+				"bucket.empty.water.denyOnLimit", false);
 		bucketEmptyWaterLimit = config.getInt("bucket.empty.water.limit", 100);
 		bucketEmptyWaterPay = config.getDouble("bucket.empty.water.pay", 0.1);
 		// Fill water
 		bucketFillWater = config.getBoolean("bucket.fill.water.enabled", false);
-		bucketFillWaterDenyPay = config.getBoolean("bucket.fill.water.denyOnLackPay", false);
-		bucketFillWaterDenyLimit = config.getBoolean("bucket.fill.water.denyOnLimit", false);
+		bucketFillWaterDenyPay = config.getBoolean(
+				"bucket.fill.water.denyOnLackPay", false);
+		bucketFillWaterDenyLimit = config.getBoolean(
+				"bucket.fill.water.denyOnLimit", false);
 		bucketFillWaterLimit = config.getInt("bucket.fill.water.limit", 100);
 		bucketFillWaterPay = config.getDouble("bucket.fill.water.pay", 0.1);
 		/**
@@ -651,6 +659,14 @@ public class Config {
 				return bedLeavePay;
 			case BOW_SHOOT:
 				return shootBowPay;
+			case BUCKET_EMPTY_LAVA:
+				return bucketEmptyLavaPay;
+			case BUCKET_EMPTY_WATER:
+				return bucketEmptyWaterPay;
+			case BUCKET_FILL_LAVA:
+				return bucketFillLavaPay;
+			case BUCKET_FILL_WATER:
+				return bucketFillWaterPay;
 			case DEATH:
 				return deathPay;
 			case CREATIVE:
@@ -711,6 +727,14 @@ public class Config {
 				return bedLeaveLimit;
 			case BOW_SHOOT:
 				return shootBowLimit;
+			case BUCKET_EMPTY_LAVA:
+				return bucketEmptyLavaLimit;
+			case BUCKET_EMPTY_WATER:
+				return bucketEmptyWaterLimit;
+			case BUCKET_FILL_LAVA:
+				return bucketFillLavaLimit;
+			case BUCKET_FILL_WATER:
+				return bucketFillWaterLimit;
 			case DEATH:
 				return deathLimit;
 			case CREATIVE:
