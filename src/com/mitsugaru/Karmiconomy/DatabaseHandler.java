@@ -241,7 +241,7 @@ public class DatabaseHandler {
 					// Add player bucket table
 					standardQuery("INSERT INTO "
 							+ Table.BUCKET.getName()
-							+ " (id, bemptylava, bemptywater, bfilllava, bfillwater) + VALUES('"
+							+ " (id, bemptylava, bemptywater, bfilllava, bfillwater) VALUES('"
 							+ id + "','0','0','0','0');");
 					return true;
 				} else {
