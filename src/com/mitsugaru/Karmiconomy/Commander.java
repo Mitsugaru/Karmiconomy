@@ -5,21 +5,13 @@
  */
 package com.mitsugaru.Karmiconomy;
 
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.enchantments.Enchantment;
-import org.bukkit.enchantments.EnchantmentWrapper;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 
 public class Commander implements CommandExecutor
 {
@@ -29,9 +21,7 @@ public class Commander implements CommandExecutor
 	private final static String bar = "======================";
 	private final Config config;
 	private final Map<String, Integer> page = new HashMap<String, Integer>();
-	private final Map<String, Integer> multiPage = new HashMap<String, Integer>();
 	private final Map<String, Integer> cache = new HashMap<String, Integer>();
-	private final Map<String, Integer> chestPage = new HashMap<String, Integer>();
 	private int limit;
 	private long time;
 
@@ -268,7 +258,6 @@ public class Commander implements CommandExecutor
 	 * @param Integer
 	 *            of the page to change to, if needed. Zero shows current page.
 	 */
-	@SuppressWarnings("unchecked")
 	private void listPool(CommandSender sender, int pageAdjust)
 	{
 		// TODO get list and update cache

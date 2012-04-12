@@ -5,12 +5,12 @@ import net.milkbowl.vault.economy.Economy;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public class Karmiconomy extends JavaPlugin
-{
+public class Karmiconomy extends JavaPlugin {
 	public static final String TAG = "[Karmiconomy]";
 	private Commander commander;
 	private Config config;
 	private PermCheck perm;
+	private DatabaseHandler database;
 	private Economy eco;
 	private boolean economyFound;
 
@@ -18,15 +18,17 @@ public class Karmiconomy extends JavaPlugin
 	 * Method that is called when plugin is disabled
 	 */
 	@Override
-	public void onDisable()
-	{
+	public void onDisable() {
 		// Save config
 		this.reloadConfig();
 		this.saveConfig();
-
-		if(economyFound)
-		{
-			//Finish up anything economy related
+		// Disconnect from sql database
+		if (database.checkConnection()) {
+			// Close connection
+			database.close();
+		}
+		if (economyFound) {
+			// Finish up anything economy related
 		}
 		getLogger().info("Plugin disabled");
 	}
@@ -35,18 +37,20 @@ public class Karmiconomy extends JavaPlugin
 	 * Method that is called when plugin is enabled
 	 */
 	@Override
-	public void onEnable()
-	{
+	public void onEnable() {
 		// Config
 		config = new Config(this);
-
+		//Grab database
+		database = new DatabaseHandler(this, config);
+		//Check update
+		config.checkUpdate();
 		// Setup economy
 		setupEconomy();
-		
-		//Set permission handler
+
+		// Set permission handler
 		perm = new PermCheck(this);
-		
-		//Setup commander
+
+		// Setup commander
 		commander = new Commander(this);
 		getCommand("kcon").setExecutor(commander);
 		// Setup listener
@@ -55,18 +59,14 @@ public class Karmiconomy extends JavaPlugin
 		getLogger().info(TAG + " Enabled v" + getDescription().getVersion());
 	}
 
-	private void setupEconomy()
-	{
+	private void setupEconomy() {
 		RegisteredServiceProvider<Economy> economyProvider = this.getServer()
 				.getServicesManager()
 				.getRegistration(net.milkbowl.vault.economy.Economy.class);
-		if (economyProvider != null)
-		{
+		if (economyProvider != null) {
 			eco = economyProvider.getProvider();
 			economyFound = true;
-		}
-		else
-		{
+		} else {
 			// No economy system found, disable
 			getLogger().warning(TAG + " No economy found!");
 			this.getServer().getPluginManager().disablePlugin(this);
@@ -74,13 +74,11 @@ public class Karmiconomy extends JavaPlugin
 		}
 	}
 
-	public Commander getCommander()
-	{
+	public Commander getCommander() {
 		return commander;
 	}
 
-	public PermCheck getPermissionHandler()
-	{
+	public PermCheck getPermissionHandler() {
 		return perm;
 	}
 
@@ -89,13 +87,20 @@ public class Karmiconomy extends JavaPlugin
 	 * 
 	 * @return Config object
 	 */
-	public Config getPluginConfig()
-	{
+	public Config getPluginConfig() {
 		return config;
 	}
 
-	public Economy getEconomy()
-	{
+	public Economy getEconomy() {
 		return eco;
+	}
+	
+	/**
+	 * Returns database handler
+	 * 
+	 * @return Database handler
+	 */
+	public DatabaseHandler getDatabaseHandler() {
+		return database;
 	}
 }
