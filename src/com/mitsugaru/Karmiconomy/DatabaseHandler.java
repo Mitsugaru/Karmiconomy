@@ -66,7 +66,14 @@ public class DatabaseHandler {
 						.info(Karmiconomy.TAG + " Created data table");
 				mysql.createTable("CREATE TABLE "
 						+ Table.DATA.getName()
-						+ " (id INT UNSIGNED NOT NULL, bedenter INT NOT NULL, bedleave INT NOT NULL, bowshoot INT NOT NULL, chat INT NOT NULL, death INT NOT NULL, creative INT NOT NULL, survival INT NOT NULL, playerJoin INT NOT NULL, kick INT NOT NULL, quit INT NOT NULL, respawn INT NOT NULL, worldchange INT NOT NULL, portalcreate INT NOT NULL, portalenter INT NOT NULL, tameocelot INT NOT NULL, tamewolf INT NOT NULL, PRIMARY KEY (id));");
+						+ " (id INT UNSIGNED NOT NULL, bedenter INT NOT NULL, bedleave INT NOT NULL, bowshoot INT NOT NULL, chat INT NOT NULL, death INT NOT NULL, creative INT NOT NULL, survival INT NOT NULL, playerJoin INT NOT NULL, playerDrop INT NOT NULL, kick INT NOT NULL, quit INT NOT NULL, respawn INT NOT NULL, worldchange INT NOT NULL, portalcreate INT NOT NULL, portalenter INT NOT NULL, tameocelot INT NOT NULL, tamewolf INT NOT NULL, PRIMARY KEY (id));");
+			}
+			if (!sqlite.checkTable(Table.PORTAL.getName())) {
+				plugin.getLogger().info(
+						Karmiconomy.TAG + " Created portal table");
+				sqlite.createTable("CREATE TABLE "
+						+ Table.PORTAL.getName()
+						+ " (id INT UNSIGNED NOT NULL, pcreatenether INT NOT NULL, pcreateend INT NOT NULL, pcreatecustom INT NOT NULL, portalenter INT NOT NULL, PRIMARY KEY(id);");
 			}
 		} else {
 			// Connect to sql database
@@ -100,7 +107,21 @@ public class DatabaseHandler {
 						.info(Karmiconomy.TAG + " Created data table");
 				sqlite.createTable("CREATE TABLE "
 						+ Table.DATA.getName()
-						+ " (id INTEGER PRIMARY KEY, bedenter INTEGER NOT NULL, bedleave INTEGER NOT NULL, bowshoot INTEGER NOT NULL, chat INTEGER NOT NULL, death INTEGER NOT NULL, creative INTEGER NOT NULL, survival INTEGER NOT NULL, playerJoin INTEGER NOT NULL, kick INTEGER NOT NULL, quit INTEGER NOT NULL, respawn INTEGER NOT NULL, worldchange INTEGER NOT NULL, portalcreate INTEGER NOT NULL, portalenter INTEGER NOT NULL, tameocelot INTEGER NOT NULL, tamewolf INTEGER NOT NULL);");
+						+ " (id INTEGER PRIMARY KEY, bedenter INTEGER NOT NULL, bedleave INTEGER NOT NULL, bowshoot INTEGER NOT NULL, chat INTEGER NOT NULL, death INTEGER NOT NULL, creative INTEGER NOT NULL, survival INTEGER NOT NULL, playerJoin INTEGER NOT NULL, playerDrop INTEGER NOT NULL, kick INTEGER NOT NULL, quit INTEGER NOT NULL, respawn INTEGER NOT NULL, worldchange INTEGER NOT NULL, portalcreate INTEGER NOT NULL, portalenter INTEGER NOT NULL, tameocelot INTEGER NOT NULL, tamewolf INTEGER NOT NULL);");
+			}
+			if (!sqlite.checkTable(Table.PORTAL.getName())) {
+				plugin.getLogger().info(
+						Karmiconomy.TAG + " Created portal table");
+				sqlite.createTable("CREATE TABLE "
+						+ Table.PORTAL.getName()
+						+ " (id INTEGER PRIMARY KEY, pcreatenether INTEGER NOT NULL, pcreateend INTEGER NOT NULL, pcreatecustom INTEGER NOT NULL, portalenter INTEGER NOT NULL);");
+			}
+			if (!sqlite.checkTable(Table.BUCKET.getName())) {
+				plugin.getLogger().info(
+						Karmiconomy.TAG + " Created portal table");
+				sqlite.createTable("CREATE TABLE "
+						+ Table.BUCKET.getName()
+						+ " (id INTEGER PRIMARY KEY, pcreatenether INTEGER NOT NULL, pcreateend INTEGER NOT NULL, pcreatecustom INTEGER NOT NULL, portalenter INTEGER NOT NULL);");
 			}
 		}
 	}
@@ -175,13 +196,11 @@ public class DatabaseHandler {
 					+ Table.MASTER.getName() + " WHERE playername='" + name
 					+ "';");
 			if (query.getResult().next()) {
-				do {
-					id = query.getResult().getInt("id");
-				} while (query.getResult().next());
+				id = query.getResult().getInt("id");
 			}
 			query.closeQuery();
 		} catch (SQLException e) {
-			plugin.getLogger().warning("SQL Exception on Import");
+			plugin.getLogger().warning("SQL Exception on grabbing player ID");
 			e.printStackTrace();
 		}
 		return id;
@@ -192,20 +211,27 @@ public class DatabaseHandler {
 			final int id = getPlayerId(name);
 			if (id == -1) {
 				// Generate last on
-				String laston = dateFormat.format(new Date());
+				final String laston = dateFormat.format(new Date());
 				// Insert player to master database
-				standardQuery("INSERT INTO " + Table.MASTER.getName()
+				final String query = "INSERT INTO " + Table.MASTER.getName()
 						+ " (playername,laston) VALUES('" + name + "','"
-						+ laston + "');");
+						+ laston + "');";
+				standardQuery(query);
 				// Grab generated id
 				final int generatedId = getPlayerId(name);
-				if (generatedId == -1) {
+				if (generatedId != -1) {
 					// Add player data table
 					standardQuery("INSERT INTO "
 							+ Table.DATA.getName()
-							+ " (id, bedenter, bedleave, bowshoot, chat, death, creative, survival, playerJoin, playerDrop, kick, quit, respawn, worldchange, portalcreate, portalenter, tameocelot, tamewolf) VALUES('"
+							+ " (id, bedenter, bedleave, bowshoot, chat, death, creative, survival, playerJoin, playerDrop, kick, quit, respawn, worldchange, tameocelot, tamewolf) VALUES('"
 							+ generatedId
-							+ "','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0');");
+							+ "','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0');");
+					// Add player portal table
+					standardQuery("INSERT INTO "
+							+ Table.PORTAL.getName()
+							+ " (id, pcreatenether, pcreateend, pcreatecustom, portalenter) VALUES('"
+							+ id + "','0','0','0','0');");
+					// TODO add bucket table
 					return true;
 				} else {
 					plugin.getLogger().warning(
@@ -288,6 +314,24 @@ public class DatabaseHandler {
 			case COMMAND: {
 				// TODO check if insert or update
 			}
+			case PORTAL: {
+				// Update
+				standardQuery("UPDATE " + field.getTable().getName() + " SET "
+						+ field.getColumnName() + "='" + value + "' WHERE id='"
+						+ id + "';");
+			}
+			case BUCKET: {
+				// Update
+				standardQuery("UPDATE " + field.getTable().getName() + " SET "
+						+ field.getColumnName() + "='" + value + "' WHERE id='"
+						+ id + "';");
+			}
+			default: {
+				plugin.getLogger().warning(
+						"Unhandled table " + field.getTable().getName()
+								+ " for field " + field);
+				break;
+			}
 			}
 
 		} else {
@@ -306,8 +350,7 @@ public class DatabaseHandler {
 					"Player '" + name + "' not found in master database!");
 			addPlayer(name);
 			id = getPlayerId(name);
-			if(id != -1)
-			{
+			if (id != -1) {
 				validId = true;
 			}
 		} else {
@@ -316,21 +359,18 @@ public class DatabaseHandler {
 		if (validId) {
 			try {
 				Query query = null;
-				if (field.getTable() == Table.DATA) {
+				switch (field.getTable()) {
+				case DATA: {
 					// Handle data specific stuff
 					query = select("SELECT * FROM "
 							+ field.getTable().getName() + " WHERE id='" + id
 							+ "';");
 					if (query.getResult().next()) {
 						data = query.getResult().getInt(field.getColumnName());
-						if (query.getResult().wasNull()) {
-							data = -1;
-							plugin.getLogger().warning(
-									"Null field '" + field + "' for player '"
-											+ name + "'");
-						}
 					}
-				} else if (field.getTable() == Table.ITEMS) {
+					break;
+				}
+				case ITEMS: {
 					if (item != null) {
 						// TODO handle items specific stuff
 						// TODO check against potions / whatever
@@ -338,17 +378,37 @@ public class DatabaseHandler {
 						plugin.getLogger().warning(
 								"ItemStack cannot be null for field: " + field);
 					}
-				} else if (field.getTable() == Table.COMMAND) {
+					break;
+				}
+				case COMMAND: {
 					if (command != null) {
 						// TODO handle command specific stuff
 					} else {
 						plugin.getLogger().warning(
 								"Command cannot be null for field: " + field);
 					}
-				} else {
+					break;
+				}
+				case PORTAL: {
+					query = select("SELECT * FROM " + field.getTable().getName() + " WHERE id='" + id + "';");
+					if(query.getResult().next()){
+						data = query.getResult().getInt(field.getColumnName());
+					}
+					break;
+				}
+				case BUCKET: {
+					query = select("SELECT * FROM " + field.getTable().getName() + " WHERE id='" + id + "';");
+					if(query.getResult().next()){
+						data = query.getResult().getInt(field.getColumnName());
+					}
+					break;
+				}
+				default: {
 					plugin.getLogger().warning(
 							"Unhandled table '" + field.getTable().getName()
 									+ "' for field '" + field + "'");
+					break;
+				}
 				}
 				if (query != null) {
 					query.closeQuery();
@@ -373,10 +433,11 @@ public class DatabaseHandler {
 				Table.DATA, "death"), CREATIVE(Table.DATA, "creative"), SURVIVAL(
 				Table.DATA, "survival"), JOIN(Table.DATA, "playerJoin"), KICK(
 				Table.DATA, "kick"), QUIT(Table.DATA, "quit"), RESPAWN(
-				Table.DATA, "respawn"), PORTAL_CREATE(Table.DATA,
-				"portalcreate"), PORTAL_ENTER(Table.DATA, "portalenter"), TAME_OCELOT(
-				Table.DATA, "tameocelot"), TAME_WOLF(Table.DATA, "tamewolf"), WORLD_CHANGE(
-				Table.DATA, "worldchange");
+				Table.DATA, "respawn"), PORTAL_CREATE_NETHER(Table.PORTAL,
+				"pcreatenether"), PORTAL_CREATE_END(Table.PORTAL, "pcreateend"), PORTAL_CREATE_CUSTOM(
+				Table.PORTAL, "pcreatecustom"), PORTAL_ENTER(Table.PORTAL,
+				"portalenter"), TAME_OCELOT(Table.DATA, "tameocelot"), TAME_WOLF(
+				Table.DATA, "tamewolf"), WORLD_CHANGE(Table.DATA, "worldchange");
 		private final Table table;
 		private final String columnname;
 
@@ -397,7 +458,8 @@ public class DatabaseHandler {
 	public enum Table {
 		MASTER(config.tablePrefix + "master"), ITEMS(config.tablePrefix
 				+ "items"), DATA(config.tablePrefix + "data"), COMMAND(
-				config.tablePrefix + "command");
+				config.tablePrefix + "command"), PORTAL(config.tablePrefix
+				+ "portal"), BUCKET(config.tablePrefix + "bucket");
 		private final String table;
 
 		private Table(String table) {

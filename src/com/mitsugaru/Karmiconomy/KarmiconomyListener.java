@@ -333,7 +333,11 @@ public class KarmiconomyListener implements Listener {
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void createPortalValid(final EntityCreatePortalEvent event) {
 		if (!event.isCancelled()
-				&& (config.portalCreateDenyPay || config.portalCreateDenyLimit)
+				&& (config.portalCreateNetherDenyPay
+						|| config.portalCreateNetherDenyLimit
+						|| config.portalCreateEndDenyPay
+						|| config.portalCreateEndDenyLimit
+						|| config.portalCreateCustomDenyPay || config.portalCreateCustomDenyLimit)
 				&& event.getEntity() != null) {
 			if (event.getEntity() instanceof Player) {
 				final Player player = (Player) event.getEntity();
@@ -354,7 +358,7 @@ public class KarmiconomyListener implements Listener {
 
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void createPortal(final EntityCreatePortalEvent event) {
-		if (!event.isCancelled() && config.portalCreate
+		if (!event.isCancelled() && (config.portalCreateNether || config.portalCreateEnd || config.portalCreateCustom)
 				&& event.getEntity() != null) {
 			if (event.getEntity() instanceof Player) {
 				final Player player = (Player) event.getEntity();
@@ -382,10 +386,6 @@ public class KarmiconomyListener implements Listener {
 				if (config.debugEvents) {
 					final Map<String, String> details = new HashMap<String, String>();
 					details.put("Player", player.getName());
-					if (event.getLocation() != null) {
-						Block block = event.getLocation().getBlock();
-						details.put("Block", block.toString());
-					}
 					debugEvent(event, details);
 				}
 			}
@@ -800,9 +800,9 @@ public class KarmiconomyListener implements Listener {
 			final Player player = event.getPlayer();
 			// Add player if they don't exist to database
 			final boolean add = db.addPlayer(player.getName());
-			if(config.debugEvents && add)
-			{
-				plugin.getLogger().info("Added player '" + player.getName() +"' to database");
+			if (config.debugEvents && add) {
+				plugin.getLogger().info(
+						"Added player '" + player.getName() + "' to database");
 			}
 			// TODO check their last on date for potential reset
 			if (config.join) {
