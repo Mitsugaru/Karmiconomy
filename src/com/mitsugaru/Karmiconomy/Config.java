@@ -16,13 +16,13 @@ import java.util.Map.Entry;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-public class Config
-{
+public class Config {
 	// Class variables
 	private Karmiconomy plugin;
 	public String host, port, database, user, password, tablePrefix;
 	public boolean debugTime, debugEvents, useMySQL, importSQL, chat,
-			chatDenyPay, chatDenyLimit, command, blockPlace, blockPlaceDenyPay,
+			chatDenyPay, chatDenyLimit, command, commandDenyPay,
+			commandDenyLimit, blockPlace, blockPlaceDenyPay,
 			blockPlaceDenyLimit, blockDestroy, blockDestroyDenyPay,
 			blockDestroyDenyLimit, craftItem, craftItemDenyPay,
 			craftItemDenyLimit, enchantItem, enchantItemDenyPay,
@@ -72,8 +72,7 @@ public class Config
 	 * @param KarmicShare
 	 *            plugin
 	 */
-	public Config(Karmiconomy plugin)
-	{
+	public Config(Karmiconomy plugin) {
 		this.plugin = plugin;
 		// Grab config
 		final ConfigurationSection config = plugin.getConfig();
@@ -158,6 +157,9 @@ public class Config
 		defaults.put("player.chat.limit", 10);
 		defaults.put("player.chat.pay", 0.1);
 		defaults.put("player.command.enabled", false);
+		defaults.put("player.command.denyOnLackPay", false);
+		defaults.put("player.command.denyOnLimit", false);
+		defaults.put("player.command.static", true);
 		defaults.put("player.command.limit", 10);
 		defaults.put("player.command.pay", 0.1);
 		defaults.put("player.death.enabled", false);
@@ -234,10 +236,8 @@ public class Config
 		defaults.put("debug.time", false);
 		defaults.put("version", plugin.getDescription().getVersion());
 		// Insert defaults into config file if they're not present
-		for (final Entry<String, Object> e : defaults.entrySet())
-		{
-			if (!config.contains(e.getKey()))
-			{
+		for (final Entry<String, Object> e : defaults.entrySet()) {
+			if (!config.contains(e.getKey())) {
 				config.set(e.getKey(), e.getValue());
 			}
 		}
@@ -378,13 +378,12 @@ public class Config
 		worldChangeLimit = config.getInt("world.change.limit", 15);
 		defaults.put("world.change.pay", 1.0);
 		// Load config for item specific value
-		this.loadValueMap();
+		this.loadItemValueMap();
 		// Finally, do a bounds check on parameters to make sure they are legal
 		this.boundsCheck();
 	}
 
-	public void set(String path, Object o)
-	{
+	public void set(String path, Object o) {
 		final ConfigurationSection config = plugin.getConfig();
 		config.set(path, o);
 		plugin.saveConfig();
@@ -393,13 +392,11 @@ public class Config
 	/**
 	 * Check if updates are necessary
 	 */
-	public void checkUpdate()
-	{
+	public void checkUpdate() {
 		// Check if need to update
 		ConfigurationSection config = plugin.getConfig();
 		if (Double.parseDouble(plugin.getDescription().getVersion()) > Double
-				.parseDouble(config.getString("version")))
-		{
+				.parseDouble(config.getString("version"))) {
 			// Update to latest version
 			plugin.getLogger().info(
 					"Updating to v" + plugin.getDescription().getVersion());
@@ -412,8 +409,7 @@ public class Config
 	 * necessary for database schema modification, for a proper update.
 	 */
 	@SuppressWarnings("unused")
-	private void update()
-	{
+	private void update() {
 		// Grab current version
 		final double ver = Double.parseDouble(plugin.getConfig().getString(
 				"version"));
@@ -427,8 +423,7 @@ public class Config
 	/**
 	 * Reloads info from yaml file(s)
 	 */
-	public void reloadConfig()
-	{
+	public void reloadConfig() {
 		// Initial relaod
 		plugin.reloadConfig();
 		// Grab config
@@ -439,7 +434,7 @@ public class Config
 		debugTime = config.getBoolean("debug.time", false);
 		debugEvents = config.getBoolean("debug.events", false);
 		// Load config for item specific values
-		this.loadValueMap();
+		this.loadItemValueMap();
 		// Check bounds
 		this.boundsCheck();
 		plugin.getLogger().info("Config reloaded");
@@ -449,107 +444,78 @@ public class Config
 	 * Check the bounds on the parameters to make sure that all config variables
 	 * are legal and usable by the plugin
 	 */
-	private void boundsCheck()
-	{
+	private void boundsCheck() {
 		// TODO format all doubles to 2 decimal places
 	}
 
 	/**
 	 * Loads the per-item karma values into a hashmap for later usage
 	 */
-	private void loadValueMap()
-	{
+	private void loadItemValueMap() {
 		// Load karma file
-		final YamlConfiguration valueFile = this.valuesFile();
+		final YamlConfiguration valueFile = this.itemValuesFile();
 		// Load custom karma file into map
-		for (final String entry : valueFile.getKeys(false))
-		{
-			try
-			{
+		for (final String entry : valueFile.getKeys(false)) {
+			try {
 				// Attempt to parse non data value nodes
 				int key = Integer.parseInt(entry);
-				if (key <= 0)
-				{
+				if (key <= 0) {
 					plugin.getLogger().warning(
 							Karmiconomy.TAG
 									+ " Zero or negative item id for entry: "
 									+ entry);
-				}
-				else
-				{
+				} else {
 					// If it has child nodes, parse those as well
-					if (valueFile.isConfigurationSection(entry))
-					{
+					if (valueFile.isConfigurationSection(entry)) {
 						values.put(new Item(key, Byte.parseByte("" + 0),
 								(short) 0), parseInfo(valueFile, entry));
-					}
-					else
-					{
+					} else {
 						plugin.getLogger().warning("No section for " + entry);
 					}
 				}
-			}
-			catch (final NumberFormatException ex)
-			{
+			} catch (final NumberFormatException ex) {
 				// Potential data value entry
-				if (entry.contains("&"))
-				{
-					try
-					{
+				if (entry.contains("&")) {
+					try {
 						final String[] split = entry.split("&");
 						final int item = Integer.parseInt(split[0]);
 						final int data = Integer.parseInt(split[1]);
-						if (item <= 0)
-						{
+						if (item <= 0) {
 							plugin.getLogger()
 									.warning(
 											Karmiconomy.TAG
 													+ " Zero or negative item id for entry: "
 													+ entry);
-						}
-						else
-						{
-							if (valueFile.isConfigurationSection(entry))
-							{
-								if (item != 373)
-								{
+						} else {
+							if (valueFile.isConfigurationSection(entry)) {
+								if (item != 373) {
 									values.put(
 											new Item(item, Byte.parseByte(""
 													+ data), (short) data),
 											parseInfo(valueFile, entry));
-								}
-								else
-								{
+								} else {
 									values.put(
 											new Item(item, Byte
 													.parseByte("" + 0),
 													(short) data),
 											parseInfo(valueFile, entry));
 								}
-							}
-							else
-							{
+							} else {
 								plugin.getLogger().warning(
 										"No section for " + entry);
 							}
 						}
-					}
-					catch (ArrayIndexOutOfBoundsException a)
-					{
+					} catch (ArrayIndexOutOfBoundsException a) {
 						plugin.getLogger()
 								.warning(
 										"Wrong format for "
 												+ entry
 												+ ". Must follow '<itemid>&<datavalue>:' entry.");
-					}
-					catch (NumberFormatException exa)
-					{
+					} catch (NumberFormatException exa) {
 						plugin.getLogger().warning(
 								"Non-integer number for " + entry);
 					}
-				}
-				else
-				{
+				} else {
 					plugin.getLogger().warning("Invalid entry for " + entry);
 				}
 			}
@@ -557,13 +523,11 @@ public class Config
 		plugin.getLogger().info("Loaded custom values");
 	}
 
-	public Map<Item, KCItemInfo> getValueMap()
-	{
+	public Map<Item, KCItemInfo> getItemValueMap() {
 		return values;
 	}
 
-	private KCItemInfo parseInfo(YamlConfiguration config, String path)
-	{
+	private KCItemInfo parseInfo(YamlConfiguration config, String path) {
 		final double craftPay = config.getDouble(path + ".craftPay", 0.0);
 		final double enchantPay = config.getDouble(path + ".enchantPay", 0.0);
 		final double placePay = config.getDouble(path + ".placePay", 0.0);
@@ -581,6 +545,8 @@ public class Config
 				destroyLimit, destroyPay, dropLimit, dropPay);
 		return info;
 	}
+	
+	//TODO command value file
 
 	/**
 	 * Loads the value file. Contains default values If the value file isn't
@@ -588,16 +554,13 @@ public class Config
 	 * 
 	 * @return YamlConfiguration file
 	 */
-	// TODO set this to custom values file? for per use item or whatever
-	private YamlConfiguration valuesFile()
-	{
+	private YamlConfiguration itemValuesFile() {
 		final File file = new File(plugin.getDataFolder().getAbsolutePath()
 				+ "/values.yml");
 		// TODO rename
 		final YamlConfiguration valueFile = YamlConfiguration
 				.loadConfiguration(file);
-		if (valueFile.getKeys(false).isEmpty())
-		{
+		if (valueFile.getKeys(false).isEmpty()) {
 			// TODO all-inclusive defaults
 			// Defaults
 			valueFile.set("14", 5);
@@ -639,13 +602,10 @@ public class Config
 			valueFile.set("331", 2);
 			valueFile.set("351&4", 4);
 			// Insert defaults into file if they're not present
-			try
-			{
+			try {
 				// Save the file
 				valueFile.save(file);
-			}
-			catch (IOException e1)
-			{
+			} catch (IOException e1) {
 				// INFO Auto-generated catch block
 				plugin.getLogger().warning(
 						"File I/O Exception on saving karma list");
@@ -656,8 +616,7 @@ public class Config
 	}
 
 	// Private class to hold item specific information
-	public class KCItemInfo
-	{
+	public class KCItemInfo {
 		public double craftPay, enchantPay, placePay, ignitePay, destroyPay,
 				dropPay;
 		public int craftLimit, enchantLimit, placeLimit, igniteLimit,
@@ -666,8 +625,7 @@ public class Config
 		public KCItemInfo(int craftLimit, double craftPay, int enchantLimit,
 				double enchantPay, int placeLimit, double placePay,
 				int igniteLimit, double ignitePay, int destroyLimit,
-				double destroyPay, int dropLimit, double dropPay)
-		{
+				double destroyPay, int dropLimit, double dropPay) {
 			this.craftPay = craftPay;
 			this.enchantPay = enchantPay;
 			this.placePay = placePay;

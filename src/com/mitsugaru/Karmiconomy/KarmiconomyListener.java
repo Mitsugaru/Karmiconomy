@@ -30,6 +30,7 @@ import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerBucketFillEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerChatEvent;
+import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerEggThrowEvent;
 import org.bukkit.event.player.PlayerGameModeChangeEvent;
@@ -78,7 +79,7 @@ public class KarmiconomyListener implements Listener
 			if(config.chatDenyLimit && (config.chatLimit >= 0))
 			{
 				//TODO deny by player limit
-				final int limit = db.getData(Field.CHAT, player.getName(), null);
+				final int limit = db.getData(Field.CHAT, player.getName(), null, null);
 				if(limit >= config.chatLimit)
 				{
 					event.setCancelled(true);
@@ -103,6 +104,42 @@ public class KarmiconomyListener implements Listener
 		{
 			final Player player = event.getPlayer();
 			// TODO pay on chat
+			if (config.debugEvents)
+			{
+				final Map<String, String> details = new HashMap<String, String>();
+				details.put("Player", player.getName());
+				details.put("Message", event.getMessage());
+				debugEvent(event, details);
+			}
+		}
+	}
+	
+	@EventHandler(priority = EventPriority.LOWEST)
+	public void commandValid(final PlayerCommandPreprocessEvent event)
+	{
+		if(!event.isCancelled() && (config.commandDenyPay || config.commandDenyLimit) && event.getPlayer() != null)
+		{
+			final Player player = event.getPlayer();
+			//TODO pay on command
+			//pay based on command match
+			if (config.debugEvents)
+			{
+				final Map<String, String> details = new HashMap<String, String>();
+				details.put("Player", player.getName());
+				details.put("Message", event.getMessage());
+				debugEvent(event, details);
+			}
+		}
+	}
+	
+	@EventHandler(priority = EventPriority.MONITOR)
+	public void command(final PlayerCommandPreprocessEvent event)
+	{
+		if(!event.isCancelled() && config.command && event.getPlayer() != null)
+		{
+			final Player player = event.getPlayer();
+			//TODO pay on command
+			//pay based on command match
 			if (config.debugEvents)
 			{
 				final Map<String, String> details = new HashMap<String, String>();
@@ -907,22 +944,33 @@ public class KarmiconomyListener implements Listener
 		}
 	}
 
+	/**
+	 * Event called when player joins the server
+	 * 
+	 * @param event
+	 */
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void join(final PlayerJoinEvent event)
 	{
-		if (config.join && event.getPlayer() != null)
+		if(event.getPlayer() != null)
 		{
 			final Player player = event.getPlayer();
-			// TODO pay on join
-			if (config.debugEvents)
+			//Add player if they don't exist to database
+			db.addPlayer(player.getName());
+			//TODO check their last on date for potential reset
+			if (config.join)
 			{
-				final Map<String, String> details = new HashMap<String, String>();
-				details.put("Player", player.getName());
-				if (event.getJoinMessage() != null)
+				// TODO pay on join
+				if (config.debugEvents)
 				{
-					details.put("Message", event.getJoinMessage());
+					final Map<String, String> details = new HashMap<String, String>();
+					details.put("Player", player.getName());
+					if (event.getJoinMessage() != null)
+					{
+						details.put("Message", event.getJoinMessage());
+					}
+					debugEvent(event, details);
 				}
-				debugEvent(event, details);
 			}
 		}
 	}
