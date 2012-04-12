@@ -68,12 +68,19 @@ public class DatabaseHandler {
 						+ Table.DATA.getName()
 						+ " (id INT UNSIGNED NOT NULL, bedenter INT NOT NULL, bedleave INT NOT NULL, bowshoot INT NOT NULL, chat INT NOT NULL, death INT NOT NULL, creative INT NOT NULL, survival INT NOT NULL, playerJoin INT NOT NULL, playerDrop INT NOT NULL, kick INT NOT NULL, quit INT NOT NULL, respawn INT NOT NULL, worldchange INT NOT NULL, portalcreate INT NOT NULL, portalenter INT NOT NULL, tameocelot INT NOT NULL, tamewolf INT NOT NULL, PRIMARY KEY (id));");
 			}
-			if (!sqlite.checkTable(Table.PORTAL.getName())) {
+			if (!mysql.checkTable(Table.PORTAL.getName())) {
 				plugin.getLogger().info(
 						Karmiconomy.TAG + " Created portal table");
-				sqlite.createTable("CREATE TABLE "
+				mysql.createTable("CREATE TABLE "
 						+ Table.PORTAL.getName()
 						+ " (id INT UNSIGNED NOT NULL, pcreatenether INT NOT NULL, pcreateend INT NOT NULL, pcreatecustom INT NOT NULL, portalenter INT NOT NULL, PRIMARY KEY(id);");
+			}
+			if (!mysql.checkTable(Table.BUCKET.getName())) {
+				plugin.getLogger().info(
+						Karmiconomy.TAG + " Created portal table");
+				mysql.createTable("CREATE TABLE "
+						+ Table.BUCKET.getName()
+						+ " (id INT UNSIGNED NOT NULL, bemptylava INT NOT NULL, bemptywater INT NOT NULL, bfilllava INT NOT NULL, bfillwater INT NOT NULL, PRIMARY KEY(id);");
 			}
 		} else {
 			// Connect to sql database
@@ -121,7 +128,7 @@ public class DatabaseHandler {
 						Karmiconomy.TAG + " Created portal table");
 				sqlite.createTable("CREATE TABLE "
 						+ Table.BUCKET.getName()
-						+ " (id INTEGER PRIMARY KEY, pcreatenether INTEGER NOT NULL, pcreateend INTEGER NOT NULL, pcreatecustom INTEGER NOT NULL, portalenter INTEGER NOT NULL);");
+						+ " (id INTEGER PRIMARY KEY, bemptylava INTEGER NOT NULL, bemptywater INTEGER NOT NULL, bfilllava INTEGER NOT NULL, bfillwater INTEGER NOT NULL);");
 			}
 		}
 	}
@@ -390,15 +397,19 @@ public class DatabaseHandler {
 					break;
 				}
 				case PORTAL: {
-					query = select("SELECT * FROM " + field.getTable().getName() + " WHERE id='" + id + "';");
-					if(query.getResult().next()){
+					query = select("SELECT * FROM "
+							+ field.getTable().getName() + " WHERE id='" + id
+							+ "';");
+					if (query.getResult().next()) {
 						data = query.getResult().getInt(field.getColumnName());
 					}
 					break;
 				}
 				case BUCKET: {
-					query = select("SELECT * FROM " + field.getTable().getName() + " WHERE id='" + id + "';");
-					if(query.getResult().next()){
+					query = select("SELECT * FROM "
+							+ field.getTable().getName() + " WHERE id='" + id
+							+ "';");
+					if (query.getResult().next()) {
 						data = query.getResult().getInt(field.getColumnName());
 					}
 					break;
@@ -437,7 +448,10 @@ public class DatabaseHandler {
 				"pcreatenether"), PORTAL_CREATE_END(Table.PORTAL, "pcreateend"), PORTAL_CREATE_CUSTOM(
 				Table.PORTAL, "pcreatecustom"), PORTAL_ENTER(Table.PORTAL,
 				"portalenter"), TAME_OCELOT(Table.DATA, "tameocelot"), TAME_WOLF(
-				Table.DATA, "tamewolf"), WORLD_CHANGE(Table.DATA, "worldchange");
+				Table.DATA, "tamewolf"), WORLD_CHANGE(Table.DATA, "worldchange"), BUCKET_EMPTY_LAVA(
+				Table.BUCKET, "bemptylava"), BUCKET_EMPTY_WATER(Table.BUCKET,
+				"bemptywater"), BUCKET_FILL_LAVA(Table.BUCKET, "bfilllava"), BUCKET_FILL_WATER(
+				Table.BUCKET, "bfillwater");
 		private final Table table;
 		private final String columnname;
 

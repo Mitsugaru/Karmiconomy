@@ -38,23 +38,26 @@ public class Config {
 			tameOcelotDenyLimit, tameWolf, tameWolfDenyPay, tameWolfDenyLimit,
 			paintingPlace, paintingPlaceDenyPay, paintingPlaceDenyLimit,
 			bedEnter, bedEnterDenyPay, bedEnterDenyLimit, bedLeave,
-			bucketEmpty, bucketEmptyDenyPay, bucketEmptyDenyLimit, bucketFill,
-			bucketFillDenyPay, bucketFillDenyLimit, worldChange, death,
-			respawn, itemDrop, itemDropDenyPay, itemDropDenyLimit, eggThrow,
-			gameModeCreative, gameModeCreativeDenyPay,
-			gameModeCreativeDenyLimit, gameModeSurvival,
-			gameModeSurvivalDenyPay, gameModeSurvivalDenyLimit, kick, join,
-			quit, sneak, sneakDenyPay, sneakDenyLimit, sprint, sprintDenyPay,
-			sprintDenyLimit, vehicleEnter, vehicleEnterDenyPay,
-			vehicleEnterDenyLimit, vehicleExit, vehicleExitDenyPay,
-			vehicleExitDenyLimit, blockPlaceStatic, blockDestroyStatic,
-			craftItemStatic, enchantItemStatic, itemDropStatic/*
-															 * ,blockIgnite ,
-															 * blockIgniteValid
-															 */;
+			bucketEmptyLava, bucketEmptyLavaDenyPay, bucketEmptyLavaDenyLimit,
+			bucketFillLava, bucketFillLavaDenyPay, bucketFillLavaDenyLimit,
+			bucketEmptyWater, bucketEmptyWaterDenyPay,
+			bucketEmptyWaterDenyLimit, bucketFillWater, bucketFillWaterDenyPay,
+			bucketFillWaterDenyLimit, worldChange, death, respawn, itemDrop,
+			itemDropDenyPay, itemDropDenyLimit, eggThrow, gameModeCreative,
+			gameModeCreativeDenyPay, gameModeCreativeDenyLimit,
+			gameModeSurvival, gameModeSurvivalDenyPay,
+			gameModeSurvivalDenyLimit, kick, join, quit, sneak, sneakDenyPay,
+			sneakDenyLimit, sprint, sprintDenyPay, sprintDenyLimit,
+			vehicleEnter, vehicleEnterDenyPay, vehicleEnterDenyLimit,
+			vehicleExit, vehicleExitDenyPay, vehicleExitDenyLimit,
+			blockPlaceStatic, blockDestroyStatic, craftItemStatic,
+			enchantItemStatic, itemDropStatic, commandStatic/*
+											 * ,blockIgnite , blockIgniteValid
+											 */;
 	public int listlimit, bedEnterLimit, bedLeaveLimit, blockDestroyLimit,
-	/* blockIgniteLimit, */blockPlaceLimit, shootBowLimit, bucketEmptyLimit,
-			bucketFillLimit, craftLimit, enchantLimit, itemDropLimit,
+	/* blockIgniteLimit, */blockPlaceLimit, shootBowLimit,
+			bucketEmptyLavaLimit, bucketEmptyWaterLimit, bucketFillLavaLimit,
+			bucketFillWaterLimit, craftLimit, enchantLimit, itemDropLimit,
 			eggThrowLimmit, chatLimit, deathLimit, gameModeCreativeLimit,
 			gameModeSurvivalLimit, kickLimit, joinLimit, quitLimit,
 			respawnLimit, sneakLimit, sprintLimit, vehicleEnterLimit,
@@ -63,14 +66,14 @@ public class Config {
 			portalCreateNetherLimit, portalCreateEndLimit,
 			portalCreateCustomLimit, portalEnterLimit, eggThrowLimit;
 	public double bedEnterPay, bedLeavePay, blockDestroyPay, /* blockIgnitePay, */
-	blockPlacePay, shootBowPay, bucketEmptyPay, bucketFillPay, craftPay,
-			enchantPay, itemDropPay, eggThrowPay, chatPay, deathPay,
-			gameModePay, kickPay, joinPay, quitPay, respawnPay, sneakPay,
-			sprintPay, vehicleEnterPay, vehicleExitPay, paintingPlacePay,
-			tameOcelotPay, tameWolfPay, gameModeCreativePay,
-			gameModeSurvivalPay, commandPay, worldChangePay,
-			portalCreateNetherPay, portalCreateEndPay, portalCreateCustomPay,
-			portalEnterPay, shootBowForce;
+	blockPlacePay, shootBowPay, bucketEmptyLavaPay, bucketEmptyWaterPay,
+			bucketFillLavaPay, bucketFillWaterPay, craftPay, enchantPay,
+			itemDropPay, eggThrowPay, chatPay, deathPay, gameModePay, kickPay,
+			joinPay, quitPay, respawnPay, sneakPay, sprintPay, vehicleEnterPay,
+			vehicleExitPay, paintingPlacePay, tameOcelotPay, tameWolfPay,
+			gameModeCreativePay, gameModeSurvivalPay, commandPay,
+			worldChangePay, portalCreateNetherPay, portalCreateEndPay,
+			portalCreateCustomPay, portalEnterPay, shootBowForce;
 	private final Map<Item, KCItemInfo> values = new HashMap<Item, KCItemInfo>();
 
 	// TODO ability to change config in-game
@@ -125,19 +128,27 @@ public class Config {
 		defaults.put("bow.shoot.forcefactor", 1.0);
 		defaults.put("bow.shoot.limit", 100);
 		defaults.put("bow.shoot.pay", 0.1);
-		// TODO reorganize bucket to the three(?) types
-		defaults.put("bucket.empty.enabled", false);
-		defaults.put("bucket.empty.denyOnLackPay", false);
-		defaults.put("bucket.empty.denyOnLimit", false);
-		defaults.put("bucket.empty.static", true);
-		defaults.put("bucket.empty.limit", 100);
-		defaults.put("bucket.empty.pay", 0.1);
-		defaults.put("bucket.fill.enabled", false);
-		defaults.put("bucket.fill.denyOnLackPay", false);
-		defaults.put("bucket.fill.denyOnLimit", false);
-		defaults.put("bucket.fill.static", true);
-		defaults.put("bucket.fill.limit", 100);
-		defaults.put("bucket.fill.pay", 0.1);
+		// TODO milk bucket
+		defaults.put("bucket.empty.lava.enabled", false);
+		defaults.put("bucket.empty.lava.denyOnLackPay", false);
+		defaults.put("bucket.empty.lava.denyOnLimit", false);
+		defaults.put("bucket.empty.lava.limit", 100);
+		defaults.put("bucket.empty.lava.pay", 0.1);
+		defaults.put("bucket.fill.lava.enabled", false);
+		defaults.put("bucket.fill.lava.denyOnLackPay", false);
+		defaults.put("bucket.fill.lava.denyOnLimit", false);
+		defaults.put("bucket.fill.lava.limit", 100);
+		defaults.put("bucket.fill.lava.pay", 0.1);
+		defaults.put("bucket.empty.water.enabled", false);
+		defaults.put("bucket.empty.water.denyOnLackPay", false);
+		defaults.put("bucket.empty.water.denyOnLimit", false);
+		defaults.put("bucket.empty.water.limit", 100);
+		defaults.put("bucket.empty.water.pay", 0.1);
+		defaults.put("bucket.fill.water.enabled", false);
+		defaults.put("bucket.fill.water.denyOnLackPay", false);
+		defaults.put("bucket.fill.water.denyOnLimit", false);
+		defaults.put("bucket.fill.water.limit", 100);
+		defaults.put("bucket.fill.water.pay", 0.1);
 		defaults.put("item.craft.enabled", false);
 		defaults.put("item.craft.static", true);
 		defaults.put("item.craft.denyOnLackPay", false);
@@ -435,16 +446,32 @@ public class Config {
 		/**
 		 * Bucket
 		 */
-		// Empty
-		/*bucketEmpty = config.getBoolean("bucket.empty.enabled", false);
-		defaults.put("bucket.empty.static", true);
-		bucketEmptyLimit = config.getInt("bucket.empty.limit", 100);
-		bucketEmptyPay = config.getDouble("bucket.empty.pay", 0.1);
-		// Fill
-		bucketFill = config.getBoolean("bucket.fill.enabled", false);
-		defaults.put("bucket.fill.static", true);
-		bucketFillLimit = config.getInt("bucket.fill.limit", 100);
-		bucketFillPay = config.getDouble("bucket.fill.pay", 0.1);*/
+		// Empty lava
+		bucketEmptyLava = config.getBoolean("bucket.empty.lava.enabled", false);
+		bucketEmptyLavaDenyPay = config.getBoolean(
+				"bucket.empty.lava.denyOnLackPay", false);
+		bucketEmptyLavaDenyLimit = config.getBoolean(
+				"bucket.empty.lava.denyOnLimit", false);
+		bucketEmptyLavaLimit = config.getInt("bucket.empty.lava.limit", 100);
+		bucketEmptyLavaPay = config.getDouble("bucket.empty.lava.pay", 0.1);
+		// Fill lava
+		bucketFillLava = config.getBoolean("bucket.fill.lava.enabled", false);
+		bucketFillLavaDenyPay = config.getBoolean("bucket.fill.lava.denyOnLackPay", false);
+		bucketFillLavaDenyLimit = config.getBoolean("bucket.fill.lava.denyOnLimit", false);
+		bucketFillLavaLimit = config.getInt("bucket.fill.lava.limit", 100);
+		bucketFillLavaPay = config.getDouble("bucket.fill.lava.pay", 0.1);
+		// Empty water
+		bucketEmptyWater = config.getBoolean("bucket.empty.water.enabled", false);
+		bucketEmptyWaterDenyPay = config.getBoolean("bucket.empty.water.denyOnLackPay", false);
+		bucketEmptyWaterDenyLimit = config.getBoolean("bucket.empty.water.denyOnLimit", false);
+		bucketEmptyWaterLimit = config.getInt("bucket.empty.water.limit", 100);
+		bucketEmptyWaterPay = config.getDouble("bucket.empty.water.pay", 0.1);
+		// Fill water
+		bucketFillWater = config.getBoolean("bucket.fill.water.enabled", false);
+		bucketFillWaterDenyPay = config.getBoolean("bucket.fill.water.denyOnLackPay", false);
+		bucketFillWaterDenyLimit = config.getBoolean("bucket.fill.water.denyOnLimit", false);
+		bucketFillWaterLimit = config.getInt("bucket.fill.water.limit", 100);
+		bucketFillWaterPay = config.getDouble("bucket.fill.water.pay", 0.1);
 		/**
 		 * Painting
 		 */
@@ -463,7 +490,7 @@ public class Config {
 		chatPay = config.getDouble("player.chat.pay", 0.1);
 		// command
 		command = config.getBoolean("player.command.enabled", false);
-		// TODO static
+		commandStatic = config.getBoolean("player.command.static", true);
 		commandDenyPay = config.getBoolean("player.command.denyOnLackPay",
 				false);
 		commandDenyLimit = config.getBoolean("player.command.denyOnLimit",
@@ -528,23 +555,36 @@ public class Config {
 		 * Portal
 		 */
 		// create nether
-		portalCreateNether = config.getBoolean("portal.createNether.enabled", false);
-		portalCreateNetherDenyPay = config.getBoolean("portal.createNether.denyOnLackPay", false);
-		portalCreateNetherDenyLimit = config.getBoolean("portal.createNether.denyOnLimit", false);
-		portalCreateNetherLimit = config.getInt("portal.createNether.limit", 10);
-		portalCreateNetherPay = config.getDouble("portal.createNether.pay.nether", 0.1);
+		portalCreateNether = config.getBoolean("portal.createNether.enabled",
+				false);
+		portalCreateNetherDenyPay = config.getBoolean(
+				"portal.createNether.denyOnLackPay", false);
+		portalCreateNetherDenyLimit = config.getBoolean(
+				"portal.createNether.denyOnLimit", false);
+		portalCreateNetherLimit = config
+				.getInt("portal.createNether.limit", 10);
+		portalCreateNetherPay = config.getDouble(
+				"portal.createNether.pay.nether", 0.1);
 		// create end
 		portalCreateEnd = config.getBoolean("portal.createEnd.enabled", false);
-		portalCreateEndDenyPay = config.getBoolean("portal.createEnd.denyOnLackPay", false);
-		portalCreateEndDenyLimit = config.getBoolean("portal.createEnd.denyOnLimit", false);
+		portalCreateEndDenyPay = config.getBoolean(
+				"portal.createEnd.denyOnLackPay", false);
+		portalCreateEndDenyLimit = config.getBoolean(
+				"portal.createEnd.denyOnLimit", false);
 		portalCreateEndLimit = config.getInt("portal.createEnd.limit", 10);
-		portalCreateEndPay = config.getDouble("portal.createEnd.pay.ender", 0.1);
-		//create custom
-		portalCreateCustom = config.getBoolean("portal.createCustom.enabled", false);
-		portalCreateCustomDenyPay = config.getBoolean("portal.createCustom.denyOnLackPay", false);
-		portalCreateCustomDenyLimit = config.getBoolean("portal.createCustom.denyOnLimit", false);
-		portalCreateCustomLimit = config.getInt("portal.createCustom.limit", 10);
-		portalCreateCustomPay = config.getDouble("portal.createCustom.pay.custom", 0.1);
+		portalCreateEndPay = config
+				.getDouble("portal.createEnd.pay.ender", 0.1);
+		// create custom
+		portalCreateCustom = config.getBoolean("portal.createCustom.enabled",
+				false);
+		portalCreateCustomDenyPay = config.getBoolean(
+				"portal.createCustom.denyOnLackPay", false);
+		portalCreateCustomDenyLimit = config.getBoolean(
+				"portal.createCustom.denyOnLimit", false);
+		portalCreateCustomLimit = config
+				.getInt("portal.createCustom.limit", 10);
+		portalCreateCustomPay = config.getDouble(
+				"portal.createCustom.pay.custom", 0.1);
 		// enter
 		portalEnter = config.getBoolean("portal.enter.enabled", false);
 		portalEnterLimit = config.getInt("portal.enter.limit", 10);

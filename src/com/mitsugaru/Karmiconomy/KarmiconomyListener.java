@@ -358,7 +358,8 @@ public class KarmiconomyListener implements Listener {
 
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void createPortal(final EntityCreatePortalEvent event) {
-		if (!event.isCancelled() && (config.portalCreateNether || config.portalCreateEnd || config.portalCreateCustom)
+		if (!event.isCancelled()
+				&& (config.portalCreateNether || config.portalCreateEnd || config.portalCreateCustom)
 				&& event.getEntity() != null) {
 			if (event.getEntity() instanceof Player) {
 				final Player player = (Player) event.getEntity();
@@ -570,7 +571,9 @@ public class KarmiconomyListener implements Listener {
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void bucketEmptyValid(final PlayerBucketEmptyEvent event) {
 		if (!event.isCancelled()
-				&& (config.bucketEmptyDenyPay || config.bucketEmptyDenyLimit)
+				&& (config.bucketEmptyWaterDenyPay
+						|| config.bucketEmptyWaterDenyLimit
+						|| config.bucketEmptyLavaDenyPay || config.bucketEmptyLavaDenyLimit)
 				&& event.getPlayer() != null) {
 			final Player player = event.getPlayer();
 			// TODO pay on empty
@@ -588,7 +591,8 @@ public class KarmiconomyListener implements Listener {
 
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void bucketEmpty(final PlayerBucketEmptyEvent event) {
-		if (!event.isCancelled() && config.bucketEmpty
+		if (!event.isCancelled()
+				&& (config.bucketEmptyLava || config.bucketEmptyWater)
 				&& event.getPlayer() != null) {
 			final Player player = event.getPlayer();
 			// TODO pay on empty
@@ -606,7 +610,9 @@ public class KarmiconomyListener implements Listener {
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void bucketFillValid(final PlayerBucketFillEvent event) {
 		if (!event.isCancelled()
-				&& (config.bucketFillDenyPay || config.bucketFillDenyLimit)
+				&& (config.bucketFillWaterDenyPay
+						|| config.bucketFillWaterDenyLimit
+						|| config.bucketFillLavaDenyPay || config.bucketFillLavaDenyLimit)
 				&& event.getPlayer() != null) {
 			final Player player = event.getPlayer();
 			// TODO deny
@@ -625,7 +631,8 @@ public class KarmiconomyListener implements Listener {
 
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void bucketFill(final PlayerBucketFillEvent event) {
-		if (!event.isCancelled() && config.bucketFill
+		if (!event.isCancelled()
+				&& (config.bucketFillWater || config.bucketFillLava)
 				&& event.getPlayer() != null) {
 			final Player player = event.getPlayer();
 			// TODO pay on fill
