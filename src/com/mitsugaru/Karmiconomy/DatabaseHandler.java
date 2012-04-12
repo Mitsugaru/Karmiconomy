@@ -73,17 +73,34 @@ public class DatabaseHandler {
 			sqlite = new SQLite(plugin.getLogger(), Karmiconomy.TAG, "data",
 					plugin.getDataFolder().getAbsolutePath());
 			// Check if table exists
-			if (!sqlite.checkTable(config.tablePrefix + "master")) {
+			if (!sqlite.checkTable(Table.MASTER.getName())) {
 				plugin.getLogger().info(
 						Karmiconomy.TAG + " Created master table");
 				// Create table
 				sqlite.createTable("CREATE TABLE "
-						+ config.tablePrefix
-						+ "master (id INTEGER PRIMARY KEY, playername varchar(32) NOT NULL, laston TEXT NOT NULL, UNIQUE (playername));");
+						+ Table.MASTER.getName()
+						+ " (id INTEGER PRIMARY KEY, playername varchar(32) NOT NULL, laston TEXT NOT NULL, UNIQUE (playername));");
 			}
-			if (!sqlite.checkTable(config.tablePrefix + "items")) {
+			if (!sqlite.checkTable(Table.ITEMS.getName())) {
 				plugin.getLogger().info(
 						Karmiconomy.TAG + " Created items table");
+				sqlite.createTable("CREATE TABLE "
+						+ Table.ITEMS.getName()
+						+ " (row INTEGER PRIMARY KEY, id INTEGER NOT NULL, itemid INTEGER NOT NULL, data TEXT NOT NULL, durability TEXT NOT NULL, place INTEGER NOT NULL, destroy INTEGER NOT NULL, craft INTEGER NOT NULL, enchant INTEGER NOT NULL, drop INTEGER NOT NULL)");
+			}
+			if (!sqlite.checkTable(Table.COMMAND.getName())) {
+				plugin.getLogger().info(
+						Karmiconomy.TAG + " Created command table");
+				sqlite.createTable("CREATE TABLE "
+						+ Table.COMMAND.getName()
+						+ " (row INTEGER PRIMARY KEY, id INTEGER NOT NULL, command TEXT NOT NULL, count INTEGER NOT NULL);");
+			}
+			if (!sqlite.checkTable(Table.DATA.getName())) {
+				plugin.getLogger()
+						.info(Karmiconomy.TAG + " Created data table");
+				sqlite.createTable("CREATE TABLE "
+						+ Table.DATA.getName()
+						+ " (id INTEGER PRIMARY KEY, bedenter INTEGER NOT NULL, bedleave INTEGER NOT NULL, bowshoot INTEGER NOT NULL, chat INTEGER NOT NULL, death INTEGER NOT NULL, creative INTEGER NOT NULL, survival INTEGER NOT NULL, join INTEGER NOT NULL, kick INTEGER NOT NULL, quit INTEGER NOT NULL, respawn INTEGER NOT NULL, worldchange INTEGER NOT NULL, portalcreate INTEGER NOT NULL, portalenter INTEGER NOT NULL, tameocelot INTEGER NOT NULL, tamewolf INTEGER NOT NULL);");
 			}
 		}
 	}
@@ -203,18 +220,29 @@ public class DatabaseHandler {
 	}
 
 	public void resetAllValues(String name) {
-		final int id = getPlayerId(name);
+		boolean drop = false;
+		int id = getPlayerId(name);
 		if (id != -1) {
+			drop = true;
+		} else {
+			// Reset was called, but somehow player did not exist. Add them to
+			// database
+			addPlayer(name);
+			id = getPlayerId(name);
+			if (id != -1) {
+				drop = true;
+			}
+		}
+		if (drop) {
 			// Reset player values in data table
 			standardQuery("UPDATE "
 					+ Table.DATA.getName()
 					+ " SET bedenter='0', bedleave='0', bowshoot='0', chat='0', death='0', creative='0', survival='0', join='0', kick='0', quit='0', respawn='0', worldchange='0', portalcreate='0', portalenter='0', tameocelot='0', tamewolf='0' WHERE id='"
 					+ id + "');");
 			// TODO drop everything in items for player id
+			// TODO same for commands
 		} else {
-			// Reset was called, but somehow player did not exist. Add them to
-			// database
-			addPlayer(name);
+			plugin.getLogger().warning("Could not reset values for: " + name);
 		}
 	}
 
@@ -225,59 +253,108 @@ public class DatabaseHandler {
 
 	public void incrementData(Field field, String name, ItemStack item,
 			String command) {
-		// TODO increment count of specified field for given player name and
-		// optional item
+		boolean inc = false;
+		int id = getPlayerId(name);
+		if (id != -1) {
+			inc = true;
+		} else {
+			// Increment was called, but somehow player did not exist. Add them
+			// to
+			// database
+			addPlayer(name);
+			id = getPlayerId(name);
+			if (id != -1) {
+				inc = true;
+			}
+		}
+		if (inc) {
+			// Grab previous value
+			int value = getData(field, name, item, command);
+			// Increment count of specified field for given player name and
+			// optional item / command
+			value++;
+			switch (field.getTable()) {
+			case DATA: {
+				// Update
+				standardQuery("UPDATE " + field.getTable().getName() + " SET "
+						+ field.getColumnName() + "='" + value + "' WHERE id='"
+						+ id + "';");
+			}
+			case ITEMS: {
+				// TODO check if insert or update
+			}
+			case COMMAND: {
+				// TODO check if insert or update
+			}
+			}
+
+		} else {
+			plugin.getLogger().warning(
+					"Could not increment value '" + field + "' for: " + name);
+		}
+
 	}
 
 	public int getData(Field field, String name, ItemStack item, String command) {
+		boolean validId = false;
 		int data = -1;
-		final int id = getPlayerId(name);
+		int id = getPlayerId(name);
 		if (id == -1) {
 			plugin.getLogger().warning(
 					"Player '" + name + "' not found in master database!");
-			// TODO make entries?
+			addPlayer(name);
+			id = getPlayerId(name);
+			if(id != -1)
+			{
+				validId = true;
+			}
+		} else {
+			validId = true;
 		}
-		try {
-			Query query = null;
-			if (field.getTable() == Table.DATA) {
-				// Handle data specific stuff
-				query = select("SELECT * FROM " + field.getTable().getName()
-						+ " WHERE id='" + id + "';");
-				if (query.getResult().next()) {
-					data = query.getResult().getInt(field.getColumnName());
-					if (query.getResult().wasNull()) {
-						data = -1;
-						plugin.getLogger().warning(
-								"Null field '" + field + "' for player '"
-										+ name + "'");
+		if (validId) {
+			try {
+				Query query = null;
+				if (field.getTable() == Table.DATA) {
+					// Handle data specific stuff
+					query = select("SELECT * FROM "
+							+ field.getTable().getName() + " WHERE id='" + id
+							+ "';");
+					if (query.getResult().next()) {
+						data = query.getResult().getInt(field.getColumnName());
+						if (query.getResult().wasNull()) {
+							data = -1;
+							plugin.getLogger().warning(
+									"Null field '" + field + "' for player '"
+											+ name + "'");
+						}
 					}
-				}
-			} else if (field.getTable() == Table.ITEMS) {
-				if (item != null) {
-					// TODO handle items specific stuff
-					// TODO check against potions / whatever
+				} else if (field.getTable() == Table.ITEMS) {
+					if (item != null) {
+						// TODO handle items specific stuff
+						// TODO check against potions / whatever
+					} else {
+						plugin.getLogger().warning(
+								"ItemStack cannot be null for field: " + field);
+					}
+				} else if (field.getTable() == Table.COMMAND) {
+					if (command != null) {
+						// TODO handle command specific stuff
+					} else {
+						plugin.getLogger().warning(
+								"Command cannot be null for field: " + field);
+					}
 				} else {
 					plugin.getLogger().warning(
-							"ItemStack cannot be null for field: " + field);
+							"Unhandled table '" + field.getTable().getName()
+									+ "' for field '" + field + "'");
 				}
-			} else if (field.getTable() == Table.COMMAND) {
-				if (command != null) {
-					// TODO handle command specific stuff
-				} else {
-					plugin.getLogger().warning(
-							"Command cannot be null for field: " + field);
+				if (query != null) {
+					query.closeQuery();
 				}
-			} else {
-				plugin.getLogger().warning(
-						"Unhandled table '" + field.getTable().getName()
-								+ "' for field '" + field + "'");
+			} catch (SQLException e) {
+				plugin.getLogger().warning("SQL Exception on Import");
+				e.printStackTrace();
 			}
-			if (query != null) {
-				query.closeQuery();
-			}
-		} catch (SQLException e) {
-			plugin.getLogger().warning("SQL Exception on Import");
-			e.printStackTrace();
 		}
 		return data;
 	}
@@ -315,7 +392,7 @@ public class DatabaseHandler {
 		}
 	}
 
-	private enum Table {
+	public enum Table {
 		MASTER(config.tablePrefix + "master"), ITEMS(config.tablePrefix
 				+ "items"), DATA(config.tablePrefix + "data"), COMMAND(
 				config.tablePrefix + "command");

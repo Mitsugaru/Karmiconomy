@@ -15,12 +15,15 @@ import java.util.Map.Entry;
 
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.inventory.ItemStack;
+
+import com.mitsugaru.Karmiconomy.DatabaseHandler.Field;
 
 public class Config {
 	// Class variables
 	private Karmiconomy plugin;
 	public String host, port, database, user, password, tablePrefix;
-	public boolean debugTime, debugEvents, useMySQL, importSQL, chat,
+	public boolean debugTime, debugEvents, debugEconomy, useMySQL, importSQL, chat,
 			chatDenyPay, chatDenyLimit, command, commandDenyPay,
 			commandDenyLimit, blockPlace, blockPlaceDenyPay,
 			blockPlaceDenyLimit, blockDestroy, blockDestroyDenyPay,
@@ -51,14 +54,15 @@ public class Config {
 			gameModeSurvivalLimit, kickLimit, joinLimit, quitLimit,
 			respawnLimit, sneakLimit, sprintLimit, vehicleEnterLimit,
 			vehicleExitLimit, paintingPlaceLimit, commandLimit,
-			worldChangeLimit, tameOcelotLimit, tameWolfLimit;
+			worldChangeLimit, tameOcelotLimit, tameWolfLimit, portalCreateLimit,
+			portalEnterLimit;
 	public double bedEnterPay, bedLeavePay, blockDestroyPay, /* blockIgnitePay, */
 	blockPlacePay, shootBowPay, bucketEmptyPay, bucketFillPay, craftPay,
 			enchantPay, itemDropPay, eggThrowPay, chatPay, deathPay,
 			gameModePay, kickPay, joinPay, quitPay, respawnPay, sneakPay,
 			sprintPay, vehicleEnterPay, vehicleExitPay, paintingPlacePay,
-			tameOcelotPay, tameWolfPay, protalCreatePay, protalEnterPay,
-			commandPay;
+			tameOcelotPay, tameWolfPay, gameModeCreativePay, gameModeSurvivalPay,
+			commandPay, worldChangePay, portalCreatePay, portalEnterPay;
 	private final Map<Item, KCItemInfo> values = new HashMap<Item, KCItemInfo>();
 
 	// TODO ability to change config in-game
@@ -234,6 +238,7 @@ public class Config {
 		defaults.put("mysql.import", false);
 		defaults.put("debug.events", false);
 		defaults.put("debug.time", false);
+		defaults.put("debug.economy", false);
 		defaults.put("version", plugin.getDescription().getVersion());
 		// Insert defaults into config file if they're not present
 		for (final Entry<String, Object> e : defaults.entrySet()) {
@@ -261,6 +266,7 @@ public class Config {
 		listlimit = config.getInt("listlimit", 10);
 		debugTime = config.getBoolean("debug.time", false);
 		debugEvents = config.getBoolean("debug.events", false);
+		debugEconomy = config.getBoolean("debug.economy", false);
 		/**
 		 * Events
 		 */
@@ -433,6 +439,7 @@ public class Config {
 		listlimit = config.getInt("listlimit", 10);
 		debugTime = config.getBoolean("debug.time", false);
 		debugEvents = config.getBoolean("debug.events", false);
+		debugEconomy = config.getBoolean("debug.economy", false);
 		// Load config for item specific values
 		this.loadItemValueMap();
 		// Check bounds
@@ -446,6 +453,119 @@ public class Config {
 	 */
 	private void boundsCheck() {
 		// TODO format all doubles to 2 decimal places
+	}
+	
+	public double getPayValue(Field type, ItemStack item, String command)
+	{
+		double pay = 0.0;
+		switch (type.getTable()) {
+		case DATA: {
+			switch (type) {
+			case CHAT:
+				return chatPay;
+			case BED_ENTER:
+				return bedEnterPay;
+			case BED_LEAVE:
+				return bedLeavePay;
+			case BOW_SHOOT:
+				return shootBowPay;
+			case DEATH:
+				return deathPay;
+			case CREATIVE:
+				return gameModeCreativePay;
+			case SURVIVAL:
+				return gameModeSurvivalPay;
+			case JOIN:
+				return joinPay;
+			case KICK:
+				return kickPay;
+			case QUIT:
+				return quitPay;
+			case RESPAWN:
+				return respawnPay;
+			case PORTAL_CREATE:
+				return portalCreatePay;
+			case PORTAL_ENTER:
+				return portalEnterPay;
+			case TAME_OCELOT:
+				return tameOcelotPay;
+			case TAME_WOLF:
+				return tameWolfPay;
+			case WORLD_CHANGE:
+				return worldChangePay;
+			default:
+				break;
+			}
+			break;
+		}
+		case ITEMS: {
+			//TODO handle custom item limit
+			break;
+		}
+		case COMMAND: {
+			//TODO handle custom command limit
+			break;
+		}
+		default:
+			break;
+		}
+		return pay;
+	}
+
+	public int getLimitValue(Field type, ItemStack item, String command) {
+		int limit = -1;
+		switch (type.getTable()) {
+		case DATA: {
+			switch (type) {
+			case CHAT:
+				return chatLimit;
+			case BED_ENTER:
+				return bedEnterLimit;
+			case BED_LEAVE:
+				return bedLeaveLimit;
+			case BOW_SHOOT:
+				return shootBowLimit;
+			case DEATH:
+				return deathLimit;
+			case CREATIVE:
+				return gameModeCreativeLimit;
+			case SURVIVAL:
+				return gameModeSurvivalLimit;
+			case JOIN:
+				return joinLimit;
+			case KICK:
+				return kickLimit;
+			case QUIT:
+				return quitLimit;
+			case RESPAWN:
+				return respawnLimit;
+			case PORTAL_CREATE:
+				return portalCreateLimit;
+			case PORTAL_ENTER:
+				return portalEnterLimit;
+			case TAME_OCELOT:
+				return tameOcelotLimit;
+			case TAME_WOLF:
+				return tameWolfLimit;
+			case WORLD_CHANGE:
+				return worldChangeLimit;
+			default:
+				break;
+			}
+			break;
+		}
+		case ITEMS: {
+			//TODO handle custom item limit
+			break;
+		}
+		case COMMAND: {
+			//TODO handle custom command limit
+			break;
+		}
+		default:
+			break;
+		}
+		return limit;
 	}
 
 	/**
@@ -545,8 +665,8 @@ public class Config {
 				destroyLimit, destroyPay, dropLimit, dropPay);
 		return info;
 	}
-	
-	//TODO command value file
+
+	// TODO command value file
 
 	/**
 	 * Loads the value file. Contains default values If the value file isn't
