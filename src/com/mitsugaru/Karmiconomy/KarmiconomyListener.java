@@ -56,6 +56,7 @@ public class KarmiconomyListener implements Listener {
 	public KarmiconomyListener(Karmiconomy plugin) {
 		this.plugin = plugin;
 		this.eco = plugin.getEconomy();
+		this.db = plugin.getDatabaseHandler();
 		this.config = plugin.getPluginConfig();
 	}
 
@@ -77,7 +78,6 @@ public class KarmiconomyListener implements Listener {
 					debugEvent(event, details);
 				}
 			}
-
 		}
 	}
 
@@ -799,7 +799,11 @@ public class KarmiconomyListener implements Listener {
 		if (event.getPlayer() != null) {
 			final Player player = event.getPlayer();
 			// Add player if they don't exist to database
-			db.addPlayer(player.getName());
+			final boolean add = db.addPlayer(player.getName());
+			if(config.debugEvents && add)
+			{
+				plugin.getLogger().info("Added player '" + player.getName() +"' to database");
+			}
 			// TODO check their last on date for potential reset
 			if (config.join) {
 				// TODO pay on join

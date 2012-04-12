@@ -187,7 +187,7 @@ public class DatabaseHandler {
 		return id;
 	}
 
-	public void addPlayer(String name) {
+	public boolean addPlayer(String name) {
 		if (!name.contains("'")) {
 			final int id = getPlayerId(name);
 			if (id == -1) {
@@ -206,6 +206,7 @@ public class DatabaseHandler {
 							+ " (id, bedenter, bedleave, bowshoot, chat, death, creative, survival, playerJoin, playerDrop, kick, quit, respawn, worldchange, portalcreate, portalenter, tameocelot, tamewolf) VALUES('"
 							+ generatedId
 							+ "','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0');");
+					return true;
 				} else {
 					plugin.getLogger().warning(
 							"Player '" + name
@@ -217,6 +218,7 @@ public class DatabaseHandler {
 					"Illegal character for player: " + name
 							+ " ... Not added to database.");
 		}
+		return false;
 	}
 
 	public void resetAllValues(String name) {
