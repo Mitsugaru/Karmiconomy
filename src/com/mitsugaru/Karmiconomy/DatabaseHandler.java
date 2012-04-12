@@ -66,7 +66,7 @@ public class DatabaseHandler {
 						.info(Karmiconomy.TAG + " Created data table");
 				mysql.createTable("CREATE TABLE "
 						+ Table.DATA.getName()
-						+ " (id INT UNSIGNED NOT NULL, bedenter INT NOT NULL, bedleave INT NOT NULL, bowshoot INT NOT NULL, chat INT NOT NULL, death INT NOT NULL, creative INT NOT NULL, survival INT NOT NULL, playerJoin INT NOT NULL, playerDrop INT NOT NULL, kick INT NOT NULL, quit INT NOT NULL, respawn INT NOT NULL, worldchange INT NOT NULL, portalcreate INT NOT NULL, portalenter INT NOT NULL, tameocelot INT NOT NULL, tamewolf INT NOT NULL, PRIMARY KEY (id));");
+						+ " (id INT UNSIGNED NOT NULL, bedenter INT NOT NULL, bedleave INT NOT NULL, bowshoot INT NOT NULL, chat INT NOT NULL, death INT NOT NULL, creative INT NOT NULL, survival INT NOT NULL, playerJoin INT NOT NULL, playerDrop INT NOT NULL, kick INT NOT NULL, quit INT NOT NULL, respawn INT NOT NULL, worldchange INT NOT NULL, tameocelot INT NOT NULL, tamewolf INT NOT NULL, PRIMARY KEY (id));");
 			}
 			if (!mysql.checkTable(Table.PORTAL.getName())) {
 				plugin.getLogger().info(
@@ -77,7 +77,7 @@ public class DatabaseHandler {
 			}
 			if (!mysql.checkTable(Table.BUCKET.getName())) {
 				plugin.getLogger().info(
-						Karmiconomy.TAG + " Created portal table");
+						Karmiconomy.TAG + " Created bucket table");
 				mysql.createTable("CREATE TABLE "
 						+ Table.BUCKET.getName()
 						+ " (id INT UNSIGNED NOT NULL, bemptylava INT NOT NULL, bemptywater INT NOT NULL, bfilllava INT NOT NULL, bfillwater INT NOT NULL, PRIMARY KEY(id);");
@@ -114,7 +114,7 @@ public class DatabaseHandler {
 						.info(Karmiconomy.TAG + " Created data table");
 				sqlite.createTable("CREATE TABLE "
 						+ Table.DATA.getName()
-						+ " (id INTEGER PRIMARY KEY, bedenter INTEGER NOT NULL, bedleave INTEGER NOT NULL, bowshoot INTEGER NOT NULL, chat INTEGER NOT NULL, death INTEGER NOT NULL, creative INTEGER NOT NULL, survival INTEGER NOT NULL, playerJoin INTEGER NOT NULL, playerDrop INTEGER NOT NULL, kick INTEGER NOT NULL, quit INTEGER NOT NULL, respawn INTEGER NOT NULL, worldchange INTEGER NOT NULL, portalcreate INTEGER NOT NULL, portalenter INTEGER NOT NULL, tameocelot INTEGER NOT NULL, tamewolf INTEGER NOT NULL);");
+						+ " (id INTEGER PRIMARY KEY, bedenter INTEGER NOT NULL, bedleave INTEGER NOT NULL, bowshoot INTEGER NOT NULL, chat INTEGER NOT NULL, death INTEGER NOT NULL, creative INTEGER NOT NULL, survival INTEGER NOT NULL, playerJoin INTEGER NOT NULL, playerDrop INTEGER NOT NULL, kick INTEGER NOT NULL, quit INTEGER NOT NULL, respawn INTEGER NOT NULL, worldchange INTEGER NOT NULL, tameocelot INTEGER NOT NULL, tamewolf INTEGER NOT NULL);");
 			}
 			if (!sqlite.checkTable(Table.PORTAL.getName())) {
 				plugin.getLogger().info(
@@ -125,7 +125,7 @@ public class DatabaseHandler {
 			}
 			if (!sqlite.checkTable(Table.BUCKET.getName())) {
 				plugin.getLogger().info(
-						Karmiconomy.TAG + " Created portal table");
+						Karmiconomy.TAG + " Created bucket table");
 				sqlite.createTable("CREATE TABLE "
 						+ Table.BUCKET.getName()
 						+ " (id INTEGER PRIMARY KEY, bemptylava INTEGER NOT NULL, bemptywater INTEGER NOT NULL, bfilllava INTEGER NOT NULL, bfillwater INTEGER NOT NULL);");
@@ -238,7 +238,11 @@ public class DatabaseHandler {
 							+ Table.PORTAL.getName()
 							+ " (id, pcreatenether, pcreateend, pcreatecustom, portalenter) VALUES('"
 							+ id + "','0','0','0','0');");
-					// TODO add bucket table
+					// Add player bucket table
+					standardQuery("INSERT INTO "
+							+ Table.BUCKET.getName()
+							+ " (id, bemptylava, bemptywater, bfilllava, bfillwater) + VALUES('"
+							+ id + "','0','0','0','0');");
 					return true;
 				} else {
 					plugin.getLogger().warning(

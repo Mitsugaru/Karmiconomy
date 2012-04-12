@@ -285,7 +285,7 @@ public class Config {
 		database = config.getString("mysql.database", "minecraft");
 		user = config.getString("mysql.user", "user");
 		password = config.getString("mysql.password", "password");
-		tablePrefix = config.getString("mysql.prefix", "kj_");
+		tablePrefix = config.getString("mysql.prefix", "kcon_");
 		importSQL = config.getBoolean("mysql.import", false);
 		// Load all other settings
 		this.loadSettings(config);
