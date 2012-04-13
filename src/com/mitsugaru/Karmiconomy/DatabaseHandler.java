@@ -114,7 +114,7 @@ public class DatabaseHandler
 						Karmiconomy.TAG + " Created items table");
 				sqlite.createTable("CREATE TABLE "
 						+ Table.ITEMS.getName()
-						+ " (row INTEGER PRIMARY KEY, id INTEGER NOT NULL, itemid INTEGER NOT NULL, data TEXT NOT NULL, durability TEXT NOT NULL, place INTEGER NOT NULL, destroy INTEGER NOT NULL, craft INTEGER NOT NULL, enchant INTEGER NOT NULL, playerDrop INTEGER NOT NULL, pickup INT NOT NULL,)");
+						+ " (row INTEGER PRIMARY KEY, id INTEGER NOT NULL, itemid INTEGER NOT NULL, data TEXT NOT NULL, durability TEXT NOT NULL, place INTEGER NOT NULL, destroy INTEGER NOT NULL, craft INTEGER NOT NULL, enchant INTEGER NOT NULL, playerDrop INTEGER NOT NULL, pickup INT NOT NULL);");
 			}
 			if (!sqlite.checkTable(Table.COMMAND.getName()))
 			{
