@@ -128,26 +128,24 @@ public class Config
 		defaults.put("bow.shoot.enabled", false);
 		defaults.put("bow.shoot.denyOnLackPay", false);
 		defaults.put("bow.shoot.denyOnLimit", false);
-		// TODO only pay on force
-		defaults.put("bow.shoot.forcefactor", 1.0);
+		defaults.put("bow.shoot.minimumforce", 0.0);
 		defaults.put("bow.shoot.limit", 100);
 		defaults.put("bow.shoot.pay", 0.1);
-		// TODO milk bucket
 		defaults.put("bucket.empty.lava.enabled", false);
 		defaults.put("bucket.empty.lava.denyOnLackPay", false);
 		defaults.put("bucket.empty.lava.denyOnLimit", false);
 		defaults.put("bucket.empty.lava.limit", 100);
-		defaults.put("bucket.empty.lava.pay", 0.1);
-		defaults.put("bucket.fill.lava.enabled", false);
-		defaults.put("bucket.fill.lava.denyOnLackPay", false);
-		defaults.put("bucket.fill.lava.denyOnLimit", false);
-		defaults.put("bucket.fill.lava.limit", 100);
-		defaults.put("bucket.fill.lava.pay", 0.1);
+		defaults.put("bucket.empty.lava.pay", -10.0);
 		defaults.put("bucket.empty.water.enabled", false);
 		defaults.put("bucket.empty.water.denyOnLackPay", false);
 		defaults.put("bucket.empty.water.denyOnLimit", false);
 		defaults.put("bucket.empty.water.limit", 100);
 		defaults.put("bucket.empty.water.pay", 0.1);
+		defaults.put("bucket.fill.lava.enabled", false);
+		defaults.put("bucket.fill.lava.denyOnLackPay", false);
+		defaults.put("bucket.fill.lava.denyOnLimit", false);
+		defaults.put("bucket.fill.lava.limit", 100);
+		defaults.put("bucket.fill.lava.pay", 0.1);
 		defaults.put("bucket.fill.water.enabled", false);
 		defaults.put("bucket.fill.water.denyOnLackPay", false);
 		defaults.put("bucket.fill.water.denyOnLimit", false);
@@ -471,7 +469,7 @@ public class Config
 		shootBow = config.getBoolean("bow.shoot.enabled", false);
 		shootBowDenyLimit = config.getBoolean("bow.shoot.denyOnLimit", false);
 		shootBowDenyPay = config.getBoolean("bow.shoot.denyOnLackPay", false);
-		shootBowForce = config.getDouble("bow.shoot.forcefactor", 1.0);
+		shootBowForce = config.getDouble("bow.shoot.minimumforce", 0.0);
 		shootBowLimit = config.getInt("bow.shoot.limit", 100);
 		shootBowPay = config.getDouble("bow.shoot.pay", 0.1);
 		/**

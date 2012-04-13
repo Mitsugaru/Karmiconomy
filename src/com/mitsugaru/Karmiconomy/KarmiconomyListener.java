@@ -8,8 +8,6 @@ import net.milkbowl.vault.economy.EconomyResponse;
 
 import org.bukkit.ChatColor;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.Cow;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
@@ -36,7 +34,6 @@ import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerEggThrowEvent;
 import org.bukkit.event.player.PlayerGameModeChangeEvent;
-import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
@@ -694,11 +691,10 @@ public class KarmiconomyListener implements Listener
 	public void shootBowValid(final EntityShootBowEvent event)
 	{
 		if (!event.isCancelled() && config.shootBow
-				&& event.getEntity() != null)
+				&& event.getEntity() != null && (event.getForce() >= config.shootBowForce))
 		{
 			if (event.getEntity() instanceof Player)
 			{
-				// TODO check force?
 				final Player player = (Player) event.getEntity();
 				if (deny(Field.BOW_SHOOT, player, config.shootBowDenyPay,
 						config.shootBowDenyLimit, null, null))
@@ -722,7 +718,7 @@ public class KarmiconomyListener implements Listener
 	public void shootBow(final EntityShootBowEvent event)
 	{
 		if (!event.isCancelled() && config.shootBow
-				&& event.getEntity() != null)
+				&& event.getEntity() != null && (event.getForce() >= config.shootBowForce))
 		{
 			if (event.getEntity() instanceof Player)
 			{
@@ -2122,7 +2118,11 @@ public class KarmiconomyListener implements Listener
 		if (denyLimit)
 		{
 			final int cLimit = config.getLimitValue(field, item, command);
-			if (cLimit >= 0)
+			if(cLimit == 0)
+			{
+				return true;
+			}
+			else if (cLimit > 0)
 			{
 				// Deny by player limit
 				final int limit = db.getData(field, player.getName(), item,
