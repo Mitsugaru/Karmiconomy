@@ -1360,10 +1360,10 @@ public class Config
 				+ ".destroyDenyPay", blockDestroyDenyPay);
 		final boolean iDestroyDenyLimit = config.getBoolean(path
 				+ ".destroyDenyLimit", blockDestroyDenyLimit);
-		final boolean iDropDenyPay = config.getBoolean(path + ".craftDenyPay",
+		final boolean iDropDenyPay = config.getBoolean(path + ".dropDenyPay",
 				itemDropDenyPay);
 		final boolean iDropDenyLimit = config.getBoolean(path
-				+ ".craftDenyLimit", itemDropDenyLimit);
+				+ ".dropDenyLimit", itemDropDenyLimit);
 		final int iPickupLimit = config.getInt(path + ".pickupLimit", pickupLimit);
 		final double iPickupPay = config.getDouble(path + ".pickupPay", pickupPay);
 		final boolean iPickupDenyPay = config.getBoolean(path + ".pickupDenyPay", pickupDenyPay);
