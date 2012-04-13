@@ -15,7 +15,6 @@ import java.util.Map.Entry;
 
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.inventory.ItemStack;
 
 import com.mitsugaru.Karmiconomy.DatabaseHandler.Field;
 
@@ -24,7 +23,7 @@ public class Config
 	// Class variables
 	private Karmiconomy plugin;
 	public String host, port, database, user, password, tablePrefix;
-	public boolean debugTime, debugEvents, debugEconomy, useMySQL, importSQL,
+	public boolean debugTime, debugEvents, debugEconomy, debugUnhandled, useMySQL, importSQL,
 			chat, chatDenyPay, chatDenyLimit, command, commandDenyPay,
 			commandDenyLimit, blockPlace, blockPlaceDenyPay,
 			blockPlaceDenyLimit, blockDestroy, blockDestroyDenyPay,
@@ -268,6 +267,7 @@ public class Config
 		defaults.put("debug.events", false);
 		defaults.put("debug.time", false);
 		defaults.put("debug.economy", false);
+		defaults.put("debug.unhandled", false);
 		defaults.put("version", plugin.getDescription().getVersion());
 		// Insert defaults into config file if they're not present
 		for (final Entry<String, Object> e : defaults.entrySet())
@@ -370,6 +370,7 @@ public class Config
 		debugTime = config.getBoolean("debug.time", false);
 		debugEvents = config.getBoolean("debug.events", false);
 		debugEconomy = config.getBoolean("debug.economy", false);
+		debugUnhandled = config.getBoolean("debug.unhandled", false);
 		/**
 		 * Event Settings
 		 */
