@@ -52,6 +52,8 @@ public class KarmiconomyListener implements Listener
 	private DatabaseHandler db;
 	private Economy eco;
 	private Config config;
+	//TODO create thread that resets this every so often? May not be necessary
+	private Map<String, String> sentMessages = new HashMap<String, String>();
 
 	public KarmiconomyListener(Karmiconomy plugin)
 	{
@@ -1929,7 +1931,25 @@ public class KarmiconomyListener implements Listener
 				pay *= -1;
 				if (pay > balance)
 				{
-					sendLackMessage(player, DenyType.MONEY, field.name());
+					switch(field.getTable())
+					{
+						case COMMAND:
+						{
+							sendLackMessage(player, DenyType.MONEY, field.name(), command);
+							break;
+						}
+						case ITEMS:
+						{
+							sendLackMessage(player, DenyType.MONEY, field.name(), item.name);
+							break;
+						}
+						default:
+						{
+							sendLackMessage(player, DenyType.MONEY, field.name(), null);
+							break;
+						}
+					}
+					
 					if (config.debugEvents)
 					{
 						plugin.getLogger().info(
@@ -1951,7 +1971,24 @@ public class KarmiconomyListener implements Listener
 						command);
 				if (limit >= cLimit)
 				{
-					sendLackMessage(player, DenyType.LIMIT, field.name());
+					switch(field.getTable())
+					{
+						case COMMAND:
+						{
+							sendLackMessage(player, DenyType.LIMIT, field.name(), command);
+							break;
+						}
+						case ITEMS:
+						{
+							sendLackMessage(player, DenyType.LIMIT, field.name(), item.name);
+							break;
+						}
+						default:
+						{
+							sendLackMessage(player, DenyType.LIMIT, field.name(), null);
+							break;
+						}
+					}
 					if (config.debugEvents)
 					{
 						plugin.getLogger().info(
@@ -1982,7 +2019,7 @@ public class KarmiconomyListener implements Listener
 		return false;
 	}
 
-	private void sendLackMessage(Player player, DenyType type, String action)
+	private void sendLackMessage(Player player, DenyType type, String action, String extra)
 	{
 		final StringBuilder sb = new StringBuilder();
 		sb.append(ChatColor.RED + Karmiconomy.TAG);
@@ -1998,8 +2035,27 @@ public class KarmiconomyListener implements Listener
 				sb.append(" Unknown DenyType ");
 				break;
 		}
-		sb.append("for action: " + ChatColor.GOLD + action);
-		player.sendMessage(sb.toString());
+		sb.append("for action: " + ChatColor.AQUA + action);
+		if(extra != null)
+		{
+			sb.append(ChatColor.RED + " of " + ChatColor.GOLD + extra);
+		}
+		final String out = sb.toString();
+		boolean send = true;
+		//Only send message if they haven't already gotten it. Should stop against spamming.
+		if(sentMessages.containsKey(player.getName()))
+		{
+			if(sentMessages.get(player.getName()).equals(out))
+			{
+				send = false;
+			}
+		}
+		if(send)
+		{
+			sentMessages.put(player.getName(), out);
+			player.sendMessage(out);
+		}
+			
 	}
 
 	private enum DenyType
