@@ -30,7 +30,7 @@ public class Karmiconomy extends JavaPlugin {
 		if (economyFound) {
 			// Finish up anything economy related
 		}
-		getLogger().info("Plugin disabled");
+		//getLogger().info("Plugin disabled");
 	}
 
 	/**
@@ -56,7 +56,7 @@ public class Karmiconomy extends JavaPlugin {
 		// Setup listener
 		KarmiconomyListener listener = new KarmiconomyListener(this);
 		this.getServer().getPluginManager().registerEvents(listener, this);
-		getLogger().info(TAG + " Enabled v" + getDescription().getVersion());
+		//getLogger().info(TAG + " Enabled v" + getDescription().getVersion());
 	}
 
 	private void setupEconomy() {
