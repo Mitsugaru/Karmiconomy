@@ -691,13 +691,26 @@ public class KarmiconomyListener implements Listener
 	public void shootBowValid(final EntityShootBowEvent event)
 	{
 		if (!event.isCancelled() && config.shootBow
-				&& event.getEntity() != null && (event.getForce() >= config.shootBowForce))
+				&& event.getEntity() != null)
 		{
 			if (event.getEntity() instanceof Player)
 			{
 				final Player player = (Player) event.getEntity();
-				if (deny(Field.BOW_SHOOT, player, config.shootBowDenyPay,
+				boolean cancel = false;
+				if (config.shootBowDenyForce
+						&& (event.getForce() < config.shootBowForce))
+				{
+					cancel = true;
+					sendLackMessage(player, DenyType.FORCE,
+							Field.BOW_SHOOT.name(), "" + event.getForce());
+				}
+
+				else if (deny(Field.BOW_SHOOT, player, config.shootBowDenyPay,
 						config.shootBowDenyLimit, null, null))
+				{
+					cancel = true;
+				}
+				if (cancel)
 				{
 					// Deny
 					event.setCancelled(true);
@@ -718,7 +731,8 @@ public class KarmiconomyListener implements Listener
 	public void shootBow(final EntityShootBowEvent event)
 	{
 		if (!event.isCancelled() && config.shootBow
-				&& event.getEntity() != null && (event.getForce() >= config.shootBowForce))
+				&& event.getEntity() != null
+				&& (event.getForce() >= config.shootBowForce))
 		{
 			if (event.getEntity() instanceof Player)
 			{
@@ -2118,7 +2132,7 @@ public class KarmiconomyListener implements Listener
 		if (denyLimit)
 		{
 			final int cLimit = config.getLimitValue(field, item, command);
-			if(cLimit == 0)
+			if (cLimit == 0)
 			{
 				return true;
 			}
@@ -2223,7 +2237,7 @@ public class KarmiconomyListener implements Listener
 
 	private enum DenyType
 	{
-		MONEY, LIMIT;
+		MONEY, LIMIT, FORCE;
 	}
 
 	// TODO use all events, and perhaps make all players get affected due to

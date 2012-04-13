@@ -52,7 +52,7 @@ public class Config
 			vehicleExit, vehicleExitDenyPay, vehicleExitDenyLimit,
 			blockPlaceStatic, blockDestroyStatic, craftItemStatic,
 			enchantItemStatic, itemDropStatic, commandStatic, pickup,
-			pickupStatic, pickupDenyPay, pickupDenyLimit/*
+			pickupStatic, pickupDenyPay, pickupDenyLimit, shootBowDenyForce/*
 														 * ,blockIgnite ,
 														 * blockIgniteValid
 														 */;
@@ -469,6 +469,7 @@ public class Config
 		shootBow = config.getBoolean("bow.shoot.enabled", false);
 		shootBowDenyLimit = config.getBoolean("bow.shoot.denyOnLimit", false);
 		shootBowDenyPay = config.getBoolean("bow.shoot.denyOnLackPay", false);
+		shootBowDenyForce = config.getBoolean("bow.shoot.denyOnLowForce", false);
 		shootBowForce = config.getDouble("bow.shoot.minimumforce", 0.0);
 		shootBowLimit = config.getInt("bow.shoot.limit", 100);
 		shootBowPay = config.getDouble("bow.shoot.pay", 0.1);
