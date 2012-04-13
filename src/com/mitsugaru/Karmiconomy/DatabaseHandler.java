@@ -423,26 +423,33 @@ public class DatabaseHandler {
 			}
 			case ITEMS: {
 				// Handle items
-				if (item.isTool()) {
-					standardQuery("UPDATE " + field.getTable().getName()
-							+ " SET " + field.getColumnName() + "='" + value
-							+ "' WHERE id='" + id + "' AND itemid='"
-							+ item.itemId() + "';");
-				} else if (item.isPotion()) {
-					// See if entry exists
-					standardQuery("UPDATE " + field.getTable().getName()
-							+ " SET " + field.getColumnName() + "='" + value
-							+ "' WHERE id='" + id + "' AND itemid='"
-							+ item.itemId() + "' AND durability='"
-							+ item.itemDurability() + "';");
+				if (item != null) {
+					if (item.isTool()) {
+						standardQuery("UPDATE " + field.getTable().getName()
+								+ " SET " + field.getColumnName() + "='"
+								+ value + "' WHERE id='" + id
+								+ "' AND itemid='" + item.itemId() + "';");
+					} else if (item.isPotion()) {
+						// See if entry exists
+						standardQuery("UPDATE " + field.getTable().getName()
+								+ " SET " + field.getColumnName() + "='"
+								+ value + "' WHERE id='" + id
+								+ "' AND itemid='" + item.itemId()
+								+ "' AND durability='" + item.itemDurability()
+								+ "';");
+					} else {
+						// See if entry exists
+						standardQuery("UPDATE " + field.getTable().getName()
+								+ " SET " + field.getColumnName() + "='"
+								+ value + "' WHERE id='" + id
+								+ "' AND itemid='" + item.itemId()
+								+ "' AND data='" + item.itemData()
+								+ "' AND durability='" + item.itemDurability()
+								+ "';");
+					}
 				} else {
-					// See if entry exists
-					standardQuery("UPDATE " + field.getTable().getName()
-							+ " SET " + field.getColumnName() + "='" + value
-							+ "' WHERE id='" + id + "' AND itemid='"
-							+ item.itemId() + "' AND data='" + item.itemData()
-							+ "' AND durability='" + item.itemDurability()
-							+ "';");
+					plugin.getLogger().warning(
+							"Item cannot be null for field: " + field);
 				}
 				break;
 			}
