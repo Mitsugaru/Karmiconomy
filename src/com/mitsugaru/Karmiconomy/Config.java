@@ -200,9 +200,13 @@ public class Config
 		defaults.put("player.death.limit", 100);
 		defaults.put("player.death.pay", -1);
 		defaults.put("player.gamemode.creative.enabled", false);
+		defaults.put("player.gamemode.creative.denyOnLackPay", false);
+		defaults.put("player.gamemode.creative.denyOnLimit", false);
 		defaults.put("player.gamemode.creative.limit", 10);
 		defaults.put("player.gamemode.creative.pay", -10);
 		defaults.put("player.gamemode.survival.enabled", false);
+		defaults.put("player.gamemode.survival.denyOnLackPay", false);
+		defaults.put("player.gamemode.survival.denyOnLimit", false);
 		defaults.put("player.gamemode.survival.limit", 1);
 		defaults.put("player.gamemode.survival.pay", 0.1);
 		defaults.put("player.join.enabled", false);
@@ -1344,34 +1348,34 @@ public class Config
 				blockDestroyLimit);
 		final int iDropLimit = config
 				.getInt(path + ".dropLimit", itemDropLimit);
-		final boolean iCraftDenyPay = config.getBoolean(path + ".craftDenyPay",
+		final boolean iCraftDenyPay = config.getBoolean(path + ".craftDenyOnPay",
 				craftItemDenyPay);
 		final boolean iCraftDenyLimit = config.getBoolean(path
-				+ ".craftDenyLimit", craftItemDenyLimit);
+				+ ".craftDenyOnLimit", craftItemDenyLimit);
 		final boolean iEnchantDenyPay = config.getBoolean(path
-				+ ".enchantDenyPay", enchantItemDenyPay);
+				+ ".enchantDenyOnPay", enchantItemDenyPay);
 		final boolean iEnchantDenyLimit = config.getBoolean(path
-				+ ".enchantDenyLimit", enchantItemDenyLimit);
-		final boolean iPlaceDenyPay = config.getBoolean(path + ".placeDenyPay",
+				+ ".enchantDenyOnLimit", enchantItemDenyLimit);
+		final boolean iPlaceDenyPay = config.getBoolean(path + ".placeDenyOnPay",
 				blockPlaceDenyPay);
 		final boolean iPlaceDenyLimit = config.getBoolean(path
-				+ ".placeDenyLimit", blockPlaceDenyLimit);
+				+ ".placeDenyOnLimit", blockPlaceDenyLimit);
 		final boolean iDestroyDenyPay = config.getBoolean(path
-				+ ".destroyDenyPay", blockDestroyDenyPay);
+				+ ".destroyDenyOnPay", blockDestroyDenyPay);
 		final boolean iDestroyDenyLimit = config.getBoolean(path
-				+ ".destroyDenyLimit", blockDestroyDenyLimit);
-		final boolean iDropDenyPay = config.getBoolean(path + ".dropDenyPay",
+				+ ".destroyDenyOnLimit", blockDestroyDenyLimit);
+		final boolean iDropDenyPay = config.getBoolean(path + ".dropDenyOnPay",
 				itemDropDenyPay);
 		final boolean iDropDenyLimit = config.getBoolean(path
-				+ ".dropDenyLimit", itemDropDenyLimit);
+				+ ".dropDenyOnLimit", itemDropDenyLimit);
 		final int iPickupLimit = config.getInt(path + ".pickupLimit",
 				pickupLimit);
 		final double iPickupPay = config.getDouble(path + ".pickupPay",
 				pickupPay);
 		final boolean iPickupDenyPay = config.getBoolean(path
-				+ ".pickupDenyPay", pickupDenyPay);
+				+ ".pickupDenyOnPay", pickupDenyPay);
 		final boolean iPickupDenyLimit = config.getBoolean(path
-				+ ".pickupDenyLimit", pickupDenyLimit);
+				+ ".pickupDenyOnLimit", pickupDenyLimit);
 		KCItemInfo info = new KCItemInfo(iCraftLimit, iCraftPay, iCraftDenyPay,
 				iCraftDenyLimit, iEnchantLimit, iEnchantPay, iEnchantDenyPay,
 				iEnchantDenyLimit, iPlaceLimit, iPlacePay, iPlaceDenyPay,

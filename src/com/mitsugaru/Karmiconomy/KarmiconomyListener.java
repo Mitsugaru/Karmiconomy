@@ -55,8 +55,8 @@ public class KarmiconomyListener implements Listener
 	private DatabaseHandler db;
 	private Economy eco;
 	private Config config;
-	//TODO create thread that resets this every so often? May not be necessary
-	//Maybe every 2 minutes?
+	// TODO create thread that resets this every so often? May not be necessary
+	// Maybe every 2 minutes?
 	private Map<String, String> sentMessages = new HashMap<String, String>();
 
 	public KarmiconomyListener(Karmiconomy plugin)
@@ -70,9 +70,7 @@ public class KarmiconomyListener implements Listener
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void chatValid(final PlayerChatEvent event)
 	{
-		if (!event.isCancelled()
-				&& config.chat
-				&& event.getPlayer() != null)
+		if (!event.isCancelled() && config.chat && event.getPlayer() != null)
 		{
 			final Player player = event.getPlayer();
 			if (deny(Field.CHAT, player, config.chatDenyPay,
@@ -121,9 +119,7 @@ public class KarmiconomyListener implements Listener
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void commandValid(final PlayerCommandPreprocessEvent event)
 	{
-		if (!event.isCancelled()
-				&& config.command
-				&& event.getPlayer() != null)
+		if (!event.isCancelled() && config.command && event.getPlayer() != null)
 		{
 			final Player player = event.getPlayer();
 			if (deny(Field.COMMAND, player, config.commandDenyPay,
@@ -501,9 +497,7 @@ public class KarmiconomyListener implements Listener
 	public void createPortalValid(final EntityCreatePortalEvent event)
 	{
 		if (!event.isCancelled()
-				&& (config.portalCreateNether
-						|| config.portalCreateEnd
-						|| config.portalCreateCustom)
+				&& (config.portalCreateNether || config.portalCreateEnd || config.portalCreateCustom)
 				&& event.getEntity() != null)
 		{
 			if (event.getEntity() instanceof Player)
@@ -699,8 +693,7 @@ public class KarmiconomyListener implements Listener
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void shootBowValid(final EntityShootBowEvent event)
 	{
-		if (!event.isCancelled()
-				&& config.shootBow
+		if (!event.isCancelled() && config.shootBow
 				&& event.getEntity() != null)
 		{
 			if (event.getEntity() instanceof Player)
@@ -902,8 +895,7 @@ public class KarmiconomyListener implements Listener
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void paintingPlaceValid(final PaintingPlaceEvent event)
 	{
-		if (!event.isCancelled()
-				&& config.paintingPlace
+		if (!event.isCancelled() && config.paintingPlace
 				&& event.getPlayer() != null)
 		{
 			final Player player = event.getPlayer();
@@ -963,8 +955,7 @@ public class KarmiconomyListener implements Listener
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void bedEnterValid(final PlayerBedEnterEvent event)
 	{
-		if (!event.isCancelled()
-				&& config.bedEnter
+		if (!event.isCancelled() && config.bedEnter
 				&& event.getPlayer() != null)
 		{
 			final Player player = event.getPlayer();
@@ -1059,20 +1050,26 @@ public class KarmiconomyListener implements Listener
 			final Player player = event.getPlayer();
 			boolean cancel = false;
 			// switch for type of bucket
-			switch(event.getBucket())
+			switch (event.getBucket())
 			{
 				case LAVA_BUCKET:
 				{
-					if(deny(Field.BUCKET_EMPTY_LAVA, player, config.bucketEmptyLavaDenyPay, config.bucketEmptyLavaDenyLimit, null, null))
+					if (deny(Field.BUCKET_EMPTY_LAVA, player,
+							config.bucketEmptyLavaDenyPay,
+							config.bucketEmptyLavaDenyLimit, null, null))
 					{
+						// deny
 						cancel = true;
 					}
 					break;
 				}
 				case WATER_BUCKET:
 				{
-					if(deny(Field.BUCKET_EMPTY_WATER, player, config.bucketEmptyWaterDenyPay, config.bucketEmptyWaterDenyLimit, null, null))
+					if (deny(Field.BUCKET_EMPTY_WATER, player,
+							config.bucketEmptyWaterDenyPay,
+							config.bucketEmptyWaterDenyLimit, null, null))
 					{
+						// Deny
 						cancel = true;
 					}
 					break;
@@ -1083,26 +1080,26 @@ public class KarmiconomyListener implements Listener
 					{
 						plugin.getLogger().warning(
 								"Unhandled " + event.getEventName()
-										+ " for game mode '"
+										+ " for type '"
 										+ event.getBucket().name() + "'");
 					}
 					break;
 				}
 			}
-			if(cancel)
+			if (cancel)
 			{
 				event.setCancelled(true);
-			if (config.debugEvents && event.isCancelled())
-			{
-				final Map<String, String> details = new HashMap<String, String>();
-				details.put("Player", player.getName());
-				if (event.getBucket() != null)
+				if (config.debugEvents)
 				{
-					details.put("Bucket", event.getBucket().toString());
+					final Map<String, String> details = new HashMap<String, String>();
+					details.put("Player", player.getName());
+					if (event.getBucket() != null)
+					{
+						details.put("Bucket", event.getBucket().toString());
+					}
+					details.put("Cancelled", "true");
+					debugEvent(event, details);
 				}
-				details.put("Cancelled", "true");
-				debugEvent(event, details);
-			}
 			}
 		}
 	}
@@ -1116,34 +1113,34 @@ public class KarmiconomyListener implements Listener
 		{
 			final Player player = event.getPlayer();
 			// Switch for type of bucket
-			switch(event.getBucket())
+			switch (event.getBucket())
 			{
 				case LAVA_BUCKET:
 				{
-					//Pay on empty
+					// Pay on empty
 					if (!hitLimit(Field.BUCKET_EMPTY_LAVA, player, null, null))
 					{
 						// Try to pay
 						if (pay(Field.BUCKET_EMPTY_LAVA, player, null, null))
 						{
 							// Increment
-							db.incrementData(Field.BUCKET_EMPTY_LAVA, player.getName(),
-									null, null);
+							db.incrementData(Field.BUCKET_EMPTY_LAVA,
+									player.getName(), null, null);
 						}
 					}
 					break;
 				}
 				case WATER_BUCKET:
 				{
-					//Pay on empty
+					// Pay on empty
 					if (!hitLimit(Field.BUCKET_EMPTY_WATER, player, null, null))
 					{
 						// Try to pay
 						if (pay(Field.BUCKET_EMPTY_WATER, player, null, null))
 						{
 							// Increment
-							db.incrementData(Field.BUCKET_EMPTY_WATER, player.getName(),
-									null, null);
+							db.incrementData(Field.BUCKET_EMPTY_WATER,
+									player.getName(), null, null);
 						}
 					}
 					break;
@@ -1154,7 +1151,7 @@ public class KarmiconomyListener implements Listener
 					{
 						plugin.getLogger().warning(
 								"Unhandled " + event.getEventName()
-										+ " for game mode '"
+										+ " for type '"
 										+ event.getBucket().name() + "'");
 					}
 					break;
@@ -1178,26 +1175,66 @@ public class KarmiconomyListener implements Listener
 	{
 		if (!event.isCancelled()
 				&& (config.bucketFillWater || config.bucketFillLava)
-				&& event.getPlayer() != null)
+				&& event.getPlayer() != null && event.getBlockClicked() != null)
 		{
 			final Player player = event.getPlayer();
-			// TODO switch for type of bucket
-			// TODO deny
-			if (config.debugEvents && event.isCancelled())
+			boolean cancel = false;
+			// Switch for type of bucket
+			switch (event.getBlockClicked().getType())
 			{
-				final Map<String, String> details = new HashMap<String, String>();
-				details.put("Player", player.getName());
-				if (event.getBucket() != null)
+				case STATIONARY_LAVA:
 				{
-					// TODO change this the specific type
-					details.put("Bucket", event.getBucket().toString());
+					if (deny(Field.BUCKET_FILL_LAVA, player,
+							config.bucketFillLavaDenyPay,
+							config.bucketFillLavaDenyLimit, null, null))
+					{
+						// Deny
+						cancel = true;
+					}
+					break;
 				}
-				if(event.getBlockClicked() != null)
+				case STATIONARY_WATER:
 				{
-					details.put("Block", event.getBlockClicked().getType().name());
+					if (deny(Field.BUCKET_FILL_WATER, player,
+							config.bucketFillWaterDenyPay,
+							config.bucketFillWaterDenyLimit, null, null))
+					{
+						// Deny
+						cancel = true;
+					}
+					break;
 				}
-				details.put("Cancelled", "true");
-				debugEvent(event, details);
+				default:
+				{
+					if (config.debugUnhandled)
+					{
+						plugin.getLogger().warning(
+								"Unhandled " + event.getEventName()
+										+ " for type '"
+										+ event.getBucket().name() + "'");
+					}
+					break;
+				}
+			}
+			if (cancel)
+			{
+				// deny
+				if (config.debugEvents)
+				{
+					final Map<String, String> details = new HashMap<String, String>();
+					details.put("Player", player.getName());
+					if (event.getBucket() != null)
+					{
+						details.put("Bucket", event.getBucket().toString());
+					}
+					if (event.getBlockClicked() != null)
+					{
+						details.put("Block", event.getBlockClicked().getType()
+								.name());
+					}
+					details.put("Cancelled", "true");
+					debugEvent(event, details);
+				}
 			}
 		}
 	}
@@ -1210,8 +1247,51 @@ public class KarmiconomyListener implements Listener
 				&& event.getPlayer() != null)
 		{
 			final Player player = event.getPlayer();
-			// TODO switch for type of bucket
-			// TODO pay on fill
+			// Switch for type of bucket
+			switch (event.getBlockClicked().getType())
+			{
+				case STATIONARY_LAVA:
+				{
+					// Pay on fill
+					if (!hitLimit(Field.BUCKET_FILL_LAVA, player, null, null))
+					{
+						// Try to pay
+						if (pay(Field.BUCKET_FILL_LAVA, player, null, null))
+						{
+							// Increment
+							db.incrementData(Field.BUCKET_FILL_LAVA,
+									player.getName(), null, null);
+						}
+					}
+					break;
+				}
+				case STATIONARY_WATER:
+				{
+					// Pay on fill
+					if (!hitLimit(Field.BUCKET_FILL_WATER, player, null, null))
+					{
+						// Try to pay
+						if (pay(Field.BUCKET_FILL_WATER, player, null, null))
+						{
+							// Increment
+							db.incrementData(Field.BUCKET_FILL_WATER,
+									player.getName(), null, null);
+						}
+					}
+					break;
+				}
+				default:
+				{
+					if (config.debugUnhandled)
+					{
+						plugin.getLogger().warning(
+								"Unhandled " + event.getEventName()
+										+ " for type '"
+										+ event.getBucket().name() + "'");
+					}
+					break;
+				}
+			}
 			if (config.debugEvents)
 			{
 				final Map<String, String> details = new HashMap<String, String>();
@@ -1221,9 +1301,10 @@ public class KarmiconomyListener implements Listener
 					// TODO change this the specific type
 					details.put("Bucket", event.getBucket().toString());
 				}
-				if(event.getBlockClicked() != null)
+				if (event.getBlockClicked() != null)
 				{
-					details.put("Block", event.getBlockClicked().getType().name());
+					details.put("Block", event.getBlockClicked().getType()
+							.name());
 				}
 				debugEvent(event, details);
 			}
@@ -1486,7 +1567,7 @@ public class KarmiconomyListener implements Listener
 				details.put("Player", player.getName());
 				if (event.getEgg() != null)
 				{
-					// TODO pay for specifics
+					// TODO pay for specifics?
 					details.put("Egg", event.getEgg().toString());
 				}
 				debugEvent(event, details);
@@ -1497,7 +1578,6 @@ public class KarmiconomyListener implements Listener
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void gameModeValid(final PlayerGameModeChangeEvent event)
 	{
-		// TODO move config check inside if
 		if (!event.isCancelled()
 				&& (config.gameModeCreative || config.gameModeSurvival)
 				&& event.getPlayer() != null)
@@ -1736,8 +1816,7 @@ public class KarmiconomyListener implements Listener
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void sneakValid(final PlayerToggleSneakEvent event)
 	{
-		if (!event.isCancelled() && event.isSneaking()
-				&& config.sneak
+		if (!event.isCancelled() && event.isSneaking() && config.sneak
 				&& event.getPlayer() != null)
 		{
 			final Player player = event.getPlayer();
@@ -1786,8 +1865,7 @@ public class KarmiconomyListener implements Listener
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void sprintValid(final PlayerToggleSprintEvent event)
 	{
-		if (!event.isCancelled() && event.isSprinting()
-				&& config.sprint
+		if (!event.isCancelled() && event.isSprinting() && config.sprint
 				&& event.getPlayer() != null)
 		{
 			final Player player = event.getPlayer();
@@ -1836,8 +1914,7 @@ public class KarmiconomyListener implements Listener
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void vehicleEnterValid(final VehicleEnterEvent event)
 	{
-		if (!event.isCancelled()
-				&& config.vehicleEnter
+		if (!event.isCancelled() && config.vehicleEnter
 				&& event.getEntered() != null)
 		{
 			if (event.getEntered() instanceof Player)
@@ -1886,8 +1963,7 @@ public class KarmiconomyListener implements Listener
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void vehicleExitValid(final VehicleExitEvent event)
 	{
-		if (!event.isCancelled()
-				&& config.vehicleExit
+		if (!event.isCancelled() && config.vehicleExit
 				&& event.getExited() != null)
 		{
 			if (event.getExited() instanceof Player)
@@ -2010,25 +2086,28 @@ public class KarmiconomyListener implements Listener
 				pay *= -1;
 				if (pay > balance)
 				{
-					switch(field.getTable())
+					switch (field.getTable())
 					{
 						case COMMAND:
 						{
-							sendLackMessage(player, DenyType.MONEY, field.name(), command);
+							sendLackMessage(player, DenyType.MONEY,
+									field.name(), command);
 							break;
 						}
 						case ITEMS:
 						{
-							sendLackMessage(player, DenyType.MONEY, field.name(), item.name);
+							sendLackMessage(player, DenyType.MONEY,
+									field.name(), item.name);
 							break;
 						}
 						default:
 						{
-							sendLackMessage(player, DenyType.MONEY, field.name(), null);
+							sendLackMessage(player, DenyType.MONEY,
+									field.name(), null);
 							break;
 						}
 					}
-					
+
 					if (config.debugEvents)
 					{
 						plugin.getLogger().info(
@@ -2050,21 +2129,24 @@ public class KarmiconomyListener implements Listener
 						command);
 				if (limit >= cLimit)
 				{
-					switch(field.getTable())
+					switch (field.getTable())
 					{
 						case COMMAND:
 						{
-							sendLackMessage(player, DenyType.LIMIT, field.name(), command);
+							sendLackMessage(player, DenyType.LIMIT,
+									field.name(), command);
 							break;
 						}
 						case ITEMS:
 						{
-							sendLackMessage(player, DenyType.LIMIT, field.name(), item.name);
+							sendLackMessage(player, DenyType.LIMIT,
+									field.name(), item.name);
 							break;
 						}
 						default:
 						{
-							sendLackMessage(player, DenyType.LIMIT, field.name(), null);
+							sendLackMessage(player, DenyType.LIMIT,
+									field.name(), null);
 							break;
 						}
 					}
@@ -2098,7 +2180,8 @@ public class KarmiconomyListener implements Listener
 		return false;
 	}
 
-	private void sendLackMessage(Player player, DenyType type, String action, String extra)
+	private void sendLackMessage(Player player, DenyType type, String action,
+			String extra)
 	{
 		final StringBuilder sb = new StringBuilder();
 		sb.append(ChatColor.RED + Karmiconomy.TAG);
@@ -2115,26 +2198,27 @@ public class KarmiconomyListener implements Listener
 				break;
 		}
 		sb.append("for action: " + ChatColor.AQUA + action);
-		if(extra != null)
+		if (extra != null)
 		{
 			sb.append(ChatColor.RED + " of " + ChatColor.GOLD + extra);
 		}
 		final String out = sb.toString();
 		boolean send = true;
-		//Only send message if they haven't already gotten it. Should stop against spamming.
-		if(sentMessages.containsKey(player.getName()))
+		// Only send message if they haven't already gotten it. Should stop
+		// against spamming.
+		if (sentMessages.containsKey(player.getName()))
 		{
-			if(sentMessages.get(player.getName()).equals(out))
+			if (sentMessages.get(player.getName()).equals(out))
 			{
 				send = false;
 			}
 		}
-		if(send)
+		if (send)
 		{
 			sentMessages.put(player.getName(), out);
 			player.sendMessage(out);
 		}
-			
+
 	}
 
 	private enum DenyType
