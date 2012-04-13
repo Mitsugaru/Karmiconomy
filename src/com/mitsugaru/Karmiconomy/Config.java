@@ -18,7 +18,8 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 import com.mitsugaru.Karmiconomy.DatabaseHandler.Field;
 
-public class Config {
+public class Config
+{
 	// Class variables
 	private Karmiconomy plugin;
 	public String host, port, database, user, password, tablePrefix;
@@ -50,10 +51,11 @@ public class Config {
 			vehicleEnter, vehicleEnterDenyPay, vehicleEnterDenyLimit,
 			vehicleExit, vehicleExitDenyPay, vehicleExitDenyLimit,
 			blockPlaceStatic, blockDestroyStatic, craftItemStatic,
-			enchantItemStatic, itemDropStatic, commandStatic/*
-															 * ,blockIgnite ,
-															 * blockIgniteValid
-															 */;
+			enchantItemStatic, itemDropStatic, commandStatic, pickup,
+			pickupStatic, pickupDenyPay, pickupDenyLimit/*
+														 * ,blockIgnite ,
+														 * blockIgniteValid
+														 */;
 	public int listlimit, bedEnterLimit, bedLeaveLimit, blockDestroyLimit,
 	/* blockIgniteLimit, */blockPlaceLimit, shootBowLimit,
 			bucketEmptyLavaLimit, bucketEmptyWaterLimit, bucketFillLavaLimit,
@@ -64,7 +66,8 @@ public class Config {
 			vehicleExitLimit, paintingPlaceLimit, commandLimit,
 			worldChangeLimit, tameOcelotLimit, tameWolfLimit,
 			portalCreateNetherLimit, portalCreateEndLimit,
-			portalCreateCustomLimit, portalEnterLimit, eggThrowLimit;
+			portalCreateCustomLimit, portalEnterLimit, eggThrowLimit,
+			pickupLimit;
 	public double bedEnterPay, bedLeavePay, blockDestroyPay, /* blockIgnitePay, */
 	blockPlacePay, shootBowPay, bucketEmptyLavaPay, bucketEmptyWaterPay,
 			bucketFillLavaPay, bucketFillWaterPay, craftPay, enchantPay,
@@ -73,7 +76,7 @@ public class Config {
 			vehicleExitPay, paintingPlacePay, tameOcelotPay, tameWolfPay,
 			gameModeCreativePay, gameModeSurvivalPay, commandPay,
 			worldChangePay, portalCreateNetherPay, portalCreateEndPay,
-			portalCreateCustomPay, portalEnterPay, shootBowForce;
+			portalCreateCustomPay, portalEnterPay, shootBowForce, pickupPay;
 	private final Map<Item, KCItemInfo> values = new HashMap<Item, KCItemInfo>();
 
 	// TODO ability to change config in-game
@@ -87,7 +90,8 @@ public class Config {
 	 * @param KarmicShare
 	 *            plugin
 	 */
-	public Config(Karmiconomy plugin) {
+	public Config(Karmiconomy plugin)
+	{
 		this.plugin = plugin;
 		// Grab config
 		final ConfigurationSection config = plugin.getConfig();
@@ -167,6 +171,12 @@ public class Config {
 		defaults.put("item.drop.static", true);
 		defaults.put("item.drop.limit", 100);
 		defaults.put("item.drop.pay", 0.1);
+		defaults.put("item.pickup.enabled", false);
+		defaults.put("item.pickup.denyOnLackPay", false);
+		defaults.put("item.pickup.denyOnLimit", false);
+		defaults.put("item.pickup.static", true);
+		defaults.put("item.pickup.limit", 100);
+		defaults.put("item.pickup.pay", 0.1);
 		defaults.put("item.egg.enabled", false);
 		defaults.put("item.egg.limit", 100);
 		defaults.put("item.egg.pay", 0.1);
@@ -268,8 +278,10 @@ public class Config {
 		defaults.put("debug.unhandled", false);
 		defaults.put("version", plugin.getDescription().getVersion());
 		// Insert defaults into config file if they're not present
-		for (final Entry<String, Object> e : defaults.entrySet()) {
-			if (!config.contains(e.getKey())) {
+		for (final Entry<String, Object> e : defaults.entrySet())
+		{
+			if (!config.contains(e.getKey()))
+			{
 				config.set(e.getKey(), e.getValue());
 			}
 		}
@@ -295,7 +307,8 @@ public class Config {
 		this.boundsCheck();
 	}
 
-	public void set(String path, Object o) {
+	public void set(String path, Object o)
+	{
 		final ConfigurationSection config = plugin.getConfig();
 		config.set(path, o);
 		plugin.saveConfig();
@@ -304,11 +317,13 @@ public class Config {
 	/**
 	 * Check if updates are necessary
 	 */
-	public void checkUpdate() {
+	public void checkUpdate()
+	{
 		// Check if need to update
 		ConfigurationSection config = plugin.getConfig();
 		if (Double.parseDouble(plugin.getDescription().getVersion()) > Double
-				.parseDouble(config.getString("version"))) {
+				.parseDouble(config.getString("version")))
+		{
 			// Update to latest version
 			plugin.getLogger().info(
 					"Updating to v" + plugin.getDescription().getVersion());
@@ -321,7 +336,8 @@ public class Config {
 	 * necessary for database schema modification, for a proper update.
 	 */
 	@SuppressWarnings("unused")
-	private void update() {
+	private void update()
+	{
 		// Grab current version
 		final double ver = Double.parseDouble(plugin.getConfig().getString(
 				"version"));
@@ -335,7 +351,8 @@ public class Config {
 	/**
 	 * Reloads info from yaml file(s)
 	 */
-	public void reloadConfig() {
+	public void reloadConfig()
+	{
 		// Initial relaod
 		plugin.reloadConfig();
 		// Grab config
@@ -352,7 +369,8 @@ public class Config {
 		plugin.getLogger().info("Config reloaded");
 	}
 
-	private void loadSettings(ConfigurationSection config) {
+	private void loadSettings(ConfigurationSection config)
+	{
 		/**
 		 * General Settings
 		 */
@@ -431,6 +449,13 @@ public class Config {
 		itemDropStatic = config.getBoolean("item.drop.static", true);
 		itemDropLimit = config.getInt("item.drop.limit", 100);
 		itemDropPay = config.getDouble("item.drop.pay", 0.1);
+		// pickup
+		pickup = config.getBoolean("item.drop.enabled", false);
+		pickupDenyPay = config.getBoolean("item.drop.denyOnLackPay", false);
+		pickupDenyLimit = config.getBoolean("item.drop.denyOnLimit", false);
+		pickupStatic = config.getBoolean("item.drop.static", true);
+		pickupLimit = config.getInt("item.drop.limit", 100);
+		pickupPay = config.getDouble("item.drop.pay", 0.1);
 		// egg
 		eggThrow = config.getBoolean("item.egg.enabled", false);
 		eggThrowLimit = config.getInt("item.egg.limit", 100);
@@ -643,436 +668,546 @@ public class Config {
 	 * Check the bounds on the parameters to make sure that all config variables
 	 * are legal and usable by the plugin
 	 */
-	private void boundsCheck() {
+	private void boundsCheck()
+	{
 		// TODO format all doubles to 2 decimal places
 	}
 
-	public double getPayValue(Field type, Item item, String command) {
+	public double getPayValue(Field type, Item item, String command)
+	{
 		double pay = 0.0;
-		switch (type.getTable()) {
-		case DATA: {
-			switch (type) {
-			case CHAT:
-				return chatPay;
-			case BED_ENTER:
-				return bedEnterPay;
-			case BED_LEAVE:
-				return bedLeavePay;
-			case BOW_SHOOT:
-				return shootBowPay;
-			case BUCKET_EMPTY_LAVA:
-				return bucketEmptyLavaPay;
-			case BUCKET_EMPTY_WATER:
-				return bucketEmptyWaterPay;
-			case BUCKET_FILL_LAVA:
-				return bucketFillLavaPay;
-			case BUCKET_FILL_WATER:
-				return bucketFillWaterPay;
-			case DEATH:
-				return deathPay;
-			case EGG_THROW:
-				return eggThrowPay;
-			case CREATIVE:
-				return gameModeCreativePay;
-			case SURVIVAL:
-				return gameModeSurvivalPay;
-			case JOIN:
-				return joinPay;
-			case KICK:
-				return kickPay;
-			case QUIT:
-				return quitPay;
-			case RESPAWN:
-				return respawnPay;
-			case PAINTING_PLACE:
-				return paintingPlacePay;
-			case PORTAL_CREATE_NETHER:
-				return portalCreateNetherPay;
-			case PORTAL_CREATE_END:
-				return portalCreateEndPay;
-			case PORTAL_CREATE_CUSTOM:
-				return portalCreateCustomPay;
-			case PORTAL_ENTER:
-				return portalEnterPay;
-			case SNEAK:
-				return sneakPay;
-			case SPRINT:
-				return sprintPay;
-			case TAME_OCELOT:
-				return tameOcelotPay;
-			case TAME_WOLF:
-				return tameWolfPay;
-			case WORLD_CHANGE:
-				return worldChangePay;
-			default:
+		switch (type.getTable())
+		{
+			case DATA:
+			{
+				switch (type)
+				{
+					case CHAT:
+						return chatPay;
+					case BED_ENTER:
+						return bedEnterPay;
+					case BED_LEAVE:
+						return bedLeavePay;
+					case BOW_SHOOT:
+						return shootBowPay;
+					case BUCKET_EMPTY_LAVA:
+						return bucketEmptyLavaPay;
+					case BUCKET_EMPTY_WATER:
+						return bucketEmptyWaterPay;
+					case BUCKET_FILL_LAVA:
+						return bucketFillLavaPay;
+					case BUCKET_FILL_WATER:
+						return bucketFillWaterPay;
+					case DEATH:
+						return deathPay;
+					case EGG_THROW:
+						return eggThrowPay;
+					case CREATIVE:
+						return gameModeCreativePay;
+					case SURVIVAL:
+						return gameModeSurvivalPay;
+					case JOIN:
+						return joinPay;
+					case KICK:
+						return kickPay;
+					case QUIT:
+						return quitPay;
+					case RESPAWN:
+						return respawnPay;
+					case PAINTING_PLACE:
+						return paintingPlacePay;
+					case PORTAL_CREATE_NETHER:
+						return portalCreateNetherPay;
+					case PORTAL_CREATE_END:
+						return portalCreateEndPay;
+					case PORTAL_CREATE_CUSTOM:
+						return portalCreateCustomPay;
+					case PORTAL_ENTER:
+						return portalEnterPay;
+					case SNEAK:
+						return sneakPay;
+					case SPRINT:
+						return sprintPay;
+					case TAME_OCELOT:
+						return tameOcelotPay;
+					case TAME_WOLF:
+						return tameWolfPay;
+					case WORLD_CHANGE:
+						return worldChangePay;
+					default:
+						break;
+				}
 				break;
 			}
-			break;
-		}
-		case ITEMS: {
-			// handle custom item limit
-			switch (type) {
-			case BLOCK_PLACE: {
-				if (!blockPlaceStatic) {
-					if (values.containsKey(item)) {
-						return values.get(item).placePay;
+			case ITEMS:
+			{
+				// handle custom item limit
+				switch (type)
+				{
+					case BLOCK_PLACE:
+					{
+						if (!blockPlaceStatic)
+						{
+							if (values.containsKey(item))
+							{
+								return values.get(item).placePay;
+							}
+						}
+						return blockPlacePay;
 					}
+					case BLOCK_DESTROY:
+					{
+						if (!blockDestroyStatic)
+						{
+							if (values.containsKey(item))
+							{
+								return values.get(item).destroyPay;
+							}
+						}
+						return blockDestroyPay;
+					}
+					case ITEM_CRAFT:
+					{
+						if (!craftItemStatic)
+						{
+							if (values.containsKey(item))
+							{
+								return values.get(item).craftPay;
+							}
+						}
+						return craftPay;
+					}
+					case ITEM_DROP:
+					{
+						if (!itemDropStatic)
+						{
+							if (values.containsKey(item))
+							{
+								return values.get(item).dropPay;
+							}
+						}
+						return itemDropPay;
+					}
+					case ITEM_ENCHANT:
+					{
+						if (!enchantItemStatic)
+						{
+							if (values.containsKey(item))
+							{
+								return values.get(item).enchantPay;
+							}
+						}
+						return enchantPay;
+					}
+					case ITEM_PICKUP:
+					{
+						if (!pickupStatic)
+						{
+							if (values.containsKey(item))
+							{
+								return values.get(item).pickupPay;
+							}
+						}
+					}
+					default:
+						break;
 				}
-				return blockPlacePay;
+				break;
 			}
-			case BLOCK_DESTROY: {
-				if (!blockDestroyStatic) {
-					if (values.containsKey(item)) {
-						return values.get(item).destroyPay;
-					}
-				}
-				return blockDestroyPay;
+			case COMMAND:
+			{
+				// TODO handle custom command limit
+				break;
 			}
-			case ITEM_CRAFT: {
-				if (!craftItemStatic) {
-					if (values.containsKey(item)) {
-						return values.get(item).craftPay;
-					}
+			case PORTAL:
+			{
+				switch (type)
+				{
+					case PORTAL_CREATE_NETHER:
+						return portalCreateNetherPay;
+					case PORTAL_CREATE_END:
+						return portalCreateEndPay;
+					case PORTAL_CREATE_CUSTOM:
+						return portalCreateCustomPay;
+					case PORTAL_ENTER:
+						return portalEnterPay;
+					default:
+						break;
 				}
-				return craftPay;
 			}
-			case ITEM_DROP: {
-				if (!itemDropStatic) {
-					if (values.containsKey(item)) {
-						return values.get(item).dropPay;
-					}
+			case BUCKET:
+			{
+				switch (type)
+				{
+					case BUCKET_EMPTY_LAVA:
+						return bucketEmptyLavaPay;
+					case BUCKET_EMPTY_WATER:
+						return bucketEmptyWaterPay;
+					case BUCKET_FILL_LAVA:
+						return bucketFillLavaPay;
+					case BUCKET_FILL_WATER:
+						return bucketFillWaterPay;
+					default:
+						break;
 				}
-				return itemDropPay;
-			}
-			case ITEM_ENCHANT: {
-				if (!enchantItemStatic) {
-					if (values.containsKey(item)) {
-						return values.get(item).enchantPay;
-					}
-				}
-				return enchantPay;
 			}
 			default:
 				break;
-			}
-			break;
-		}
-		case COMMAND: {
-			// TODO handle custom command limit
-			break;
-		}
-		case PORTAL: {
-			switch (type) {
-			case PORTAL_CREATE_NETHER:
-				return portalCreateNetherPay;
-			case PORTAL_CREATE_END:
-				return portalCreateEndPay;
-			case PORTAL_CREATE_CUSTOM:
-				return portalCreateCustomPay;
-			case PORTAL_ENTER:
-				return portalEnterPay;
-			default:
-				break;
-			}
-		}
-		case BUCKET: {
-			switch (type) {
-			case BUCKET_EMPTY_LAVA:
-				return bucketEmptyLavaPay;
-			case BUCKET_EMPTY_WATER:
-				return bucketEmptyWaterPay;
-			case BUCKET_FILL_LAVA:
-				return bucketFillLavaPay;
-			case BUCKET_FILL_WATER:
-				return bucketFillWaterPay;
-			default:
-				break;
-			}
-		}
-		default:
-			break;
 		}
 		return pay;
 	}
 
-	public int getLimitValue(Field type, Item item, String command) {
+	public int getLimitValue(Field type, Item item, String command)
+	{
 		int limit = -1;
-		switch (type.getTable()) {
-		case DATA: {
-			switch (type) {
-			case CHAT:
-				return chatLimit;
-			case BED_ENTER:
-				return bedEnterLimit;
-			case BED_LEAVE:
-				return bedLeaveLimit;
-			case BOW_SHOOT:
-				return shootBowLimit;
-			case BUCKET_EMPTY_LAVA:
-				return bucketEmptyLavaLimit;
-			case BUCKET_EMPTY_WATER:
-				return bucketEmptyWaterLimit;
-			case BUCKET_FILL_LAVA:
-				return bucketFillLavaLimit;
-			case BUCKET_FILL_WATER:
-				return bucketFillWaterLimit;
-			case DEATH:
-				return deathLimit;
-			case EGG_THROW:
-				return eggThrowLimit;
-			case CREATIVE:
-				return gameModeCreativeLimit;
-			case SURVIVAL:
-				return gameModeSurvivalLimit;
-			case JOIN:
-				return joinLimit;
-			case KICK:
-				return kickLimit;
-			case QUIT:
-				return quitLimit;
-			case RESPAWN:
-				return respawnLimit;
-			case PAINTING_PLACE:
-				return paintingPlaceLimit;
-			case PORTAL_CREATE_NETHER:
-				return portalCreateNetherLimit;
-			case PORTAL_CREATE_END:
-				return portalCreateEndLimit;
-			case PORTAL_CREATE_CUSTOM:
-				return portalCreateCustomLimit;
-			case PORTAL_ENTER:
-				return portalEnterLimit;
-			case SNEAK:
-				return sneakLimit;
-			case SPRINT:
-				return sprintLimit;
-			case TAME_OCELOT:
-				return tameOcelotLimit;
-			case TAME_WOLF:
-				return tameWolfLimit;
-			case WORLD_CHANGE:
-				return worldChangeLimit;
-			default:
+		switch (type.getTable())
+		{
+			case DATA:
+			{
+				switch (type)
+				{
+					case CHAT:
+						return chatLimit;
+					case BED_ENTER:
+						return bedEnterLimit;
+					case BED_LEAVE:
+						return bedLeaveLimit;
+					case BOW_SHOOT:
+						return shootBowLimit;
+					case BUCKET_EMPTY_LAVA:
+						return bucketEmptyLavaLimit;
+					case BUCKET_EMPTY_WATER:
+						return bucketEmptyWaterLimit;
+					case BUCKET_FILL_LAVA:
+						return bucketFillLavaLimit;
+					case BUCKET_FILL_WATER:
+						return bucketFillWaterLimit;
+					case DEATH:
+						return deathLimit;
+					case EGG_THROW:
+						return eggThrowLimit;
+					case CREATIVE:
+						return gameModeCreativeLimit;
+					case SURVIVAL:
+						return gameModeSurvivalLimit;
+					case JOIN:
+						return joinLimit;
+					case KICK:
+						return kickLimit;
+					case QUIT:
+						return quitLimit;
+					case RESPAWN:
+						return respawnLimit;
+					case PAINTING_PLACE:
+						return paintingPlaceLimit;
+					case PORTAL_CREATE_NETHER:
+						return portalCreateNetherLimit;
+					case PORTAL_CREATE_END:
+						return portalCreateEndLimit;
+					case PORTAL_CREATE_CUSTOM:
+						return portalCreateCustomLimit;
+					case PORTAL_ENTER:
+						return portalEnterLimit;
+					case SNEAK:
+						return sneakLimit;
+					case SPRINT:
+						return sprintLimit;
+					case TAME_OCELOT:
+						return tameOcelotLimit;
+					case TAME_WOLF:
+						return tameWolfLimit;
+					case WORLD_CHANGE:
+						return worldChangeLimit;
+					default:
+						break;
+				}
 				break;
 			}
-			break;
-		}
-		case ITEMS: {
-			// handle custom item limit
-			switch (type) {
-			case BLOCK_PLACE: {
-				if (!blockPlaceStatic) {
-					if (values.containsKey(item)) {
-						return values.get(item).placeLimit;
+			case ITEMS:
+			{
+				// handle custom item limit
+				switch (type)
+				{
+					case BLOCK_PLACE:
+					{
+						if (!blockPlaceStatic)
+						{
+							if (values.containsKey(item))
+							{
+								return values.get(item).placeLimit;
+							}
+						}
+						return blockPlaceLimit;
+					}
+					case BLOCK_DESTROY:
+					{
+						if (!blockDestroyStatic)
+						{
+							if (values.containsKey(item))
+							{
+								return values.get(item).destroyLimit;
+							}
+						}
+						return blockDestroyLimit;
+					}
+					case ITEM_CRAFT:
+					{
+						if (!craftItemStatic)
+						{
+							if (values.containsKey(item))
+							{
+								return values.get(item).craftLimit;
+							}
+						}
+						return craftLimit;
+					}
+					case ITEM_DROP:
+					{
+						if (!itemDropStatic)
+						{
+							if (values.containsKey(item))
+							{
+								return values.get(item).dropLimit;
+							}
+						}
+						return itemDropLimit;
+					}
+					case ITEM_ENCHANT:
+					{
+						if (!enchantItemStatic)
+						{
+							if (values.containsKey(item))
+							{
+								return values.get(item).enchantLimit;
+							}
+						}
+						return enchantLimit;
+					}
+					case ITEM_PICKUP:
+					{
+						if (!pickupStatic)
+						{
+							if (values.containsKey(item))
+							{
+								return values.get(item).pickupLimit;
+							}
+						}
+					}
+					default:
+					{
+						if (debugUnhandled)
+						{
+							plugin.getLogger().warning(
+									"Unhandled Deny Pay for " + type.name());
+						}
+						break;
 					}
 				}
-				return blockPlaceLimit;
+				break;
 			}
-			case BLOCK_DESTROY: {
-				if (!blockDestroyStatic) {
-					if (values.containsKey(item)) {
-						return values.get(item).destroyLimit;
-					}
-				}
-				return blockDestroyLimit;
+			case COMMAND:
+			{
+				// TODO handle custom command limit
+				break;
 			}
-			case ITEM_CRAFT: {
-				if (!craftItemStatic) {
-					if (values.containsKey(item)) {
-						return values.get(item).craftLimit;
-					}
+			case PORTAL:
+			{
+				switch (type)
+				{
+					case PORTAL_CREATE_NETHER:
+						return portalCreateNetherLimit;
+					case PORTAL_CREATE_END:
+						return portalCreateEndLimit;
+					case PORTAL_CREATE_CUSTOM:
+						return portalCreateCustomLimit;
+					case PORTAL_ENTER:
+						return portalEnterLimit;
+					default:
+						break;
 				}
-				return craftLimit;
 			}
-			case ITEM_DROP: {
-				if (!itemDropStatic) {
-					if (values.containsKey(item)) {
-						return values.get(item).dropLimit;
-					}
+			case BUCKET:
+			{
+				switch (type)
+				{
+					case BUCKET_EMPTY_LAVA:
+						return bucketEmptyLavaLimit;
+					case BUCKET_EMPTY_WATER:
+						return bucketEmptyWaterLimit;
+					case BUCKET_FILL_LAVA:
+						return bucketFillLavaLimit;
+					case BUCKET_FILL_WATER:
+						return bucketFillWaterLimit;
+					default:
+						break;
 				}
-				return itemDropLimit;
-			}
-			case ITEM_ENCHANT: {
-				if (!enchantItemStatic) {
-					if (values.containsKey(item)) {
-						return values.get(item).enchantLimit;
-					}
-				}
-				return enchantLimit;
 			}
 			default:
 				break;
-			}
-			break;
-		}
-		case COMMAND: {
-			// TODO handle custom command limit
-			break;
-		}
-		case PORTAL: {
-			switch (type) {
-			case PORTAL_CREATE_NETHER:
-				return portalCreateNetherLimit;
-			case PORTAL_CREATE_END:
-				return portalCreateEndLimit;
-			case PORTAL_CREATE_CUSTOM:
-				return portalCreateCustomLimit;
-			case PORTAL_ENTER:
-				return portalEnterLimit;
-			default:
-				break;
-			}
-		}
-		case BUCKET: {
-			switch (type) {
-			case BUCKET_EMPTY_LAVA:
-				return bucketEmptyLavaLimit;
-			case BUCKET_EMPTY_WATER:
-				return bucketEmptyWaterLimit;
-			case BUCKET_FILL_LAVA:
-				return bucketFillLavaLimit;
-			case BUCKET_FILL_WATER:
-				return bucketFillWaterLimit;
-			default:
-				break;
-			}
-		}
-		default:
-			break;
 		}
 		return limit;
 	}
 
 	public boolean getItemDenyPay(Field type, Item item)
 	{
-		switch(type)
+		switch (type)
 		{
-		case BLOCK_PLACE:
-		{
-			if(!blockPlaceStatic)
+			case BLOCK_PLACE:
 			{
-				if (values.containsKey(item))
+				if (!blockPlaceStatic)
 				{
-					return values.get(item).placeDenyPay;
+					if (values.containsKey(item))
+					{
+						return values.get(item).placeDenyPay;
+					}
+				}
+				return blockPlaceDenyPay;
+			}
+			case BLOCK_DESTROY:
+			{
+				if (!blockDestroyStatic)
+				{
+					if (values.containsKey(item))
+					{
+						return values.get(item).destroyDenyPay;
+					}
+				}
+				return blockDestroyDenyPay;
+			}
+			case ITEM_CRAFT:
+			{
+				if (!craftItemStatic)
+				{
+					if (values.containsKey(item))
+					{
+						return values.get(item).craftDenyPay;
+					}
+				}
+				return craftItemDenyPay;
+			}
+			case ITEM_DROP:
+			{
+				if (!itemDropStatic)
+				{
+					if (values.containsKey(item))
+					{
+						return values.get(item).dropDenyPay;
+					}
+				}
+				return itemDropDenyPay;
+			}
+			case ITEM_ENCHANT:
+			{
+				if (!enchantItemStatic)
+				{
+					if (values.containsKey(item))
+					{
+						return values.get(item).enchantDenyPay;
+					}
+				}
+				return enchantItemDenyPay;
+			}
+			case ITEM_PICKUP:
+			{
+				if (!pickupStatic)
+				{
+					if (values.containsKey(item))
+					{
+						return values.get(item).pickupDenyPay;
+					}
 				}
 			}
-			return blockPlaceDenyPay;
-		}
-		case BLOCK_DESTROY:
-		{
-			if(!blockDestroyStatic)
+			default:
 			{
-				if (values.containsKey(item))
+				if (debugUnhandled)
 				{
-					return values.get(item).destroyDenyPay;
+					plugin.getLogger().warning(
+							"Unhandled Deny Pay for " + type.name());
 				}
+				break;
 			}
-			return blockDestroyDenyPay;
-		}
-		case ITEM_CRAFT:
-		{
-			if (!craftItemStatic)
-			{
-				if (values.containsKey(item))
-				{
-					return values.get(item).craftDenyPay;
-				}
-			}
-			return craftItemDenyPay;
-		}
-		case ITEM_DROP:
-		{
-			if(!itemDropStatic)
-			{
-				if (values.containsKey(item))
-				{
-					return values.get(item).dropDenyPay;
-				}
-			}
-			return itemDropDenyPay;
-		}
-		case ITEM_ENCHANT:
-		{
-			if(!enchantItemStatic)
-			{
-				if (values.containsKey(item))
-				{
-					return values.get(item).enchantDenyPay;
-				}
-			}
-			return enchantItemDenyPay;
-		}
-		default:
-		{
-			if(debugUnhandled)
-			{
-				plugin.getLogger().warning("Unhandled Deny Pay for " + type.name());
-			}
-			break;
-		}
 		}
 		return false;
 	}
 
-	public boolean getItemDenyLimit(Field type, Item item) {
-		switch (type) {
-		case BLOCK_PLACE: {
-			if(!blockPlaceStatic)
+	public boolean getItemDenyLimit(Field type, Item item)
+	{
+		switch (type)
+		{
+			case BLOCK_PLACE:
 			{
-				if (values.containsKey(item))
+				if (!blockPlaceStatic)
 				{
-					return values.get(item).placeDenyLimit;
+					if (values.containsKey(item))
+					{
+						return values.get(item).placeDenyLimit;
+					}
+				}
+				return blockPlaceDenyLimit;
+			}
+			case BLOCK_DESTROY:
+			{
+				if (!blockDestroyStatic)
+				{
+					if (values.containsKey(item))
+					{
+						return values.get(item).destroyDenyLimit;
+					}
+				}
+				return blockDestroyDenyLimit;
+			}
+			case ITEM_CRAFT:
+			{
+				if (!craftItemStatic)
+				{
+					if (values.containsKey(item))
+					{
+						return values.get(item).craftDenyLimit;
+					}
+				}
+				return craftItemDenyLimit;
+			}
+			case ITEM_DROP:
+			{
+				if (!itemDropStatic)
+				{
+					if (values.containsKey(item))
+					{
+						return values.get(item).dropDenyLimit;
+					}
+				}
+				return itemDropDenyLimit;
+			}
+			case ITEM_ENCHANT:
+			{
+				if (!enchantItemStatic)
+				{
+					if (values.containsKey(item))
+					{
+						return values.get(item).enchantDenyLimit;
+					}
+				}
+				return enchantItemDenyLimit;
+			}
+			case ITEM_PICKUP:
+			{
+				if (!pickupStatic)
+				{
+					if (values.containsKey(item))
+					{
+						return values.get(item).pickupDenyLimit;
+					}
 				}
 			}
-			return blockPlaceDenyLimit;
-		}
-		case BLOCK_DESTROY: {
-			if(!blockDestroyStatic)
+			default:
 			{
-				if (values.containsKey(item))
+				if (debugUnhandled)
 				{
-					return values.get(item).destroyDenyLimit;
+					plugin.getLogger().warning(
+							"Unhandled Deny Limit for " + type.name());
 				}
+				break;
 			}
-			return blockDestroyDenyLimit;
-		}
-		case ITEM_CRAFT: {
-			if (!craftItemStatic)
-			{
-				if (values.containsKey(item))
-				{
-					return values.get(item).craftDenyLimit;
-				}
-			}
-			return craftItemDenyLimit;
-		}
-		case ITEM_DROP: {
-			if(!itemDropStatic)
-			{
-				if (values.containsKey(item))
-				{
-					return values.get(item).dropDenyLimit;
-				}
-			}
-			return itemDropDenyLimit;
-		}
-		case ITEM_ENCHANT: {
-			if(!enchantItemStatic)
-			{
-				if (values.containsKey(item))
-				{
-					return values.get(item).enchantDenyLimit;
-				}
-			}
-			return enchantItemDenyLimit;
-		}
-		default: {
-			if (debugUnhandled) {
-				plugin.getLogger().warning(
-						"Unhandled Deny Limit for " + type.name());
-			}
-			break;
-		}
 		}
 		return false;
 	}
@@ -1080,71 +1215,99 @@ public class Config {
 	/**
 	 * Loads the per-item karma values into a hashmap for later usage
 	 */
-	private void loadItemValueMap() {
+	private void loadItemValueMap()
+	{
 		// Load karma file
 		final YamlConfiguration valueFile = this.itemValuesFile();
 		// Load custom karma file into map
-		for (final String entry : valueFile.getKeys(false)) {
-			try {
+		for (final String entry : valueFile.getKeys(false))
+		{
+			try
+			{
 				// Attempt to parse non data value nodes
 				int key = Integer.parseInt(entry);
-				if (key <= 0) {
+				if (key <= 0)
+				{
 					plugin.getLogger().warning(
 							Karmiconomy.TAG
 									+ " Zero or negative item id for entry: "
 									+ entry);
-				} else {
+				}
+				else
+				{
 					// If it has child nodes, parse those as well
-					if (valueFile.isConfigurationSection(entry)) {
+					if (valueFile.isConfigurationSection(entry))
+					{
 						values.put(new Item(key, Byte.parseByte("" + 0),
 								(short) 0), parseInfo(valueFile, entry));
-					} else {
+					}
+					else
+					{
 						plugin.getLogger().warning("No section for " + entry);
 					}
 				}
-			} catch (final NumberFormatException ex) {
+			}
+			catch (final NumberFormatException ex)
+			{
 				// Potential data value entry
-				if (entry.contains("&")) {
-					try {
+				if (entry.contains("&"))
+				{
+					try
+					{
 						final String[] split = entry.split("&");
 						final int item = Integer.parseInt(split[0]);
 						final int data = Integer.parseInt(split[1]);
-						if (item <= 0) {
+						if (item <= 0)
+						{
 							plugin.getLogger()
 									.warning(
 											Karmiconomy.TAG
 													+ " Zero or negative item id for entry: "
 													+ entry);
-						} else {
-							if (valueFile.isConfigurationSection(entry)) {
-								if (item != 373) {
+						}
+						else
+						{
+							if (valueFile.isConfigurationSection(entry))
+							{
+								if (item != 373)
+								{
 									values.put(
 											new Item(item, Byte.parseByte(""
 													+ data), (short) data),
 											parseInfo(valueFile, entry));
-								} else {
+								}
+								else
+								{
 									values.put(
 											new Item(item, Byte
 													.parseByte("" + 0),
 													(short) data),
 											parseInfo(valueFile, entry));
 								}
-							} else {
+							}
+							else
+							{
 								plugin.getLogger().warning(
 										"No section for " + entry);
 							}
 						}
-					} catch (ArrayIndexOutOfBoundsException a) {
+					}
+					catch (ArrayIndexOutOfBoundsException a)
+					{
 						plugin.getLogger()
 								.warning(
 										"Wrong format for "
 												+ entry
 												+ ". Must follow '<itemid>&<datavalue>:' entry.");
-					} catch (NumberFormatException exa) {
+					}
+					catch (NumberFormatException exa)
+					{
 						plugin.getLogger().warning(
 								"Non-integer number for " + entry);
 					}
-				} else {
+				}
+				else
+				{
 					plugin.getLogger().warning("Invalid entry for " + entry);
 				}
 			}
@@ -1152,11 +1315,13 @@ public class Config {
 		plugin.getLogger().info("Loaded custom values");
 	}
 
-	public Map<Item, KCItemInfo> getItemValueMap() {
+	public Map<Item, KCItemInfo> getItemValueMap()
+	{
 		return values;
 	}
 
-	private KCItemInfo parseInfo(YamlConfiguration config, String path) {
+	private KCItemInfo parseInfo(YamlConfiguration config, String path)
+	{
 		final double iCraftPay = config.getDouble(path + ".craftPay", craftPay);
 		final double iEnchantPay = config.getDouble(path + ".enchantPay",
 				enchantPay);
@@ -1199,12 +1364,17 @@ public class Config {
 				itemDropDenyPay);
 		final boolean iDropDenyLimit = config.getBoolean(path
 				+ ".craftDenyLimit", itemDropDenyLimit);
+		final int iPickupLimit = config.getInt(path + ".pickupLimit", pickupLimit);
+		final double iPickupPay = config.getDouble(path + ".pickupPay", pickupPay);
+		final boolean iPickupDenyPay = config.getBoolean(path + ".pickupDenyPay", pickupDenyPay);
+		final boolean iPickupDenyLimit = config.getBoolean(path + ".pickupDenyLimit", pickupDenyLimit);
 		KCItemInfo info = new KCItemInfo(iCraftLimit, iCraftPay, iCraftDenyPay,
 				iCraftDenyLimit, iEnchantLimit, iEnchantPay, iEnchantDenyPay,
 				iEnchantDenyLimit, iPlaceLimit, iPlacePay, iPlaceDenyPay,
 				iPlaceDenyLimit, /* iIgniteLimit, iIgnitePay, */
 				iDestroyLimit, iDestroyPay, iDestroyDenyPay, iDestroyDenyLimit,
-				iDropLimit, iDropPay, iDropDenyPay, iDropDenyLimit);
+				iDropLimit, iDropPay, iDropDenyPay, iDropDenyLimit,
+				iPickupLimit, iPickupPay, iPickupDenyPay, iPickupDenyLimit);
 		return info;
 	}
 
@@ -1216,13 +1386,15 @@ public class Config {
 	 * 
 	 * @return YamlConfiguration file
 	 */
-	private YamlConfiguration itemValuesFile() {
+	private YamlConfiguration itemValuesFile()
+	{
 		final File file = new File(plugin.getDataFolder().getAbsolutePath()
 				+ "/values.yml");
 		// TODO rename
 		final YamlConfiguration valueFile = YamlConfiguration
 				.loadConfiguration(file);
-		if (valueFile.getKeys(false).isEmpty()) {
+		if (valueFile.getKeys(false).isEmpty())
+		{
 			// TODO all-inclusive defaults
 			// Defaults
 			valueFile.set("14.dropPay", 5);
@@ -1248,10 +1420,13 @@ public class Config {
 			 * valueFile.set("351&4", 4);
 			 */
 			// Insert defaults into file if they're not present
-			try {
+			try
+			{
 				// Save the file
 				valueFile.save(file);
-			} catch (IOException e1) {
+			}
+			catch (IOException e1)
+			{
 				// INFO Auto-generated catch block
 				plugin.getLogger().warning(
 						"File I/O Exception on saving karma list");
@@ -1262,14 +1437,15 @@ public class Config {
 	}
 
 	// Private class to hold item specific information
-	public class KCItemInfo {
+	public class KCItemInfo
+	{
 		public double craftPay, enchantPay, placePay, /* ignitePay, */destroyPay,
-				dropPay;
+				dropPay, pickupPay;
 		public int craftLimit, enchantLimit, placeLimit, /* igniteLimit, */
-		destroyLimit, dropLimit;
+		destroyLimit, dropLimit, pickupLimit;
 		public boolean craftDenyPay, craftDenyLimit, enchantDenyPay,
 				enchantDenyLimit, destroyDenyPay, destroyDenyLimit,
-				placeDenyPay, placeDenyLimit, dropDenyPay, dropDenyLimit;
+				placeDenyPay, placeDenyLimit, dropDenyPay, dropDenyLimit, pickupDenyPay, pickupDenyLimit;
 
 		public KCItemInfo(int craftLimit, double craftPay,
 				boolean craftDenyPay, boolean craftDenyLimit, int enchantLimit,
@@ -1279,7 +1455,9 @@ public class Config {
 				/* int igniteLimit, double ignitePay, */int destroyLimit,
 				double destroyPay, boolean destroyDenyPay,
 				boolean destroyDenyLimit, int dropLimit, double dropPay,
-				boolean dropDenyPay, boolean dropDenyLimit) {
+				boolean dropDenyPay, boolean dropDenyLimit, int pickupLimit,
+				double pickupPay, boolean pickupDenyPay, boolean pickupDenyLimit)
+		{
 			this.craftPay = craftPay;
 			this.enchantPay = enchantPay;
 			this.placePay = placePay;
@@ -1302,6 +1480,10 @@ public class Config {
 			this.placeDenyLimit = placeDenyLimit;
 			this.dropDenyPay = dropDenyPay;
 			this.dropDenyLimit = dropDenyLimit;
+			this.pickupLimit = pickupLimit;
+			this.pickupPay = pickupPay;
+			this.pickupDenyLimit = pickupDenyLimit;
+			this.pickupDenyPay = pickupDenyPay;
 		}
 	}
 }
