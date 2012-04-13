@@ -53,6 +53,7 @@ public class KarmiconomyListener implements Listener
 	private Economy eco;
 	private Config config;
 	//TODO create thread that resets this every so often? May not be necessary
+	//Maybe every 2 minutes?
 	private Map<String, String> sentMessages = new HashMap<String, String>();
 
 	public KarmiconomyListener(Karmiconomy plugin)
@@ -67,7 +68,7 @@ public class KarmiconomyListener implements Listener
 	public void chatValid(final PlayerChatEvent event)
 	{
 		if (!event.isCancelled()
-				&& (config.chatDenyPay || config.chatDenyLimit)
+				&& config.chat
 				&& event.getPlayer() != null)
 		{
 			final Player player = event.getPlayer();
@@ -118,7 +119,7 @@ public class KarmiconomyListener implements Listener
 	public void commandValid(final PlayerCommandPreprocessEvent event)
 	{
 		if (!event.isCancelled()
-				&& (config.commandDenyPay || config.commandDenyLimit)
+				&& config.command
 				&& event.getPlayer() != null)
 		{
 			final Player player = event.getPlayer();
@@ -171,7 +172,7 @@ public class KarmiconomyListener implements Listener
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void blockPlaceValid(final BlockPlaceEvent event)
 	{
-		if (!event.isCancelled())
+		if (!event.isCancelled() && config.blockPlace)
 		{
 			final Item placed = new Item(event.getBlockPlaced().getTypeId(),
 					event.getBlockPlaced().getData(), (short) 0);
@@ -251,7 +252,7 @@ public class KarmiconomyListener implements Listener
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void blockDestroyValid(final BlockBreakEvent event)
 	{
-		if (!event.isCancelled())
+		if (!event.isCancelled() && config.blockDestroy)
 		{
 			final Item destroyed = new Item(event.getBlock().getTypeId(), event
 					.getBlock().getData(), (short) 0);
@@ -342,7 +343,7 @@ public class KarmiconomyListener implements Listener
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void craftItemValid(final CraftItemEvent event)
 	{
-		if (!event.isCancelled())
+		if (!event.isCancelled() && config.craftItem)
 		{
 			final Item craft = new Item(event.getRecipe().getResult());
 			final boolean denyPay = config.getItemDenyPay(Field.ITEM_CRAFT,
@@ -417,7 +418,7 @@ public class KarmiconomyListener implements Listener
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void enchantItemValid(final EnchantItemEvent event)
 	{
-		if (!event.isCancelled())
+		if (!event.isCancelled() && config.enchantItem)
 		{
 			final Item enchant = new Item(event.getItem());
 			final boolean denyPay = config.getItemDenyPay(Field.ITEM_ENCHANT,
@@ -497,11 +498,9 @@ public class KarmiconomyListener implements Listener
 	public void createPortalValid(final EntityCreatePortalEvent event)
 	{
 		if (!event.isCancelled()
-				&& (config.portalCreateNetherDenyPay
-						|| config.portalCreateNetherDenyLimit
-						|| config.portalCreateEndDenyPay
-						|| config.portalCreateEndDenyLimit
-						|| config.portalCreateCustomDenyPay || config.portalCreateCustomDenyLimit)
+				&& (config.portalCreateNether
+						|| config.portalCreateEnd
+						|| config.portalCreateCustom)
 				&& event.getEntity() != null)
 		{
 			if (event.getEntity() instanceof Player)
@@ -698,7 +697,7 @@ public class KarmiconomyListener implements Listener
 	public void shootBowValid(final EntityShootBowEvent event)
 	{
 		if (!event.isCancelled()
-				&& (config.shootBowDenyPay || config.shootBowDenyLimit)
+				&& config.shootBow
 				&& event.getEntity() != null)
 		{
 			if (event.getEntity() instanceof Player)
@@ -759,9 +758,7 @@ public class KarmiconomyListener implements Listener
 	public void tameValid(final EntityTameEvent event)
 	{
 		// Move config check inside if
-		if (!event.isCancelled()
-				&& (config.tameOcelotDenyPay || config.tameWolfDenyPay
-						|| config.tameOcelotDenyLimit || config.tameWolfDenyLimit)
+		if (!event.isCancelled() && (config.tameOcelot || config.tameWolf)
 				&& event.getOwner() != null)
 		{
 			if (event.getOwner() instanceof Player)
@@ -903,7 +900,7 @@ public class KarmiconomyListener implements Listener
 	public void paintingPlaceValid(final PaintingPlaceEvent event)
 	{
 		if (!event.isCancelled()
-				&& (config.paintingPlaceDenyPay || config.paintingPlaceDenyLimit)
+				&& config.paintingPlace
 				&& event.getPlayer() != null)
 		{
 			final Player player = event.getPlayer();
@@ -964,7 +961,7 @@ public class KarmiconomyListener implements Listener
 	public void bedEnterValid(final PlayerBedEnterEvent event)
 	{
 		if (!event.isCancelled()
-				&& (config.bedEnterDenyPay || config.bedEnterDenyLimit)
+				&& config.bedEnter
 				&& event.getPlayer() != null)
 		{
 			final Player player = event.getPlayer();
@@ -1053,9 +1050,7 @@ public class KarmiconomyListener implements Listener
 	public void bucketEmptyValid(final PlayerBucketEmptyEvent event)
 	{
 		if (!event.isCancelled()
-				&& (config.bucketEmptyWaterDenyPay
-						|| config.bucketEmptyWaterDenyLimit
-						|| config.bucketEmptyLavaDenyPay || config.bucketEmptyLavaDenyLimit)
+				&& (config.bucketEmptyWater || config.bucketEmptyLava)
 				&& event.getPlayer() != null)
 		{
 			final Player player = event.getPlayer();
@@ -1102,9 +1097,7 @@ public class KarmiconomyListener implements Listener
 	public void bucketFillValid(final PlayerBucketFillEvent event)
 	{
 		if (!event.isCancelled()
-				&& (config.bucketFillWaterDenyPay
-						|| config.bucketFillWaterDenyLimit
-						|| config.bucketFillLavaDenyPay || config.bucketFillLavaDenyLimit)
+				&& (config.bucketFillWater || config.bucketFillLava)
 				&& event.getPlayer() != null)
 		{
 			final Player player = event.getPlayer();
@@ -1247,7 +1240,7 @@ public class KarmiconomyListener implements Listener
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void itemPickupValid(final PlayerPickupItemEvent event)
 	{
-		if (!event.isCancelled())
+		if (!event.isCancelled() && config.pickup)
 		{
 			final Item pickup = new Item(event.getItem().getItemStack());
 			final boolean denyPay = config.getItemDenyPay(Field.ITEM_PICKUP,
@@ -1316,7 +1309,7 @@ public class KarmiconomyListener implements Listener
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void itemDropValid(final PlayerDropItemEvent event)
 	{
-		if (!event.isCancelled())
+		if (!event.isCancelled() && config.itemDrop)
 		{
 			final Item dropped = new Item(event.getItemDrop().getItemStack());
 			final boolean denyPay = config.getItemDenyPay(Field.ITEM_DROP,
@@ -1418,9 +1411,7 @@ public class KarmiconomyListener implements Listener
 	{
 		// TODO move config check inside if
 		if (!event.isCancelled()
-				&& (config.gameModeCreativeDenyPay
-						|| config.gameModeSurvivalDenyPay
-						|| config.gameModeCreativeDenyLimit || config.gameModeSurvivalDenyLimit)
+				&& (config.gameModeCreative || config.gameModeSurvival)
 				&& event.getPlayer() != null)
 		{
 			boolean cancel = false;
@@ -1658,7 +1649,7 @@ public class KarmiconomyListener implements Listener
 	public void sneakValid(final PlayerToggleSneakEvent event)
 	{
 		if (!event.isCancelled() && event.isSneaking()
-				&& (config.sneakDenyPay || config.sneakDenyLimit)
+				&& config.sneak
 				&& event.getPlayer() != null)
 		{
 			final Player player = event.getPlayer();
@@ -1708,7 +1699,7 @@ public class KarmiconomyListener implements Listener
 	public void sprintValid(final PlayerToggleSprintEvent event)
 	{
 		if (!event.isCancelled() && event.isSprinting()
-				&& (config.sprintDenyPay || config.sprintDenyLimit)
+				&& config.sprint
 				&& event.getPlayer() != null)
 		{
 			final Player player = event.getPlayer();
@@ -1758,7 +1749,7 @@ public class KarmiconomyListener implements Listener
 	public void vehicleEnterValid(final VehicleEnterEvent event)
 	{
 		if (!event.isCancelled()
-				&& (config.vehicleEnterDenyPay || config.vehicleEnterDenyLimit)
+				&& config.vehicleEnter
 				&& event.getEntered() != null)
 		{
 			if (event.getEntered() instanceof Player)
@@ -1808,7 +1799,7 @@ public class KarmiconomyListener implements Listener
 	public void vehicleExitValid(final VehicleExitEvent event)
 	{
 		if (!event.isCancelled()
-				&& (config.vehicleExitDenyPay || config.vehicleExitDenyLimit)
+				&& config.vehicleExit
 				&& event.getExited() != null)
 		{
 			if (event.getExited() instanceof Player)
