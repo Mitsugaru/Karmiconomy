@@ -438,7 +438,7 @@ public class DatabaseHandler
 		return same;
 	}
 
-	public void resetAllValues(String name)
+	public boolean resetAllValues(String name)
 	{
 		boolean drop = false;
 		int id = getPlayerId(name);
@@ -451,7 +451,7 @@ public class DatabaseHandler
 			// Reset was called, but somehow player did not exist. Add them to
 			// the
 			// database
-			addPlayer(name);
+			return addPlayer(name);
 		}
 		if (drop)
 		{
@@ -481,6 +481,7 @@ public class DatabaseHandler
 		{
 			plugin.getLogger().warning("Could not reset values for: " + name);
 		}
+		return drop;
 	}
 
 	public void resetValue(Field field, String name, Item item, String command)
