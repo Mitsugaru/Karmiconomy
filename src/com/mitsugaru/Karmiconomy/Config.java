@@ -1364,10 +1364,14 @@ public class Config
 				itemDropDenyPay);
 		final boolean iDropDenyLimit = config.getBoolean(path
 				+ ".dropDenyLimit", itemDropDenyLimit);
-		final int iPickupLimit = config.getInt(path + ".pickupLimit", pickupLimit);
-		final double iPickupPay = config.getDouble(path + ".pickupPay", pickupPay);
-		final boolean iPickupDenyPay = config.getBoolean(path + ".pickupDenyPay", pickupDenyPay);
-		final boolean iPickupDenyLimit = config.getBoolean(path + ".pickupDenyLimit", pickupDenyLimit);
+		final int iPickupLimit = config.getInt(path + ".pickupLimit",
+				pickupLimit);
+		final double iPickupPay = config.getDouble(path + ".pickupPay",
+				pickupPay);
+		final boolean iPickupDenyPay = config.getBoolean(path
+				+ ".pickupDenyPay", pickupDenyPay);
+		final boolean iPickupDenyLimit = config.getBoolean(path
+				+ ".pickupDenyLimit", pickupDenyLimit);
 		KCItemInfo info = new KCItemInfo(iCraftLimit, iCraftPay, iCraftDenyPay,
 				iCraftDenyLimit, iEnchantLimit, iEnchantPay, iEnchantDenyPay,
 				iEnchantDenyLimit, iPlaceLimit, iPlacePay, iPlaceDenyPay,
@@ -1445,7 +1449,8 @@ public class Config
 		destroyLimit, dropLimit, pickupLimit;
 		public boolean craftDenyPay, craftDenyLimit, enchantDenyPay,
 				enchantDenyLimit, destroyDenyPay, destroyDenyLimit,
-				placeDenyPay, placeDenyLimit, dropDenyPay, dropDenyLimit, pickupDenyPay, pickupDenyLimit;
+				placeDenyPay, placeDenyLimit, dropDenyPay, dropDenyLimit,
+				pickupDenyPay, pickupDenyLimit;
 
 		public KCItemInfo(int craftLimit, double craftPay,
 				boolean craftDenyPay, boolean craftDenyLimit, int enchantLimit,

@@ -8,6 +8,8 @@ import net.milkbowl.vault.economy.EconomyResponse;
 
 import org.bukkit.ChatColor;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Cow;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
@@ -34,6 +36,7 @@ import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerEggThrowEvent;
 import org.bukkit.event.player.PlayerGameModeChangeEvent;
+import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
@@ -1054,8 +1057,41 @@ public class KarmiconomyListener implements Listener
 				&& event.getPlayer() != null)
 		{
 			final Player player = event.getPlayer();
-			// TODO switch for type of bucket
-			// TODO pay on empty
+			boolean cancel = false;
+			// switch for type of bucket
+			switch(event.getBucket())
+			{
+				case LAVA_BUCKET:
+				{
+					if(deny(Field.BUCKET_EMPTY_LAVA, player, config.bucketEmptyLavaDenyPay, config.bucketEmptyLavaDenyLimit, null, null))
+					{
+						cancel = true;
+					}
+					break;
+				}
+				case WATER_BUCKET:
+				{
+					if(deny(Field.BUCKET_EMPTY_WATER, player, config.bucketEmptyWaterDenyPay, config.bucketEmptyWaterDenyLimit, null, null))
+					{
+						cancel = true;
+					}
+					break;
+				}
+				default:
+				{
+					if (config.debugUnhandled)
+					{
+						plugin.getLogger().warning(
+								"Unhandled " + event.getEventName()
+										+ " for game mode '"
+										+ event.getBucket().name() + "'");
+					}
+					break;
+				}
+			}
+			if(cancel)
+			{
+				event.setCancelled(true);
 			if (config.debugEvents && event.isCancelled())
 			{
 				final Map<String, String> details = new HashMap<String, String>();
@@ -1066,6 +1102,7 @@ public class KarmiconomyListener implements Listener
 				}
 				details.put("Cancelled", "true");
 				debugEvent(event, details);
+			}
 			}
 		}
 	}
@@ -1078,8 +1115,51 @@ public class KarmiconomyListener implements Listener
 				&& event.getPlayer() != null)
 		{
 			final Player player = event.getPlayer();
-			// TODO switch for type of bucket
-			// TODO pay on empty
+			// Switch for type of bucket
+			switch(event.getBucket())
+			{
+				case LAVA_BUCKET:
+				{
+					//Pay on empty
+					if (!hitLimit(Field.BUCKET_EMPTY_LAVA, player, null, null))
+					{
+						// Try to pay
+						if (pay(Field.BUCKET_EMPTY_LAVA, player, null, null))
+						{
+							// Increment
+							db.incrementData(Field.BUCKET_EMPTY_LAVA, player.getName(),
+									null, null);
+						}
+					}
+					break;
+				}
+				case WATER_BUCKET:
+				{
+					//Pay on empty
+					if (!hitLimit(Field.BUCKET_EMPTY_WATER, player, null, null))
+					{
+						// Try to pay
+						if (pay(Field.BUCKET_EMPTY_WATER, player, null, null))
+						{
+							// Increment
+							db.incrementData(Field.BUCKET_EMPTY_WATER, player.getName(),
+									null, null);
+						}
+					}
+					break;
+				}
+				default:
+				{
+					if (config.debugUnhandled)
+					{
+						plugin.getLogger().warning(
+								"Unhandled " + event.getEventName()
+										+ " for game mode '"
+										+ event.getBucket().name() + "'");
+					}
+					break;
+				}
+			}
 			if (config.debugEvents)
 			{
 				final Map<String, String> details = new HashMap<String, String>();
@@ -1112,6 +1192,10 @@ public class KarmiconomyListener implements Listener
 					// TODO change this the specific type
 					details.put("Bucket", event.getBucket().toString());
 				}
+				if(event.getBlockClicked() != null)
+				{
+					details.put("Block", event.getBlockClicked().getType().name());
+				}
 				details.put("Cancelled", "true");
 				debugEvent(event, details);
 			}
@@ -1136,6 +1220,10 @@ public class KarmiconomyListener implements Listener
 				{
 					// TODO change this the specific type
 					details.put("Bucket", event.getBucket().toString());
+				}
+				if(event.getBlockClicked() != null)
+				{
+					details.put("Block", event.getBlockClicked().getType().name());
 				}
 				debugEvent(event, details);
 			}
