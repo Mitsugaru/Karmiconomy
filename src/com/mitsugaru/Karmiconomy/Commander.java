@@ -13,6 +13,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
+@SuppressWarnings("unused")
 public class Commander implements CommandExecutor
 {
 	// Class variables
@@ -56,15 +57,7 @@ public class Commander implements CommandExecutor
 		if (args.length == 0)
 		{
 			// Check if they have "karma" permission
-			if (perm.checkPermission(sender, "KarmicShare.karma"))
-			{
-				// TODO implement help
-			}
-			else
-			{
-				sender.sendMessage(ChatColor.RED + Karmiconomy.TAG
-						+ " Lack permission: KarmicShare.karma");
-			}
+			this.displayHelp(sender);
 		}
 		else
 		{
@@ -79,9 +72,9 @@ public class Commander implements CommandExecutor
 				this.displayHelp(sender);
 			}
 			// Previous page
-			else if (com.equals("prev"))
+			/*else if (com.equals("prev"))
 			{
-				if (perm.checkPermission(sender, "KarmicShare.commands.list"))
+				if (perm.checkPermission(sender, "Karmiconomy.commands.list"))
 				{
 					// List, with previous page
 					this.listPool(sender, -1);
@@ -89,13 +82,13 @@ public class Commander implements CommandExecutor
 				else
 				{
 					sender.sendMessage(ChatColor.RED + Karmiconomy.TAG
-							+ " Lack permission: KarmicShare.commands.list");
+							+ " Lack permission: Karmiconomy.commands.list");
 				}
 			}
 			// Next page
 			else if (com.equals("next"))
 			{
-				if (perm.checkPermission(sender, "KarmicShare.commands.list"))
+				if (perm.checkPermission(sender, "Karmiconomy.commands.list"))
 				{
 					// List with next page
 					this.listPool(sender, 1);
@@ -103,22 +96,22 @@ public class Commander implements CommandExecutor
 				else
 				{
 					sender.sendMessage(ChatColor.RED + Karmiconomy.TAG
-							+ " Lack permission: KarmicShare.commands.list");
+							+ " Lack permission: Karmiconomy.commands.list");
 				}
 			}
 			// List actions
 			else if (com.equals("list"))
 			{
-				if (perm.checkPermission(sender, "KarmicShare.commands.list"))
+				if (perm.checkPermission(sender, "Karmiconomy.commands.list"))
 				{
 					this.listCommand(sender, args);
 				}
 				else
 				{
 					sender.sendMessage(ChatColor.RED + Karmiconomy.TAG
-							+ " Lack permission: KarmicShare.commands.list");
+							+ " Lack permission: Karmiconomy.commands.list");
 				}
-			}
+			}*/
 			else if(com.equals("reload"))
 			{
 				if(perm.checkPermission(sender, "Karmiconomy.admin"))
@@ -130,6 +123,11 @@ public class Commander implements CommandExecutor
 					sender.sendMessage(ChatColor.RED + Karmiconomy.TAG
 							+ " Lack permission: Karmiconomy.admin");
 				}
+			}
+			else
+			{
+				sender.sendMessage(ChatColor.RED + Karmiconomy.TAG
+						+ " Unknown command '" + ChatColor.GOLD + com + ChatColor.RED + "'. Bad syntax.");
 			}
 		}
 		if (config.debugTime)
@@ -179,12 +177,19 @@ public class Commander implements CommandExecutor
 	private void showVersion(CommandSender sender, String[] args)
 	{
 		sender.sendMessage(ChatColor.BLUE + bar + "=====");
-		sender.sendMessage(ChatColor.GREEN + "KarmicShare v"
+		sender.sendMessage(ChatColor.GREEN + "Karmiconomy v"
 				+ plugin.getDescription().getVersion());
 		sender.sendMessage(ChatColor.GREEN + "Coded by Mitsugaru");
 		sender.sendMessage(ChatColor.BLUE + "===========" + ChatColor.GRAY
 				+ "Config" + ChatColor.BLUE + "===========");
-		//sender.sendMessage(ChatColor.GRAY + "Effects: " + config.effects);
+		if(config.debugTime)
+			sender.sendMessage(ChatColor.GRAY + "Debug time: " + config.debugTime);
+		if(config.debugEvents)
+			sender.sendMessage(ChatColor.GRAY + "Debug time: " + config.debugEvents);
+		if(config.debugEconomy)
+			sender.sendMessage(ChatColor.GRAY + "Debug time: " + config.debugEconomy);
+		if(config.debugUnhandled)
+			sender.sendMessage(ChatColor.GRAY + "Debug time: " + config.debugUnhandled);
 	}
 
 	private void debugTime(CommandSender sender, long time)
@@ -204,8 +209,8 @@ public class Commander implements CommandExecutor
 	private void displayHelp(CommandSender sender)
 	{
 		sender.sendMessage(ChatColor.BLUE + "=====" + ChatColor.RED
-				+ "KarmicShare" + ChatColor.BLUE + "=====");
-		sender.sendMessage(ChatColor.GREEN + "/ks" + ChatColor.YELLOW
+				+ "Karmiconomy" + ChatColor.BLUE + "=====");
+		/*sender.sendMessage(ChatColor.GREEN + "/ks" + ChatColor.YELLOW
 				+ " : Show karma");
 		if (perm.checkPermission(sender, "KarmicShare.give"))
 		{
@@ -227,10 +232,10 @@ public class Commander implements CommandExecutor
 				+ ChatColor.YELLOW + " : Show previous/next page of list");
 		sender.sendMessage(ChatColor.GREEN + "/ks value [prev|next|page#]"
 				+ ChatColor.YELLOW
-				+ " : List karma multiplier values, and page through list");
-		sender.sendMessage(ChatColor.GREEN + "/ks help" + ChatColor.YELLOW
+				+ " : List karma multiplier values, and page through list");*/
+		sender.sendMessage(ChatColor.GREEN + "/kcon help" + ChatColor.YELLOW
 				+ " : Show help menu");
-		if (perm.checkPermission(sender, "KarmicShare.info"))
+		/*if (perm.checkPermission(sender, "KarmicShare.info"))
 		{
 			sender.sendMessage(ChatColor.GREEN + "/ks info" + ChatColor.YELLOW
 					+ " : Inspect currently held item");
@@ -244,8 +249,13 @@ public class Commander implements CommandExecutor
 		{
 			sender.sendMessage(ChatColor.GREEN + "/ks admin" + ChatColor.YELLOW
 					+ " : List admin commands");
+		}*/
+		if(perm.checkPermission(sender, "Karmiconomy.admin"))
+		{
+			sender.sendMessage(ChatColor.GREEN + "/kcon reload" + ChatColor.YELLOW
+					+ " : Reload all config files");
 		}
-		sender.sendMessage(ChatColor.GREEN + "/ks version" + ChatColor.YELLOW
+		sender.sendMessage(ChatColor.GREEN + "/kcon version" + ChatColor.YELLOW
 				+ " : Show version and config");
 	}
 
@@ -265,7 +275,7 @@ public class Commander implements CommandExecutor
 		if (cache.isEmpty())
 		{
 			sender.sendMessage(ChatColor.RED + Karmiconomy.TAG
-					+ " No jailed players");
+					+ " No players");
 			return;
 		}
 		if (!page.containsKey(sender.getName()))

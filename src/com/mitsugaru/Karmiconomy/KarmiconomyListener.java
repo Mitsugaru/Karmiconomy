@@ -153,8 +153,8 @@ public class KarmiconomyListener implements Listener {
 			final Player player = event.getPlayer();
 			final Item placed = new Item(event.getBlockPlaced().getTypeId(),
 					event.getBlockPlaced().getData(), (short) 0);
-			if (deny(Field.BLOCK_PLACE, player, config.blockPlaceDenyPay,
-					config.blockPlaceDenyLimit, placed, null)) {
+			if (deny(Field.BLOCK_PLACE, player, config.getItemDenyPay(Field.BLOCK_PLACE, placed),
+					config.getItemDenyLimit(Field.BLOCK_PLACE, placed), placed, null)) {
 				event.setCancelled(true);
 				if (config.debugEvents) {
 					final Map<String, String> details = new HashMap<String, String>();
@@ -213,8 +213,8 @@ public class KarmiconomyListener implements Listener {
 			final Player player = event.getPlayer();
 			final Item destroyed = new Item(event.getBlock().getTypeId(), event
 					.getBlock().getData(), (short) 0);
-			if (deny(Field.BLOCK_DESTROY, player, config.blockDestroyDenyPay,
-					config.blockDestroyDenyLimit, destroyed, null)) {
+			if (deny(Field.BLOCK_DESTROY, player, config.getItemDenyPay(Field.BLOCK_DESTROY, destroyed),
+					config.getItemDenyLimit(Field.BLOCK_DESTROY, destroyed), destroyed, null)) {
 				// deny
 				event.setCancelled(true);
 				if (config.debugEvents) {
@@ -288,8 +288,8 @@ public class KarmiconomyListener implements Listener {
 			if (event.getWhoClicked() instanceof Player) {
 				final Player player = (Player) event.getWhoClicked();
 				final Item craft = new Item(event.getRecipe().getResult());
-				if (deny(Field.ITEM_CRAFT, player, config.craftItemDenyPay,
-						config.craftItemDenyLimit, craft, null)) {
+				if (deny(Field.ITEM_CRAFT, player, config.getItemDenyPay(Field.ITEM_CRAFT, craft),
+						config.getItemDenyLimit(Field.ITEM_CRAFT, craft), craft, null)) {
 					// Deny
 					event.setCancelled(true);
 					if (config.debugEvents) {
@@ -343,8 +343,8 @@ public class KarmiconomyListener implements Listener {
 				&& event.getEnchanter() != null) {
 			final Player player = event.getEnchanter();
 			final Item enchant = new Item(event.getItem());
-			if (deny(Field.ITEM_ENCHANT, player, config.enchantItemDenyPay,
-					config.enchantItemDenyLimit, enchant, null)) {
+			if (deny(Field.ITEM_ENCHANT, player, config.getItemDenyPay(Field.ITEM_ENCHANT, enchant),
+					config.getItemDenyLimit(Field.ITEM_ENCHANT, enchant), enchant, null)) {
 				// Deny
 				event.setCancelled(true);
 				if (config.debugEvents) {
@@ -1011,8 +1011,8 @@ public class KarmiconomyListener implements Listener {
 				&& event.getPlayer() != null) {
 			final Player player = event.getPlayer();
 			final Item dropped = new Item(event.getItemDrop().getItemStack());
-			if (deny(Field.ITEM_DROP, player, config.itemDropDenyPay,
-					config.itemDropDenyLimit, dropped, null)) {
+			if (deny(Field.ITEM_DROP, player, config.getItemDenyPay(Field.ITEM_DROP, dropped),
+					config.getItemDenyLimit(Field.ITEM_DROP, dropped), dropped, null)) {
 				// Deny
 				event.setCancelled(true);
 				if (config.debugEvents) {
@@ -1503,7 +1503,7 @@ public class KarmiconomyListener implements Listener {
 				// comparison.
 				pay *= -1;
 				if (pay > balance) {
-					sendLackMessage(player, DenyType.MONEY, "chat");
+					sendLackMessage(player, DenyType.MONEY, field.name());
 					if (config.debugEvents) {
 						plugin.getLogger().info(
 								"Denied " + field + " for player "
@@ -1521,7 +1521,7 @@ public class KarmiconomyListener implements Listener {
 				final int limit = db.getData(field, player.getName(), item,
 						command);
 				if (limit >= cLimit) {
-					sendLackMessage(player, DenyType.LIMIT, "chat");
+					sendLackMessage(player, DenyType.LIMIT, field.name());
 					if (config.debugEvents) {
 						plugin.getLogger().info(
 								"Denied " + field + " for player "
