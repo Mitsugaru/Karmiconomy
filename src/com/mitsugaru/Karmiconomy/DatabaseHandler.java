@@ -66,7 +66,7 @@ public class DatabaseHandler {
 						.info(Karmiconomy.TAG + " Created data table");
 				mysql.createTable("CREATE TABLE "
 						+ Table.DATA.getName()
-						+ " (id INT UNSIGNED NOT NULL, bedenter INT NOT NULL, bedleave INT NOT NULL, bowshoot INT NOT NULL, chat INT NOT NULL, death INT NOT NULL, creative INT NOT NULL, survival INT NOT NULL, playerJoin INT NOT NULL, playerDrop INT NOT NULL, kick INT NOT NULL, quit INT NOT NULL, respawn INT NOT NULL, worldchange INT NOT NULL, tameocelot INT NOT NULL, tamewolf INT NOT NULL, PRIMARY KEY (id));");
+						+ " (id INT UNSIGNED NOT NULL, bedenter INT NOT NULL, bedleave INT NOT NULL, bowshoot INT NOT NULL, chat INT NOT NULL, death INT NOT NULL, creative INT NOT NULL, survival INT NOT NULL, playerJoin INT NOT NULL, playerDrop INT NOT NULL, kick INT NOT NULL, quit INT NOT NULL, respawn INT NOT NULL, worldchange INT NOT NULL, tameocelot INT NOT NULL, tamewolf INT NOT NULL, paintingplace INT NOT NULL, eggThrow INT NOT NULL, sneak INT NOT NULL, sprint INT NOT NULL, PRIMARY KEY (id));");
 			}
 			if (!mysql.checkTable(Table.PORTAL.getName())) {
 				plugin.getLogger().info(
@@ -114,7 +114,7 @@ public class DatabaseHandler {
 						.info(Karmiconomy.TAG + " Created data table");
 				sqlite.createTable("CREATE TABLE "
 						+ Table.DATA.getName()
-						+ " (id INTEGER PRIMARY KEY, bedenter INTEGER NOT NULL, bedleave INTEGER NOT NULL, bowshoot INTEGER NOT NULL, chat INTEGER NOT NULL, death INTEGER NOT NULL, creative INTEGER NOT NULL, survival INTEGER NOT NULL, playerJoin INTEGER NOT NULL, playerDrop INTEGER NOT NULL, kick INTEGER NOT NULL, quit INTEGER NOT NULL, respawn INTEGER NOT NULL, worldchange INTEGER NOT NULL, tameocelot INTEGER NOT NULL, tamewolf INTEGER NOT NULL);");
+						+ " (id INTEGER PRIMARY KEY, bedenter INTEGER NOT NULL, bedleave INTEGER NOT NULL, bowshoot INTEGER NOT NULL, chat INTEGER NOT NULL, death INTEGER NOT NULL, creative INTEGER NOT NULL, survival INTEGER NOT NULL, playerJoin INTEGER NOT NULL, playerDrop INTEGER NOT NULL, kick INTEGER NOT NULL, quit INTEGER NOT NULL, respawn INTEGER NOT NULL, worldchange INTEGER NOT NULL, tameocelot INTEGER NOT NULL, tamewolf INTEGER NOT NULL, paintingplace INTEGER NOT NULL, eggThrow INTEGER NOT NULL, sneak INTEGER NOT NULL, sprint INTEGER NOT NULL);");
 			}
 			if (!sqlite.checkTable(Table.PORTAL.getName())) {
 				plugin.getLogger().info(
@@ -443,12 +443,12 @@ public class DatabaseHandler {
 		BOW_SHOOT(Table.DATA, "bowshoot"), BED_ENTER(Table.DATA, "bedenter"), BED_LEAVE(
 				Table.DATA, "bedleave"), BLOCK_PLACE(Table.ITEMS, "place"), BLOCK_DESTROY(
 				Table.ITEMS, "destroy"), ITEM_CRAFT(Table.ITEMS, "craft"), ITEM_ENCHANT(
-				Table.ITEMS, "enchant"), ITEM_DROP(Table.ITEMS, "playerDrop"), CHAT(
+				Table.ITEMS, "enchant"), ITEM_DROP(Table.ITEMS, "playerDrop"), EGG_THROW(Table.DATA, "eggThrow"), CHAT(
 				Table.DATA, "chat"), COMMAND(Table.COMMAND, "command"), DEATH(
 				Table.DATA, "death"), CREATIVE(Table.DATA, "creative"), SURVIVAL(
 				Table.DATA, "survival"), JOIN(Table.DATA, "playerJoin"), KICK(
 				Table.DATA, "kick"), QUIT(Table.DATA, "quit"), RESPAWN(
-				Table.DATA, "respawn"), PORTAL_CREATE_NETHER(Table.PORTAL,
+				Table.DATA, "respawn"), SNEAK(Table.DATA, "sneak"), SPRINT(Table.DATA, "sprint"), PAINTING_PLACE(Table.DATA, "paintingplace"), PORTAL_CREATE_NETHER(Table.PORTAL,
 				"pcreatenether"), PORTAL_CREATE_END(Table.PORTAL, "pcreateend"), PORTAL_CREATE_CUSTOM(
 				Table.PORTAL, "pcreatecustom"), PORTAL_ENTER(Table.PORTAL,
 				"portalenter"), TAME_OCELOT(Table.DATA, "tameocelot"), TAME_WOLF(

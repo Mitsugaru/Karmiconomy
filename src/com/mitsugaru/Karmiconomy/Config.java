@@ -59,7 +59,7 @@ public class Config {
 	/* blockIgniteLimit, */blockPlaceLimit, shootBowLimit,
 			bucketEmptyLavaLimit, bucketEmptyWaterLimit, bucketFillLavaLimit,
 			bucketFillWaterLimit, craftLimit, enchantLimit, itemDropLimit,
-			eggThrowLimmit, chatLimit, deathLimit, gameModeCreativeLimit,
+			chatLimit, deathLimit, gameModeCreativeLimit,
 			gameModeSurvivalLimit, kickLimit, joinLimit, quitLimit,
 			respawnLimit, sneakLimit, sprintLimit, vehicleEnterLimit,
 			vehicleExitLimit, paintingPlaceLimit, commandLimit,
@@ -669,6 +669,8 @@ public class Config {
 				return bucketFillWaterPay;
 			case DEATH:
 				return deathPay;
+			case EGG_THROW:
+				return eggThrowPay;
 			case CREATIVE:
 				return gameModeCreativePay;
 			case SURVIVAL:
@@ -681,6 +683,8 @@ public class Config {
 				return quitPay;
 			case RESPAWN:
 				return respawnPay;
+			case PAINTING_PLACE:
+				return paintingPlacePay;
 			case PORTAL_CREATE_NETHER:
 				return portalCreateNetherPay;
 			case PORTAL_CREATE_END:
@@ -689,6 +693,10 @@ public class Config {
 				return portalCreateCustomPay;
 			case PORTAL_ENTER:
 				return portalEnterPay;
+			case SNEAK:
+				return sneakPay;
+			case SPRINT:
+				return sprintPay;
 			case TAME_OCELOT:
 				return tameOcelotPay;
 			case TAME_WOLF:
@@ -707,6 +715,36 @@ public class Config {
 		case COMMAND: {
 			// TODO handle custom command limit
 			break;
+		}
+		case PORTAL:
+		{
+			switch (type) {
+			case PORTAL_CREATE_NETHER:
+				return portalCreateNetherPay;
+			case PORTAL_CREATE_END:
+				return portalCreateEndPay;
+			case PORTAL_CREATE_CUSTOM:
+				return portalCreateCustomPay;
+			case PORTAL_ENTER:
+				return portalEnterPay;
+			default:
+				break;
+			}
+		}
+		case BUCKET:
+		{
+			switch (type) {
+			case BUCKET_EMPTY_LAVA:
+				return bucketEmptyLavaPay;
+			case BUCKET_EMPTY_WATER:
+				return bucketEmptyWaterPay;
+			case BUCKET_FILL_LAVA:
+				return bucketFillLavaPay;
+			case BUCKET_FILL_WATER:
+				return bucketFillWaterPay;
+			default:
+				break;
+			}
 		}
 		default:
 			break;
@@ -737,6 +775,8 @@ public class Config {
 				return bucketFillWaterLimit;
 			case DEATH:
 				return deathLimit;
+			case EGG_THROW:
+				return eggThrowLimit;
 			case CREATIVE:
 				return gameModeCreativeLimit;
 			case SURVIVAL:
@@ -749,6 +789,8 @@ public class Config {
 				return quitLimit;
 			case RESPAWN:
 				return respawnLimit;
+			case PAINTING_PLACE:
+				return paintingPlaceLimit;
 			case PORTAL_CREATE_NETHER:
 				return portalCreateNetherLimit;
 			case PORTAL_CREATE_END:
@@ -757,6 +799,10 @@ public class Config {
 				return portalCreateCustomLimit;
 			case PORTAL_ENTER:
 				return portalEnterLimit;
+			case SNEAK:
+				return sneakLimit;
+			case SPRINT:
+				return sprintLimit;
 			case TAME_OCELOT:
 				return tameOcelotLimit;
 			case TAME_WOLF:
@@ -775,6 +821,36 @@ public class Config {
 		case COMMAND: {
 			// TODO handle custom command limit
 			break;
+		}
+		case PORTAL:
+		{
+			switch (type) {
+			case PORTAL_CREATE_NETHER:
+				return portalCreateNetherLimit;
+			case PORTAL_CREATE_END:
+				return portalCreateEndLimit;
+			case PORTAL_CREATE_CUSTOM:
+				return portalCreateCustomLimit;
+			case PORTAL_ENTER:
+				return portalEnterLimit;
+			default:
+				break;
+			}
+		}
+		case BUCKET:
+		{
+			switch (type) {
+			case BUCKET_EMPTY_LAVA:
+				return bucketEmptyLavaLimit;
+			case BUCKET_EMPTY_WATER:
+				return bucketEmptyWaterLimit;
+			case BUCKET_FILL_LAVA:
+				return bucketFillLavaLimit;
+			case BUCKET_FILL_WATER:
+				return bucketFillWaterLimit;
+			default:
+				break;
+			}
 		}
 		default:
 			break;

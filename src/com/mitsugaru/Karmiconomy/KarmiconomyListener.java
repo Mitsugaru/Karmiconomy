@@ -7,7 +7,6 @@ import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
 
 import org.bukkit.ChatColor;
-import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -108,13 +107,17 @@ public class KarmiconomyListener implements Listener {
 				&& (config.commandDenyPay || config.commandDenyLimit)
 				&& event.getPlayer() != null) {
 			final Player player = event.getPlayer();
-			// TODO deny command
-			if (event.isCancelled() && config.debugEvents) {
-				final Map<String, String> details = new HashMap<String, String>();
-				details.put("Player", player.getName());
-				details.put("Message", event.getMessage());
-				details.put("Cancelled", "true");
-				debugEvent(event, details);
+			if (deny(Field.COMMAND, player, config.commandDenyPay,
+					config.commandDenyLimit, null, event.getMessage())) {
+				// Deny
+				event.setCancelled(true);
+				if (config.debugEvents) {
+					final Map<String, String> details = new HashMap<String, String>();
+					details.put("Player", player.getName());
+					details.put("Message", event.getMessage());
+					details.put("Cancelled", "true");
+					debugEvent(event, details);
+				}
 			}
 		}
 	}
@@ -124,7 +127,16 @@ public class KarmiconomyListener implements Listener {
 		if (!event.isCancelled() && config.command && event.getPlayer() != null) {
 			final Player player = event.getPlayer();
 			// TODO pay on command
-			// pay based on command match
+			// Check if hit limit
+			if (!hitLimit(Field.COMMAND, player, null, event.getMessage())) {
+				// Try to pay
+				if (pay(Field.COMMAND, player, null, null)) {
+					// Increment
+					db.incrementData(Field.COMMAND, player.getName(), null,
+							event.getMessage());
+				}
+			}
+			// TODO pay based on command match
 			if (config.debugEvents) {
 				final Map<String, String> details = new HashMap<String, String>();
 				details.put("Player", player.getName());
@@ -330,7 +342,7 @@ public class KarmiconomyListener implements Listener {
 		}
 	}
 
-	@EventHandler(priority = EventPriority.MONITOR)
+	@EventHandler(priority = EventPriority.LOWEST)
 	public void createPortalValid(final EntityCreatePortalEvent event) {
 		if (!event.isCancelled()
 				&& (config.portalCreateNetherDenyPay
@@ -341,16 +353,50 @@ public class KarmiconomyListener implements Listener {
 				&& event.getEntity() != null) {
 			if (event.getEntity() instanceof Player) {
 				final Player player = (Player) event.getEntity();
-				// TODO deny
-				// TODO can pay based on portal type
-				if (config.debugEvents && event.isCancelled()) {
-					final Map<String, String> details = new HashMap<String, String>();
-					details.put("Player", player.getName());
-					if (event.getPortalType() != null) {
-						details.put("Portal", event.getPortalType().toString());
+				// Deny based on portal type
+				boolean cancel = false;
+				switch (event.getPortalType()) {
+				case NETHER: {
+					if (deny(Field.PORTAL_CREATE_NETHER, player,
+							config.portalCreateNetherDenyPay,
+							config.portalCreateNetherDenyLimit, null, null)) {
+						// Deny
+						cancel = true;
 					}
-					details.put("Cancelled", "true");
-					debugEvent(event, details);
+				}
+				case ENDER: {
+					if (deny(Field.PORTAL_CREATE_END, player,
+							config.portalCreateEndDenyPay,
+							config.portalCreateEndDenyLimit, null, null)) {
+						// Deny
+						cancel = true;
+					}
+				}
+				case CUSTOM: {
+					if (deny(Field.PORTAL_CREATE_CUSTOM, player,
+							config.portalCreateCustomDenyPay,
+							config.portalCreateCustomDenyLimit, null, null)) {
+						// Deny
+						cancel = true;
+					}
+				}
+				default: {
+					// INFO unknown
+					break;
+				}
+				}
+				if (cancel) {
+					event.setCancelled(true);
+					if (config.debugEvents) {
+						final Map<String, String> details = new HashMap<String, String>();
+						details.put("Player", player.getName());
+						if (event.getPortalType() != null) {
+							details.put("Portal", event.getPortalType()
+									.toString());
+						}
+						details.put("Cancelled", "true");
+						debugEvent(event, details);
+					}
 				}
 			}
 		}
@@ -363,8 +409,45 @@ public class KarmiconomyListener implements Listener {
 				&& event.getEntity() != null) {
 			if (event.getEntity() instanceof Player) {
 				final Player player = (Player) event.getEntity();
-				// TODO pay on portal create
-				// TODO can pay based on portal type
+				// Pay on portal create, based on portal type
+				switch (event.getPortalType()) {
+				case NETHER: {
+					if (!hitLimit(Field.PORTAL_CREATE_NETHER, player, null,
+							null)) {
+						// Try to pay
+						if (pay(Field.PORTAL_CREATE_NETHER, player, null, null)) {
+							// Increment
+							db.incrementData(Field.PORTAL_CREATE_NETHER,
+									player.getName(), null, null);
+						}
+					}
+				}
+				case ENDER: {
+					if (!hitLimit(Field.PORTAL_CREATE_END, player, null, null)) {
+						// Try to pay
+						if (pay(Field.PORTAL_CREATE_END, player, null, null)) {
+							// Increment
+							db.incrementData(Field.PORTAL_CREATE_END,
+									player.getName(), null, null);
+						}
+					}
+				}
+				case CUSTOM: {
+					if (!hitLimit(Field.PORTAL_CREATE_CUSTOM, player, null,
+							null)) {
+						// Try to pay
+						if (pay(Field.PORTAL_CREATE_CUSTOM, player, null, null)) {
+							// Increment
+							db.incrementData(Field.PORTAL_CREATE_CUSTOM,
+									player.getName(), null, null);
+						}
+					}
+				}
+				default: {
+					// INFO unknown
+					break;
+				}
+				}
 				if (config.debugEvents && event.isCancelled()) {
 					final Map<String, String> details = new HashMap<String, String>();
 					details.put("Player", player.getName());
@@ -382,8 +465,15 @@ public class KarmiconomyListener implements Listener {
 		if (config.portalEnter && event.getEntity() != null) {
 			if (event.getEntity() instanceof Player) {
 				final Player player = (Player) event.getEntity();
-				// TODO pay on portal create
-				// TODO can pay based on portal type
+				// Pay on portal enter
+				if (!hitLimit(Field.PORTAL_ENTER, player, null, null)) {
+					// Try to pay
+					if (pay(Field.PORTAL_ENTER, player, null, null)) {
+						// Increment
+						db.incrementData(Field.PORTAL_ENTER, player.getName(),
+								null, null);
+					}
+				}
 				if (config.debugEvents) {
 					final Map<String, String> details = new HashMap<String, String>();
 					details.put("Player", player.getName());
@@ -400,13 +490,17 @@ public class KarmiconomyListener implements Listener {
 				&& event.getEntity() != null) {
 			if (event.getEntity() instanceof Player) {
 				final Player player = (Player) event.getEntity();
-				// TODO deny
-				if (config.debugEvents && event.isCancelled()) {
-					final Map<String, String> details = new HashMap<String, String>();
-					details.put("Player", player.getName());
-					details.put("Force", "" + event.getForce());
-					details.put("Cancelled", "true");
-					debugEvent(event, details);
+				if (deny(Field.BOW_SHOOT, player, config.shootBowDenyPay,
+						config.shootBowDenyLimit, null, null)) {
+					// Deny
+					event.setCancelled(true);
+					if (config.debugEvents) {
+						final Map<String, String> details = new HashMap<String, String>();
+						details.put("Player", player.getName());
+						details.put("Force", "" + event.getForce());
+						details.put("Cancelled", "true");
+						debugEvent(event, details);
+					}
 				}
 			}
 		}
@@ -418,7 +512,14 @@ public class KarmiconomyListener implements Listener {
 				&& event.getEntity() != null) {
 			if (event.getEntity() instanceof Player) {
 				final Player player = (Player) event.getEntity();
-				// TODO pay on portal create
+				if (!hitLimit(Field.BOW_SHOOT, player, null, null)) {
+					// Try to pay
+					if (pay(Field.BOW_SHOOT, player, null, null)) {
+						// Increment
+						db.incrementData(Field.BOW_SHOOT, player.getName(),
+								null, null);
+					}
+				}
 				// TODO can pay based on force
 				// TODO can pay based on entity?
 				if (config.debugEvents) {
@@ -478,22 +579,26 @@ public class KarmiconomyListener implements Listener {
 		}
 	}
 
-	@EventHandler(priority = EventPriority.MONITOR)
+	@EventHandler(priority = EventPriority.LOWEST)
 	public void paintingPlaceValid(final PaintingPlaceEvent event) {
 		if (!event.isCancelled()
 				&& (config.paintingPlaceDenyPay || config.paintingPlaceDenyLimit)
 				&& event.getPlayer() != null) {
 			final Player player = event.getPlayer();
-			// TODO deny
-			// TODO also need to get painting break
-			if (config.debugEvents && event.isCancelled()) {
-				final Map<String, String> details = new HashMap<String, String>();
-				details.put("Player", player.getName());
-				if (event.getPainting() != null) {
-					details.put("Painting", event.getPainting().toString());
+			if (deny(Field.PAINTING_PLACE, player, config.paintingPlaceDenyPay,
+					config.paintingPlaceDenyLimit, null, null)) {
+				// Deny
+				event.setCancelled(true);
+				// TODO also need to get painting break
+				if (config.debugEvents && event.isCancelled()) {
+					final Map<String, String> details = new HashMap<String, String>();
+					details.put("Player", player.getName());
+					if (event.getPainting() != null) {
+						details.put("Painting", event.getPainting().toString());
+					}
+					details.put("Cancelled", "true");
+					debugEvent(event, details);
 				}
-				details.put("Cancelled", "true");
-				debugEvent(event, details);
 			}
 		}
 	}
@@ -503,7 +608,15 @@ public class KarmiconomyListener implements Listener {
 		if (!event.isCancelled() && config.paintingPlace
 				&& event.getPlayer() != null) {
 			final Player player = event.getPlayer();
-			// TODO pay on place
+			// Pay on place
+			if (!hitLimit(Field.PAINTING_PLACE, player, null, null)) {
+				// Try to pay
+				if (pay(Field.PAINTING_PLACE, player, null, null)) {
+					// Increment
+					db.incrementData(Field.PAINTING_PLACE, player.getName(),
+							null, null);
+				}
+			}
 			// TODO also need to get painting break
 			if (config.debugEvents) {
 				final Map<String, String> details = new HashMap<String, String>();
@@ -516,21 +629,25 @@ public class KarmiconomyListener implements Listener {
 		}
 	}
 
-	@EventHandler(priority = EventPriority.MONITOR)
+	@EventHandler(priority = EventPriority.LOWEST)
 	public void bedEnterValid(final PlayerBedEnterEvent event) {
 		if (!event.isCancelled()
 				&& (config.bedEnterDenyPay || config.bedEnterDenyLimit)
 				&& event.getPlayer() != null) {
 			final Player player = event.getPlayer();
-			// TODO deny
-			if (config.debugEvents && event.isCancelled()) {
-				final Map<String, String> details = new HashMap<String, String>();
-				details.put("Player", player.getName());
-				if (event.getBed() != null) {
-					details.put("Bed", event.getBed().toString());
+			if (deny(Field.BED_ENTER, player, config.bedEnterDenyPay,
+					config.bedEnterDenyLimit, null, null)) {
+				// Deny
+				event.setCancelled(true);
+				if (config.debugEvents && event.isCancelled()) {
+					final Map<String, String> details = new HashMap<String, String>();
+					details.put("Player", player.getName());
+					if (event.getBed() != null) {
+						details.put("Bed", event.getBed().toString());
+					}
+					details.put("Cancelled", "true");
+					debugEvent(event, details);
 				}
-				details.put("Cancelled", "true");
-				debugEvent(event, details);
 			}
 		}
 	}
@@ -540,7 +657,15 @@ public class KarmiconomyListener implements Listener {
 		if (!event.isCancelled() && config.bedEnter
 				&& event.getPlayer() != null) {
 			final Player player = event.getPlayer();
-			// TODO pay on enter
+			// Pay on enter
+			if (!hitLimit(Field.BED_ENTER, player, null, null)) {
+				// Try to pay
+				if (pay(Field.BED_ENTER, player, null, null)) {
+					// Increment
+					db.incrementData(Field.BED_ENTER, player.getName(),
+							null, null);
+				}
+			}
 			if (config.debugEvents) {
 				final Map<String, String> details = new HashMap<String, String>();
 				details.put("Player", player.getName());
@@ -556,7 +681,15 @@ public class KarmiconomyListener implements Listener {
 	public void bedLeave(final PlayerBedLeaveEvent event) {
 		if (config.bedLeave && event.getPlayer() != null) {
 			final Player player = event.getPlayer();
-			// TODO pay on leave
+			// Pay on leave
+			if (!hitLimit(Field.BED_LEAVE, player, null, null)) {
+				// Try to pay
+				if (pay(Field.BED_LEAVE, player, null, null)) {
+					// Increment
+					db.incrementData(Field.BED_LEAVE, player.getName(),
+							null, null);
+				}
+			}
 			if (config.debugEvents) {
 				final Map<String, String> details = new HashMap<String, String>();
 				details.put("Player", player.getName());
@@ -568,7 +701,7 @@ public class KarmiconomyListener implements Listener {
 		}
 	}
 
-	@EventHandler(priority = EventPriority.MONITOR)
+	@EventHandler(priority = EventPriority.LOWEST)
 	public void bucketEmptyValid(final PlayerBucketEmptyEvent event) {
 		if (!event.isCancelled()
 				&& (config.bucketEmptyWaterDenyPay
@@ -576,6 +709,7 @@ public class KarmiconomyListener implements Listener {
 						|| config.bucketEmptyLavaDenyPay || config.bucketEmptyLavaDenyLimit)
 				&& event.getPlayer() != null) {
 			final Player player = event.getPlayer();
+			//TODO switch for type of bucket
 			// TODO pay on empty
 			if (config.debugEvents && event.isCancelled()) {
 				final Map<String, String> details = new HashMap<String, String>();
@@ -595,6 +729,7 @@ public class KarmiconomyListener implements Listener {
 				&& (config.bucketEmptyLava || config.bucketEmptyWater)
 				&& event.getPlayer() != null) {
 			final Player player = event.getPlayer();
+			//TODO switch for type of bucket
 			// TODO pay on empty
 			if (config.debugEvents) {
 				final Map<String, String> details = new HashMap<String, String>();
@@ -615,6 +750,7 @@ public class KarmiconomyListener implements Listener {
 						|| config.bucketFillLavaDenyPay || config.bucketFillLavaDenyLimit)
 				&& event.getPlayer() != null) {
 			final Player player = event.getPlayer();
+			//TODO switch for type of bucket
 			// TODO deny
 			if (config.debugEvents && event.isCancelled()) {
 				final Map<String, String> details = new HashMap<String, String>();
@@ -635,6 +771,7 @@ public class KarmiconomyListener implements Listener {
 				&& (config.bucketFillWater || config.bucketFillLava)
 				&& event.getPlayer() != null) {
 			final Player player = event.getPlayer();
+			//TODO switch for type of bucket
 			// TODO pay on fill
 			if (config.debugEvents) {
 				final Map<String, String> details = new HashMap<String, String>();
@@ -652,7 +789,15 @@ public class KarmiconomyListener implements Listener {
 	public void worldChange(final PlayerChangedWorldEvent event) {
 		if (config.worldChange && event.getPlayer() != null) {
 			final Player player = event.getPlayer();
-			// TODO pay on change
+			// Pay on change
+			if (!hitLimit(Field.WORLD_CHANGE, player, null, null)) {
+				// Try to pay
+				if (pay(Field.WORLD_CHANGE, player, null, null)) {
+					// Increment
+					db.incrementData(Field.WORLD_CHANGE, player.getName(),
+							null, null);
+				}
+			}
 			if (config.debugEvents) {
 				final Map<String, String> details = new HashMap<String, String>();
 				details.put("Player", player.getName());
@@ -668,7 +813,15 @@ public class KarmiconomyListener implements Listener {
 	public void playerDeath(final PlayerDeathEvent event) {
 		if (config.death && event.getEntity() != null) {
 			final Player player = event.getEntity();
-			// TODO pay on death
+			// Pay on death
+			if (!hitLimit(Field.DEATH, player, null, null)) {
+				// Try to pay
+				if (pay(Field.DEATH, player, null, null)) {
+					// Increment
+					db.incrementData(Field.DEATH, player.getName(),
+							null, null);
+				}
+			}
 			if (config.debugEvents) {
 				final Map<String, String> details = new HashMap<String, String>();
 				details.put("Player", player.getName());
@@ -688,6 +841,15 @@ public class KarmiconomyListener implements Listener {
 	public void playerRespawn(final PlayerRespawnEvent event) {
 		if (config.respawn && event.getPlayer() != null) {
 			final Player player = event.getPlayer();
+			//Pay on respawn
+			if (!hitLimit(Field.RESPAWN, player, null, null)) {
+				// Try to pay
+				if (pay(Field.RESPAWN, player, null, null)) {
+					// Increment
+					db.incrementData(Field.RESPAWN, player.getName(),
+							null, null);
+				}
+			}
 			if (config.debugEvents) {
 				final Map<String, String> details = new HashMap<String, String>();
 				details.put("Player", player.getName());
@@ -742,7 +904,15 @@ public class KarmiconomyListener implements Listener {
 	public void eggThrow(final PlayerEggThrowEvent event) {
 		if (config.eggThrow && event.getPlayer() != null) {
 			final Player player = event.getPlayer();
-			// TODO pay on throw
+			// Pay on throw
+			if (!hitLimit(Field.EGG_THROW, player, null, null)) {
+				// Try to pay
+				if (pay(Field.EGG_THROW, player, null, null)) {
+					// Increment
+					db.incrementData(Field.EGG_THROW, player.getName(),
+							null, null);
+				}
+			}
 			if (config.debugEvents) {
 				final Map<String, String> details = new HashMap<String, String>();
 				details.put("Player", player.getName());
@@ -812,8 +982,16 @@ public class KarmiconomyListener implements Listener {
 						"Added player '" + player.getName() + "' to database");
 			}
 			// TODO check their last on date for potential reset
+			//Pay on join
+			if (!hitLimit(Field.JOIN, player, null, null)) {
+				// Try to pay
+				if (pay(Field.JOIN, player, null, null)) {
+					// Increment
+					db.incrementData(Field.JOIN, player.getName(),
+							null, null);
+				}
+			}
 			if (config.join) {
-				// TODO pay on join
 				if (config.debugEvents) {
 					final Map<String, String> details = new HashMap<String, String>();
 					details.put("Player", player.getName());
@@ -830,7 +1008,15 @@ public class KarmiconomyListener implements Listener {
 	public void kick(final PlayerKickEvent event) {
 		if (config.kick && event.getPlayer() != null) {
 			final Player player = event.getPlayer();
-			// TODO pay on kick
+			// Pay on kick
+			if (!hitLimit(Field.KICK, player, null, null)) {
+				// Try to pay
+				if (pay(Field.KICK, player, null, null)) {
+					// Increment
+					db.incrementData(Field.KICK, player.getName(),
+							null, null);
+				}
+			}
 			if (config.debugEvents) {
 				final Map<String, String> details = new HashMap<String, String>();
 				details.put("Player", player.getName());
@@ -846,7 +1032,15 @@ public class KarmiconomyListener implements Listener {
 	public void quit(final PlayerQuitEvent event) {
 		if (config.quit && event.getPlayer() != null) {
 			final Player player = event.getPlayer();
-			// TODO pay on quit
+			//Pay on quit
+			if (!hitLimit(Field.QUIT, player, null, null)) {
+				// Try to pay
+				if (pay(Field.QUIT, player, null, null)) {
+					// Increment
+					db.incrementData(Field.QUIT, player.getName(),
+							null, null);
+				}
+			}
 			if (config.debugEvents) {
 				final Map<String, String> details = new HashMap<String, String>();
 				details.put("Player", player.getName());
@@ -864,12 +1058,16 @@ public class KarmiconomyListener implements Listener {
 				&& (config.sneakDenyPay || config.sneakDenyLimit)
 				&& event.getPlayer() != null) {
 			final Player player = event.getPlayer();
-			// TODO deny
+			if (deny(Field.SNEAK, player, config.sneakDenyPay,
+					config.sneakDenyLimit, null, null)) {
+				// Deny
+				event.setCancelled(true);
 			if (config.debugEvents && event.isCancelled()) {
 				final Map<String, String> details = new HashMap<String, String>();
 				details.put("Player", player.getName());
 				details.put("Cancelled", "true");
 				debugEvent(event, details);
+			}
 			}
 		}
 	}
@@ -879,7 +1077,15 @@ public class KarmiconomyListener implements Listener {
 		if (!event.isCancelled() && event.isSneaking() && config.sneak
 				&& event.getPlayer() != null) {
 			final Player player = event.getPlayer();
-			// TODO pay on sneak
+			// Pay on sneak
+			if (!hitLimit(Field.SNEAK, player, null, null)) {
+				// Try to pay
+				if (pay(Field.SNEAK, player, null, null)) {
+					// Increment
+					db.incrementData(Field.SNEAK, player.getName(),
+							null, null);
+				}
+			}
 			if (config.debugEvents) {
 				final Map<String, String> details = new HashMap<String, String>();
 				details.put("Player", player.getName());
@@ -894,12 +1100,16 @@ public class KarmiconomyListener implements Listener {
 				&& (config.sprintDenyPay || config.sprintDenyLimit)
 				&& event.getPlayer() != null) {
 			final Player player = event.getPlayer();
-			// TODO deny
+			if (deny(Field.SPRINT, player, config.sprintDenyPay,
+					config.sprintDenyLimit, null, null)) {
+				// Deny
+				event.setCancelled(true);
 			if (config.debugEvents && event.isCancelled()) {
 				final Map<String, String> details = new HashMap<String, String>();
 				details.put("Player", player.getName());
 				details.put("Cancelled", "true");
 				debugEvent(event, details);
+			}
 			}
 		}
 	}
@@ -909,7 +1119,15 @@ public class KarmiconomyListener implements Listener {
 		if (!event.isCancelled() && event.isSprinting() && config.sprint
 				&& event.getPlayer() != null) {
 			final Player player = event.getPlayer();
-			// TODO pay on sneak
+			// Pay on sprint
+			if (!hitLimit(Field.SPRINT, player, null, null)) {
+				// Try to pay
+				if (pay(Field.SPRINT, player, null, null)) {
+					// Increment
+					db.incrementData(Field.SPRINT, player.getName(),
+							null, null);
+				}
+			}
 			if (config.debugEvents) {
 				final Map<String, String> details = new HashMap<String, String>();
 				details.put("Player", player.getName());
