@@ -1217,6 +1217,7 @@ public class Config
 						return values.get(item).pickupDenyPay;
 					}
 				}
+				return pickupDenyPay;
 			}
 			default:
 			{
@@ -1299,6 +1300,7 @@ public class Config
 						return values.get(item).pickupDenyLimit;
 					}
 				}
+				return pickupDenyLimit;
 			}
 			default:
 			{
