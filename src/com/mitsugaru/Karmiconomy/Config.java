@@ -999,9 +999,11 @@ public class Config
 								return values.get(item).pickupLimit;
 							}
 						}
+						return pickupLimit;
 					}
 					default:
 					{
+						//Typically ignore
 						if (debugUnhandled)
 						{
 							plugin.getLogger().warning(
@@ -1032,6 +1034,7 @@ public class Config
 					default:
 						break;
 				}
+				break;
 			}
 			case BUCKET:
 			{

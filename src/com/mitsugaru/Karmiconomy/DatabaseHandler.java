@@ -175,7 +175,7 @@ public class DatabaseHandler
 					statement.setInt(1, rs.getResult().getInt("id"));
 					statement.setString(2,
 							rs.getResult().getString("playername"));
-					statement.setString(3, rs.getResult().getString("date"));
+					statement.setString(3, rs.getResult().getString("laston"));
 					statement.executeUpdate();
 					statement.close();
 				} while (rs.getResult().next());
