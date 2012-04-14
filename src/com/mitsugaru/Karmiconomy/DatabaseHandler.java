@@ -735,7 +735,9 @@ public class DatabaseHandler
 								query = select("SELECT * FROM "
 										+ field.getTable().getName()
 										+ " WHERE id='" + id + "' AND itemid='"
-										+ item.itemId() + "' AND durability='"
+										+ item.itemId() + "' AND data='"
+												+ item.itemDurability()
+												+ "' AND durability='"
 										+ item.itemDurability() + "';");
 								if (query.getResult().next())
 								{
@@ -757,7 +759,7 @@ public class DatabaseHandler
 											+ field.getTable().getName()
 											+ " (id,itemid,data,durability,place,destroy,craft,enchant,playerDrop) VALUES('"
 											+ id + "','" + item.itemId()
-											+ "','0','" + item.itemDurability()
+											+ "','" +item.itemDurability() +"','" + item.itemDurability()
 											+ "','0','0','0','0','0');");
 								}
 							}
