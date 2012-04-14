@@ -253,7 +253,8 @@ public class Config
 		defaults.put("tame.wolf.enabled", false);
 		defaults.put("tame.wolf.limit", 10);
 		defaults.put("tame.wolf.pay", 10);
-		defaults.put("vehicle.enter.enabled", false);
+		//TODO implement
+		/*defaults.put("vehicle.enter.enabled", false);
 		defaults.put("vehicle.enter.denyOnLackPay", false);
 		defaults.put("vehicle.enter.denyOnLimit", false);
 		defaults.put("vehicle.enter.limit", 100);
@@ -262,7 +263,7 @@ public class Config
 		defaults.put("vehicle.exit.denyOnLackPay", false);
 		defaults.put("vehicle.exit.denyOnLimit", false);
 		defaults.put("vehicle.exit.limit", 100);
-		defaults.put("vehicle.exit.pay", 0.1);
+		defaults.put("vehicle.exit.pay", 0.1);*/
 		defaults.put("world.change.enabled", false);
 		defaults.put("world.change.limit", 15);
 		defaults.put("world.change.pay", 1.0);
@@ -645,19 +646,21 @@ public class Config
 		tameWolfPay = config.getDouble("tame.wolf.pay", 10);
 		/**
 		 * Vehicle
+		 * 
+		 * TODO implement
 		 */
 		// enter
-		vehicleEnter = config.getBoolean("vehicle.enter.enabled", false);
+		/*vehicleEnter = config.getBoolean("vehicle.enter.enabled", false);
 		vehicleEnterDenyPay = config.getBoolean("vehicle.enter.denyOnLackPay",
 				false);
 		vehicleEnterDenyLimit = config.getBoolean("vehicle.enter.denyOnLimit",
 				false);
 		vehicleEnterLimit = config.getInt("vehicle.enter.limit", 100);
-		vehicleEnterPay = config.getDouble("vehicle.enter.pay", 0.1);
+		vehicleEnterPay = config.getDouble("vehicle.enter.pay", 0.1);*/
 		// exit
-		vehicleExit = config.getBoolean("vehicle.exit.enabled", false);
+		/*vehicleExit = config.getBoolean("vehicle.exit.enabled", false);
 		vehicleExitLimit = config.getInt("vehicle.exit.limit", 100);
-		vehicleExitPay = config.getDouble("vehicle.exit.pay", 0.1);
+		vehicleExitPay = config.getDouble("vehicle.exit.pay", 0.1);*/
 		/**
 		 * World
 		 */
@@ -1493,9 +1496,31 @@ public class Config
 				.loadConfiguration(file);
 		if (valueFile.getKeys(false).isEmpty())
 		{
-			// TODO all-inclusive defaults
 			// Defaults
-			valueFile.set("14.dropPay", 5);
+			valueFile.set("14.dropPay", 0);
+			valueFile.set("14.dropDenyOnPay", 0);
+			valueFile.set("14.dropDenyOnLimit", 0);
+			valueFile.set("14.dropLimit", 0);
+			valueFile.set("14.placePay", 0);
+			valueFile.set("14.placeDenyOnPay", 0);
+			valueFile.set("14.placeDenyOnLimit", 0);
+			valueFile.set("14.placeLimit", 0);
+			valueFile.set("14.pickupPay", 0);
+			valueFile.set("14.pickupDenyOnPay", 0);
+			valueFile.set("14.pickupDenyOnLimit", 0);
+			valueFile.set("14.pickupLimit", 0);
+			valueFile.set("35&7.destroyPay", 5);
+			valueFile.set("35&7.destroyDenyOnPay", 0);
+			valueFile.set("35&7.destroyDenyOnLimit", 0);
+			valueFile.set("35&7.destroyLimit", 0);
+			valueFile.set("290.craftPay", 0);
+			valueFile.set("290.craftDenyOnPay", 0);
+			valueFile.set("290.craftDenyOnLimit", 0);
+			valueFile.set("290.craftLimit", 0);
+			valueFile.set("290.enchantPay", 0);
+			valueFile.set("290.enchantDenyOnPay", 0);
+			valueFile.set("290.enchantDenyOnLimit", 0);
+			valueFile.set("290.enchantLimit", 0);
 			/*
 			 * valueFile.set("15", 2); valueFile.set("17&0", 2);
 			 * valueFile.set("17&1", 2); valueFile.set("17&2", 2);
