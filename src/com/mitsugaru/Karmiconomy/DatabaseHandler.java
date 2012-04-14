@@ -82,7 +82,7 @@ public class DatabaseHandler
 						Karmiconomy.TAG + " Created portal table");
 				mysql.createTable("CREATE TABLE "
 						+ Table.PORTAL.getName()
-						+ " (id INT UNSIGNED NOT NULL, pcreatenether INT NOT NULL, pcreateend INT NOT NULL, pcreatecustom INT NOT NULL, portalenter INT NOT NULL, PRIMARY KEY(id);");
+						+ " (id INT UNSIGNED NOT NULL, pcreatenether INT NOT NULL, pcreateend INT NOT NULL, pcreatecustom INT NOT NULL, portalenter INT NOT NULL, PRIMARY KEY(id));");
 			}
 			if (!mysql.checkTable(Table.BUCKET.getName()))
 			{
@@ -90,7 +90,7 @@ public class DatabaseHandler
 						Karmiconomy.TAG + " Created bucket table");
 				mysql.createTable("CREATE TABLE "
 						+ Table.BUCKET.getName()
-						+ " (id INT UNSIGNED NOT NULL, bemptylava INT NOT NULL, bemptywater INT NOT NULL, bfilllava INT NOT NULL, bfillwater INT NOT NULL, PRIMARY KEY(id);");
+						+ " (id INT UNSIGNED NOT NULL, bemptylava INT NOT NULL, bemptywater INT NOT NULL, bfilllava INT NOT NULL, bfillwater INT NOT NULL, PRIMARY KEY(id));");
 			}
 		}
 		else
