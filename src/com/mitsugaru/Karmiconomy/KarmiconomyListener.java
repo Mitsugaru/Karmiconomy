@@ -1739,7 +1739,8 @@ public class KarmiconomyListener implements Listener
 				if (config.debugEvents)
 				{
 					plugin.getLogger().info(
-							"Reset values for player '" + player.getName() + "'");
+							"Reset values for player '" + player.getName()
+									+ "'");
 				}
 				db.resetAllValues(player.getName());
 			}
@@ -1802,28 +1803,38 @@ public class KarmiconomyListener implements Listener
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void quit(final PlayerQuitEvent event)
 	{
-		if (config.quit && event.getPlayer() != null)
+		if (event.getPlayer() != null)
 		{
+			//Remove any message from cache
 			final Player player = event.getPlayer();
-			// Pay on quit
-			if (!hitLimit(Field.QUIT, player, null, null))
+			if (sentMessages.containsKey(player.getName()))
 			{
-				// Try to pay
-				if (pay(Field.QUIT, player, null, null))
-				{
-					// Increment
-					db.incrementData(Field.QUIT, player.getName(), null, null);
-				}
+				sentMessages.remove(player.getName());
 			}
-			if (config.debugEvents)
+			if (config.quit)
 			{
-				final Map<String, String> details = new HashMap<String, String>();
-				details.put("Player", player.getName());
-				if (event.getQuitMessage() != null)
+
+				// Pay on quit
+				if (!hitLimit(Field.QUIT, player, null, null))
 				{
-					details.put("Message", event.getQuitMessage());
+					// Try to pay
+					if (pay(Field.QUIT, player, null, null))
+					{
+						// Increment
+						db.incrementData(Field.QUIT, player.getName(), null,
+								null);
+					}
 				}
-				debugEvent(event, details);
+				if (config.debugEvents)
+				{
+					final Map<String, String> details = new HashMap<String, String>();
+					details.put("Player", player.getName());
+					if (event.getQuitMessage() != null)
+					{
+						details.put("Message", event.getQuitMessage());
+					}
+					debugEvent(event, details);
+				}
 			}
 		}
 	}
@@ -2164,20 +2175,20 @@ public class KarmiconomyListener implements Listener
 				{
 					case COMMAND:
 					{
-						sendLackMessage(player, DenyType.LIMIT,
-								field.name(), command);
+						sendLackMessage(player, DenyType.LIMIT, field.name(),
+								command);
 						break;
 					}
 					case ITEMS:
 					{
-						sendLackMessage(player, DenyType.LIMIT,
-								field.name(), item.name);
+						sendLackMessage(player, DenyType.LIMIT, field.name(),
+								item.name);
 						break;
 					}
 					default:
 					{
-						sendLackMessage(player, DenyType.LIMIT,
-								field.name(), null);
+						sendLackMessage(player, DenyType.LIMIT, field.name(),
+								null);
 						break;
 					}
 				}

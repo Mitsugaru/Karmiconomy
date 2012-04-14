@@ -345,7 +345,8 @@ public class Config
 		// Grab current version
 		final double ver = Double.parseDouble(plugin.getConfig().getString(
 				"version"));
-
+		//can remove old config options using the following:
+		//plugin.getConfig().set("path.to.remove", null);
 		// Update version number in config.yml
 		plugin.getConfig().set("version", plugin.getDescription().getVersion());
 		plugin.saveConfig();
