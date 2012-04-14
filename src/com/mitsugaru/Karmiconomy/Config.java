@@ -1050,6 +1050,97 @@ public class Config
 		}
 		return limit;
 	}
+	
+	public boolean getDenyPay(Field field, Item item)
+	{
+		if(item != null)
+		{
+			return getItemDenyPay(field, item);
+		}
+		else
+		{
+			switch(field.getTable())
+			{
+				case DATA:
+				{
+					switch(field)
+					{
+						case CHAT:
+							return chatDenyPay;
+						case BED_ENTER:
+							return bedEnterDenyPay;
+						case BOW_SHOOT:
+							return shootBowDenyPay;
+						case BUCKET_EMPTY_LAVA:
+							return bucketEmptyLavaDenyPay;
+						case BUCKET_EMPTY_WATER:
+							return bucketEmptyWaterDenyPay;
+						case BUCKET_FILL_LAVA:
+							return bucketFillLavaDenyPay;
+						case BUCKET_FILL_WATER:
+							return bucketFillWaterDenyPay;
+						case CREATIVE:
+							return gameModeCreativeDenyPay;
+						case SURVIVAL:
+							return gameModeSurvivalDenyPay;
+						case PAINTING_PLACE:
+							return paintingPlaceDenyPay;
+						case PORTAL_CREATE_NETHER:
+							return portalCreateNetherDenyPay;
+						case PORTAL_CREATE_END:
+							return portalCreateEndDenyPay;
+						case PORTAL_CREATE_CUSTOM:
+							return portalCreateCustomDenyPay;
+						case SNEAK:
+							return sneakDenyPay;
+						case SPRINT:
+							return sprintDenyPay;
+						case TAME_OCELOT:
+							return tameOcelotDenyPay;
+						case TAME_WOLF:
+							return tameWolfDenyPay;
+					}
+					break;
+				}
+				case PORTAL:
+				{
+					switch(field)
+					{
+						case PORTAL_CREATE_NETHER:
+							return portalCreateNetherDenyPay;
+						case PORTAL_CREATE_END:
+							return portalCreateEndDenyPay;
+						case PORTAL_CREATE_CUSTOM:
+							return portalCreateCustomDenyPay;
+					}
+				}
+				case BUCKET:
+				{
+					switch(field)
+					{
+						case BUCKET_EMPTY_LAVA:
+							return bucketEmptyLavaDenyPay;
+						case BUCKET_EMPTY_WATER:
+							return bucketEmptyWaterDenyPay;
+						case BUCKET_FILL_LAVA:
+							return bucketFillLavaDenyPay;
+						case BUCKET_FILL_WATER:
+							return bucketFillWaterDenyPay;
+					}
+				}
+				default:
+				{
+					if (debugUnhandled)
+					{
+						plugin.getLogger().warning(
+								"Unhandled Deny Pay for " + field.name());
+					}
+					break;
+				}
+			}
+		}
+		return false;
+	}
 
 	public boolean getItemDenyPay(Field type, Item item)
 	{

@@ -2047,20 +2047,41 @@ public class KarmiconomyListener implements Listener
 		}
 		if (response != null)
 		{
+			String message = "";
 			switch (response.type)
 			{
 				case FAILURE:
 				{
-					player.sendMessage("Could not pay " + amount + "! D:");
-					plugin.getLogger().severe(
-							"Eco Failure: " + response.errorMessage);
+					if (config.getDenyPay(field, item))
+					{
+						message = ChatColor.RED + Karmiconomy.TAG
+								+ " Could not pay " + ChatColor.GOLD + amount
+								+ ChatColor.RED + " for " + ChatColor.AQUA
+								+ field.name();
+						player.sendMessage(message);
+						sentMessages.put(player.getName(), message);
+						if (config.debugEconomy)
+						{
+							plugin.getLogger().severe(
+									"Eco Failure: " + response.errorMessage);
+						}
+					}
 					break;
 				}
 				case NOT_IMPLEMENTED:
 				{
-					player.sendMessage("Could not pay " + amount + "! D:");
-					plugin.getLogger().severe(
-							"Eco not implemented: " + response.errorMessage);
+					message = ChatColor.RED + Karmiconomy.TAG
+							+ " Could not pay " + ChatColor.GOLD + amount
+							+ ChatColor.RED + " for " + ChatColor.AQUA
+							+ field.name();
+					player.sendMessage(message);
+					sentMessages.put(player.getName(), message);
+					if (config.debugEconomy)
+					{
+						plugin.getLogger()
+								.severe("Eco not implemented: "
+										+ response.errorMessage);
+					}
 					break;
 				}
 				case SUCCESS:
