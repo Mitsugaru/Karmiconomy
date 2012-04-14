@@ -1498,29 +1498,29 @@ public class Config
 		if (valueFile.getKeys(false).isEmpty())
 		{
 			// Defaults
-			valueFile.set("14.dropPay", 0);
-			valueFile.set("14.dropDenyOnPay", 0);
-			valueFile.set("14.dropDenyOnLimit", 0);
+			valueFile.set("14.dropPay", 0.0);
+			valueFile.set("14.dropDenyOnPay", false);
+			valueFile.set("14.dropDenyOnLimit", false);
 			valueFile.set("14.dropLimit", 0);
-			valueFile.set("14.placePay", 0);
-			valueFile.set("14.placeDenyOnPay", 0);
-			valueFile.set("14.placeDenyOnLimit", 0);
+			valueFile.set("14.placePay", 0.0);
+			valueFile.set("14.placeDenyOnPay", false);
+			valueFile.set("14.placeDenyOnLimit", false);
 			valueFile.set("14.placeLimit", 0);
-			valueFile.set("14.pickupPay", 0);
-			valueFile.set("14.pickupDenyOnPay", 0);
-			valueFile.set("14.pickupDenyOnLimit", 0);
+			valueFile.set("14.pickupPay", 0.0);
+			valueFile.set("14.pickupDenyOnPay", false);
+			valueFile.set("14.pickupDenyOnLimit", false);
 			valueFile.set("14.pickupLimit", 0);
-			valueFile.set("35&7.destroyPay", 5);
-			valueFile.set("35&7.destroyDenyOnPay", 0);
-			valueFile.set("35&7.destroyDenyOnLimit", 0);
+			valueFile.set("35&7.destroyPay", 5.0);
+			valueFile.set("35&7.destroyDenyOnPay", false);
+			valueFile.set("35&7.destroyDenyOnLimit", false);
 			valueFile.set("35&7.destroyLimit", 0);
 			valueFile.set("290.craftPay", 0);
-			valueFile.set("290.craftDenyOnPay", 0);
-			valueFile.set("290.craftDenyOnLimit", 0);
+			valueFile.set("290.craftDenyOnPay", false);
+			valueFile.set("290.craftDenyOnLimit", false);
 			valueFile.set("290.craftLimit", 0);
-			valueFile.set("290.enchantPay", 0);
-			valueFile.set("290.enchantDenyOnPay", 0);
-			valueFile.set("290.enchantDenyOnLimit", 0);
+			valueFile.set("290.enchantPay", 0.0);
+			valueFile.set("290.enchantDenyOnPay", false);
+			valueFile.set("290.enchantDenyOnLimit", false);
 			valueFile.set("290.enchantLimit", 0);
 			/*
 			 * valueFile.set("15", 2); valueFile.set("17&0", 2);

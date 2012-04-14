@@ -1734,8 +1734,13 @@ public class KarmiconomyListener implements Listener
 						"Added player '" + player.getName() + "' to database");
 			}
 			// Check their last on date for potential reset
-			if (db.checkDateReset(player.getName()))
+			if (!db.checkDateReset(player.getName()))
 			{
+				if (config.debugEvents)
+				{
+					plugin.getLogger().info(
+							"Reset values for player '" + player.getName() + "'");
+				}
 				db.resetAllValues(player.getName());
 			}
 			if (config.join)

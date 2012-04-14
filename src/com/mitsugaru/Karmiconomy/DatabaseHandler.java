@@ -191,13 +191,51 @@ public class DatabaseHandler
 					PreparedStatement statement = mysql
 							.prepare("INSERT INTO "
 									+ Table.DATA.getName()
-									+ " (id, bedenter, bedleave, bowshoot, chat, death, creative, survival, playerJoin, kick, quit, respawn, worldchange, tameocelot, tamewolf, paintingplace, eggThrow, sneak, sprint) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);");
-					// TODO set elements
+									+ " (id, bedenter, bedleave, bowshoot, chat, death, creative, survival, playerJoin, kick, quit, respawn, worldchange, tameocelot, tamewolf, paintingplace, eggThrow, sneak, sprint) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
+					statement.setInt(1, rs.getResult().getInt("id"));
+					statement.setInt(2, rs.getResult().getInt("bedenter"));
+					statement.setInt(3, rs.getResult().getInt("bedleave"));
+					statement.setInt(4, rs.getResult().getInt("bowshoot"));
+					statement.setInt(5, rs.getResult().getInt("chat"));
+					statement.setInt(6, rs.getResult().getInt("death"));
+					statement.setInt(7, rs.getResult().getInt("creative"));
+					statement.setInt(8, rs.getResult().getInt("survival"));
+					statement.setInt(9, rs.getResult().getInt("playerJoin"));
+					statement.setInt(10, rs.getResult().getInt("kick"));
+					statement.setInt(11, rs.getResult().getInt("quit"));
+					statement.setInt(12, rs.getResult().getInt("respawn"));
+					statement.setInt(13, rs.getResult().getInt("worldchange"));
+					statement.setInt(14, rs.getResult().getInt("tameocelot"));
+					statement.setInt(15, rs.getResult().getInt("tamewolf"));
+					statement.setInt(16, rs.getResult().getInt("paintingplace"));
+					statement.setInt(17, rs.getResult().getInt("eggThrow"));
+					statement.setInt(18, rs.getResult().getInt("sneak"));
+					statement.setInt(19, rs.getResult().getInt("sprint"));
 					statement.execute();
 					statement.close();
 				} while (rs.getResult().next());
 			}
-			// TODO import items
+			//Import items
+			rs = sqlite.select("SELECT * FROM " + Table.ITEMS.getName() + ";");
+			if(rs.getResult().next())
+			{
+				plugin.getLogger().info(
+						Karmiconomy.TAG + " Importing portal table...");
+				PreparedStatement statement = mysql.prepare("INSERT INTO " + Table.ITEMS.getName() + "(id, itemid, data, durability, place, destroy, craft, enchant, playerDrop, pickup) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
+				statement.setInt(1, rs.getResult().getInt("id"));
+				statement.setInt(2, rs.getResult().getInt("itemid"));
+				statement.setString(3, rs.getResult().getString("data"));
+				statement.setString(4, rs.getResult().getString("durability"));
+				statement.setInt(5, rs.getResult().getInt("place"));
+				statement.setInt(6, rs.getResult().getInt("destroy"));
+				statement.setInt(7, rs.getResult().getInt("craft"));
+				statement.setInt(8, rs.getResult().getInt("enchant"));
+				statement.setInt(9, rs.getResult().getInt("playerDrop"));
+				statement.setInt(10, rs.getResult().getInt("pickup"));
+				statement.execute();
+				statement.close();
+			}
+			rs.closeQuery();
 			// TODO import command
 			rs.closeQuery();
 			rs = sqlite.select("SELECT * FROM " + Table.PORTAL.getName() + ";");
@@ -329,7 +367,7 @@ public class DatabaseHandler
 	{
 		if (!name.contains("'"))
 		{
-			final int id = getPlayerId(name);
+			int id = getPlayerId(name);
 			if (id == -1)
 			{
 				// Generate last on
@@ -340,14 +378,14 @@ public class DatabaseHandler
 						+ laston + "');";
 				standardQuery(query);
 				// Grab generated id
-				final int generatedId = getPlayerId(name);
-				if (generatedId != -1)
+				id = getPlayerId(name);
+				if (id != -1)
 				{
 					// Add player data table
 					standardQuery("INSERT INTO "
 							+ Table.DATA.getName()
 							+ " (id, bedenter, bedleave, bowshoot, chat, death, creative, survival, playerJoin, kick, quit, respawn, worldchange, tameocelot, tamewolf, paintingplace, eggThrow, sneak, sprint) VALUES('"
-							+ generatedId
+							+ id
 							+ "','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0');");
 					// Add player portal table
 					standardQuery("INSERT INTO "
@@ -414,6 +452,11 @@ public class DatabaseHandler
 						&& cArray[2].equals(dArray[2]))
 				{
 					same = true;
+				}
+				else
+				{
+					//Update date
+					standardQuery("UPDATE " + Table.MASTER.getName() + " SET laston='" + current + "' WHERE id='" + id + "';");
 				}
 			}
 			catch (SQLException e)
