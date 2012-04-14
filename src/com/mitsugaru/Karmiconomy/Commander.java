@@ -117,6 +117,8 @@ public class Commander implements CommandExecutor
 				if(perm.checkPermission(sender, "Karmiconomy.admin"))
 				{
 					config.reloadConfig();
+					sender.sendMessage(ChatColor.GREEN + Karmiconomy.TAG
+							+ ChatColor.WHITE + " Config reloaded.");
 				}
 				else
 				{
