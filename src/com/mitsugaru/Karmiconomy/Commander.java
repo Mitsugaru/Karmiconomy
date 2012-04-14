@@ -187,11 +187,11 @@ public class Commander implements CommandExecutor
 		if(config.debugTime)
 			sender.sendMessage(ChatColor.GRAY + "Debug time: " + config.debugTime);
 		if(config.debugEvents)
-			sender.sendMessage(ChatColor.GRAY + "Debug time: " + config.debugEvents);
+			sender.sendMessage(ChatColor.GRAY + "Debug events: " + config.debugEvents);
 		if(config.debugEconomy)
-			sender.sendMessage(ChatColor.GRAY + "Debug time: " + config.debugEconomy);
+			sender.sendMessage(ChatColor.GRAY + "Debug economy: " + config.debugEconomy);
 		if(config.debugUnhandled)
-			sender.sendMessage(ChatColor.GRAY + "Debug time: " + config.debugUnhandled);
+			sender.sendMessage(ChatColor.GRAY + "Debug unhandled: " + config.debugUnhandled);
 	}
 
 	private void debugTime(CommandSender sender, long time)
