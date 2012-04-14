@@ -825,11 +825,9 @@ public class DatabaseHandler
 		return data;
 	}
 
-	// TODO make method to get limit field for specified player
-
 	public enum Field
 	{
-		// TODO eggs, paintings, vehicle
+		// TODO eggs, painting break?, vehicle
 		BOW_SHOOT(Table.DATA, "bowshoot"), BED_ENTER(Table.DATA, "bedenter"), BED_LEAVE(
 				Table.DATA, "bedleave"), BLOCK_PLACE(Table.ITEMS, "place"), BLOCK_DESTROY(
 				Table.ITEMS, "destroy"), ITEM_CRAFT(Table.ITEMS, "craft"), ITEM_ENCHANT(

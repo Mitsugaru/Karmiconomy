@@ -128,6 +128,7 @@ public class Config
 		defaults.put("bow.shoot.enabled", false);
 		defaults.put("bow.shoot.denyOnLackPay", false);
 		defaults.put("bow.shoot.denyOnLimit", false);
+		defaults.put("bow.shoot.denyOnLowForce", false);
 		defaults.put("bow.shoot.minimumforce", 0.0);
 		defaults.put("bow.shoot.limit", 100);
 		defaults.put("bow.shoot.pay", 0.1);
