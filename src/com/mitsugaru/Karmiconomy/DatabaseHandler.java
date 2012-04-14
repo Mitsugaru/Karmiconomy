@@ -207,7 +207,8 @@ public class DatabaseHandler
 					statement.setInt(13, rs.getResult().getInt("worldchange"));
 					statement.setInt(14, rs.getResult().getInt("tameocelot"));
 					statement.setInt(15, rs.getResult().getInt("tamewolf"));
-					statement.setInt(16, rs.getResult().getInt("paintingplace"));
+					statement
+							.setInt(16, rs.getResult().getInt("paintingplace"));
 					statement.setInt(17, rs.getResult().getInt("eggThrow"));
 					statement.setInt(18, rs.getResult().getInt("sneak"));
 					statement.setInt(19, rs.getResult().getInt("sprint"));
@@ -215,13 +216,16 @@ public class DatabaseHandler
 					statement.close();
 				} while (rs.getResult().next());
 			}
-			//Import items
+			// Import items
 			rs = sqlite.select("SELECT * FROM " + Table.ITEMS.getName() + ";");
-			if(rs.getResult().next())
+			if (rs.getResult().next())
 			{
 				plugin.getLogger().info(
 						Karmiconomy.TAG + " Importing portal table...");
-				PreparedStatement statement = mysql.prepare("INSERT INTO " + Table.ITEMS.getName() + "(id, itemid, data, durability, place, destroy, craft, enchant, playerDrop, pickup) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
+				PreparedStatement statement = mysql
+						.prepare("INSERT INTO "
+								+ Table.ITEMS.getName()
+								+ "(id, itemid, data, durability, place, destroy, craft, enchant, playerDrop, pickup) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
 				statement.setInt(1, rs.getResult().getInt("id"));
 				statement.setInt(2, rs.getResult().getInt("itemid"));
 				statement.setString(3, rs.getResult().getString("data"));
@@ -455,8 +459,10 @@ public class DatabaseHandler
 				}
 				else
 				{
-					//Update date
-					standardQuery("UPDATE " + Table.MASTER.getName() + " SET laston='" + current + "' WHERE id='" + id + "';");
+					// Update date
+					standardQuery("UPDATE " + Table.MASTER.getName()
+							+ " SET laston='" + current + "' WHERE id='" + id
+							+ "';");
 				}
 			}
 			catch (SQLException e)
@@ -590,7 +596,9 @@ public class DatabaseHandler
 									+ field.getTable().getName() + " SET "
 									+ field.getColumnName() + "='" + value
 									+ "' WHERE id='" + id + "' AND itemid='"
-									+ item.itemId() + "' AND durability='"
+									+ item.itemId() + "' AND data='"
+									+ item.itemDurability()
+									+ "' AND durability='"
 									+ item.itemDurability() + "';");
 						}
 						else
@@ -736,8 +744,8 @@ public class DatabaseHandler
 										+ field.getTable().getName()
 										+ " WHERE id='" + id + "' AND itemid='"
 										+ item.itemId() + "' AND data='"
-												+ item.itemDurability()
-												+ "' AND durability='"
+										+ item.itemDurability()
+										+ "' AND durability='"
 										+ item.itemDurability() + "';");
 								if (query.getResult().next())
 								{
@@ -759,7 +767,8 @@ public class DatabaseHandler
 											+ field.getTable().getName()
 											+ " (id,itemid,data,durability,place,destroy,craft,enchant,playerDrop) VALUES('"
 											+ id + "','" + item.itemId()
-											+ "','" +item.itemDurability() +"','" + item.itemDurability()
+											+ "','" + item.itemDurability()
+											+ "','" + item.itemDurability()
 											+ "','0','0','0','0','0');");
 								}
 							}
