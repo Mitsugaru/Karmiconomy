@@ -2155,8 +2155,34 @@ public class KarmiconomyListener implements Listener
 			final int cLimit = config.getLimitValue(field, item, command);
 			if (cLimit == 0)
 			{
-				sendLackMessage(player, DenyType.LIMIT,
-						field.name(), null);
+				switch (field.getTable())
+				{
+					case COMMAND:
+					{
+						sendLackMessage(player, DenyType.LIMIT,
+								field.name(), command);
+						break;
+					}
+					case ITEMS:
+					{
+						sendLackMessage(player, DenyType.LIMIT,
+								field.name(), item.name);
+						break;
+					}
+					default:
+					{
+						sendLackMessage(player, DenyType.LIMIT,
+								field.name(), null);
+						break;
+					}
+				}
+				if (config.debugEvents)
+				{
+					plugin.getLogger().info(
+							"Denied " + field + " for player "
+									+ player.getName() + " for "
+									+ DenyType.LIMIT);
+				}
 				return true;
 			}
 			else if (cLimit > 0)
