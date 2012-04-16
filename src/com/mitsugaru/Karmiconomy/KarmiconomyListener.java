@@ -23,6 +23,7 @@ import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.EntityTameEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.CraftItemEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.painting.PaintingPlaceEvent;
 import org.bukkit.event.player.PlayerBedEnterEvent;
 import org.bukkit.event.player.PlayerBedLeaveEvent;
@@ -1805,7 +1806,7 @@ public class KarmiconomyListener implements Listener
 	{
 		if (event.getPlayer() != null)
 		{
-			//Remove any message from cache
+			// Remove any message from cache
 			final Player player = event.getPlayer();
 			if (sentMessages.containsKey(player.getName()))
 			{
@@ -2032,6 +2033,17 @@ public class KarmiconomyListener implements Listener
 					debugEvent(event, details);
 				}
 			}
+		}
+	}
+
+	@EventHandler(priority = EventPriority.HIGHEST)
+	public void inventoryClick(final InventoryClickEvent event)
+	{
+		if (config.debugEvents)
+		{
+			final Map<String, String> details = new HashMap<String, String>();
+			details.put("Player", event.getWhoClicked().getName());
+			debugEvent(event, details);
 		}
 	}
 

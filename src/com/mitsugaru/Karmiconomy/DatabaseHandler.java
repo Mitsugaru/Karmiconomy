@@ -166,19 +166,20 @@ public class DatabaseHandler
 			{
 				plugin.getLogger().info(
 						Karmiconomy.TAG + " Importing master table...");
+				PreparedStatement statement = mysql.prepare("INSERT INTO "
+						+ Table.MASTER.getName()
+						+ " (id, playername, laston) VALUES(?,?,?);");
 				do
 				{
 					// import master
-					PreparedStatement statement = mysql.prepare("INSERT INTO "
-							+ Table.MASTER.getName()
-							+ " (id, playername, laston) VALUES(?,?,?);");
 					statement.setInt(1, rs.getResult().getInt("id"));
 					statement.setString(2,
 							rs.getResult().getString("playername"));
 					statement.setString(3, rs.getResult().getString("laston"));
 					statement.executeUpdate();
-					statement.close();
+
 				} while (rs.getResult().next());
+				statement.close();
 			}
 			rs.closeQuery();
 			rs = sqlite.select("SELECT * FROM " + Table.DATA.getName() + ";");
@@ -186,12 +187,12 @@ public class DatabaseHandler
 			{
 				plugin.getLogger().info(
 						Karmiconomy.TAG + " Importing data table...");
+				PreparedStatement statement = mysql
+						.prepare("INSERT INTO "
+								+ Table.DATA.getName()
+								+ " (id, bedenter, bedleave, bowshoot, chat, death, creative, survival, playerJoin, kick, quit, respawn, worldchange, tameocelot, tamewolf, paintingplace, eggThrow, sneak, sprint) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
 				do
 				{
-					PreparedStatement statement = mysql
-							.prepare("INSERT INTO "
-									+ Table.DATA.getName()
-									+ " (id, bedenter, bedleave, bowshoot, chat, death, creative, survival, playerJoin, kick, quit, respawn, worldchange, tameocelot, tamewolf, paintingplace, eggThrow, sneak, sprint) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
 					statement.setInt(1, rs.getResult().getInt("id"));
 					statement.setInt(2, rs.getResult().getInt("bedenter"));
 					statement.setInt(3, rs.getResult().getInt("bedleave"));
@@ -212,9 +213,9 @@ public class DatabaseHandler
 					statement.setInt(17, rs.getResult().getInt("eggThrow"));
 					statement.setInt(18, rs.getResult().getInt("sneak"));
 					statement.setInt(19, rs.getResult().getInt("sprint"));
-					statement.execute();
-					statement.close();
+					statement.executeUpdate();
 				} while (rs.getResult().next());
+				statement.close();
 			}
 			// Import items
 			rs = sqlite.select("SELECT * FROM " + Table.ITEMS.getName() + ";");
@@ -226,17 +227,21 @@ public class DatabaseHandler
 						.prepare("INSERT INTO "
 								+ Table.ITEMS.getName()
 								+ "(id, itemid, data, durability, place, destroy, craft, enchant, playerDrop, pickup) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
-				statement.setInt(1, rs.getResult().getInt("id"));
-				statement.setInt(2, rs.getResult().getInt("itemid"));
-				statement.setString(3, rs.getResult().getString("data"));
-				statement.setString(4, rs.getResult().getString("durability"));
-				statement.setInt(5, rs.getResult().getInt("place"));
-				statement.setInt(6, rs.getResult().getInt("destroy"));
-				statement.setInt(7, rs.getResult().getInt("craft"));
-				statement.setInt(8, rs.getResult().getInt("enchant"));
-				statement.setInt(9, rs.getResult().getInt("playerDrop"));
-				statement.setInt(10, rs.getResult().getInt("pickup"));
-				statement.execute();
+				do
+				{
+					statement.setInt(1, rs.getResult().getInt("id"));
+					statement.setInt(2, rs.getResult().getInt("itemid"));
+					statement.setString(3, rs.getResult().getString("data"));
+					statement.setString(4,
+							rs.getResult().getString("durability"));
+					statement.setInt(5, rs.getResult().getInt("place"));
+					statement.setInt(6, rs.getResult().getInt("destroy"));
+					statement.setInt(7, rs.getResult().getInt("craft"));
+					statement.setInt(8, rs.getResult().getInt("enchant"));
+					statement.setInt(9, rs.getResult().getInt("playerDrop"));
+					statement.setInt(10, rs.getResult().getInt("pickup"));
+					statement.execute();
+				} while (rs.getResult().next());
 				statement.close();
 			}
 			rs.closeQuery();
@@ -247,20 +252,20 @@ public class DatabaseHandler
 			{
 				plugin.getLogger().info(
 						Karmiconomy.TAG + " Importing portal table...");
+				PreparedStatement statement = mysql
+						.prepare("INSERT INTO "
+								+ Table.PORTAL.getName()
+								+ " (id,pcreatenether, pcreateend, pcreatecustom, portalenter) VALUES (?,?,?,?,?);");
 				do
 				{
-					PreparedStatement statement = mysql
-							.prepare("INSERT INTO "
-									+ Table.PORTAL.getName()
-									+ " (id,pcreatenether, pcreateend, pcreatecustom, portalenter) VALUES (?,?,?,?,?);");
 					statement.setInt(1, rs.getResult().getInt("id"));
 					statement.setInt(2, rs.getResult().getInt("pcreatenether"));
 					statement.setInt(3, rs.getResult().getInt("pcreateend"));
 					statement.setInt(4, rs.getResult().getInt("pcreatecustom"));
 					statement.setInt(5, rs.getResult().getInt("portalenter"));
 					statement.executeUpdate();
-					statement.close();
 				} while (rs.getResult().next());
+				statement.close();
 			}
 			rs.closeQuery();
 			rs = sqlite.select("SELECT * FROM " + Table.BUCKET.getName() + ";");
@@ -268,20 +273,21 @@ public class DatabaseHandler
 			{
 				plugin.getLogger().info(
 						Karmiconomy.TAG + " Importing bucket table...");
+				PreparedStatement statement = mysql
+						.prepare("INSERT INTO "
+								+ Table.BUCKET.getName()
+								+ " (id,bemptylava, bemptywater, bfilllava, bfillwater) VALUES (?,?,?,?,?);");
 				do
 				{
-					PreparedStatement statement = mysql
-							.prepare("INSERT INTO "
-									+ Table.BUCKET.getName()
-									+ " (id,bemptylava, bemptywater, bfilllava, bfillwater) VALUES (?,?,?,?,?);");
 					statement.setInt(1, rs.getResult().getInt("id"));
 					statement.setInt(2, rs.getResult().getInt("bemptylava"));
 					statement.setInt(3, rs.getResult().getInt("bemptywater"));
 					statement.setInt(4, rs.getResult().getInt("bfilllava"));
 					statement.setInt(5, rs.getResult().getInt("bfillwater"));
 					statement.executeUpdate();
-					statement.close();
+
 				} while (rs.getResult().next());
+				statement.close();
 			}
 			rs.closeQuery();
 			plugin.getLogger().info(
