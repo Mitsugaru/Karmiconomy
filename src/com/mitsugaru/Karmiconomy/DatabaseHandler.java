@@ -738,9 +738,9 @@ public class DatabaseHandler
 									// Add entry for tool item
 									standardQuery("INSERT INTO "
 											+ field.getTable().getName()
-											+ " (id,itemid,data,durability,place,destroy,craft,enchant,playerDrop) VALUES('"
+											+ " (id,itemid,data,durability,place,destroy,craft,enchant,playerDrop,pickup) VALUES('"
 											+ id + "','" + item.itemId()
-											+ "','0','0','0','0','0','0','0');");
+											+ "','0','0','0','0','0','0','0','0');");
 								}
 							}
 							else if (item.isPotion())
@@ -771,11 +771,11 @@ public class DatabaseHandler
 									// Add entry for tool item
 									standardQuery("INSERT INTO "
 											+ field.getTable().getName()
-											+ " (id,itemid,data,durability,place,destroy,craft,enchant,playerDrop) VALUES('"
+											+ " (id,itemid,data,durability,place,destroy,craft,enchant,playerDrop,pickup) VALUES('"
 											+ id + "','" + item.itemId()
 											+ "','" + item.itemDurability()
 											+ "','" + item.itemDurability()
-											+ "','0','0','0','0','0');");
+											+ "','0','0','0','0','0','0');");
 								}
 							}
 							else
