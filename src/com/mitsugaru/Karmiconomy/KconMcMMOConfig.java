@@ -53,6 +53,7 @@ public class KconMcMMOConfig
 
 	public static void save()
 	{
+		//Set config 
 		try
 		{
 			// Save the file
@@ -68,7 +69,9 @@ public class KconMcMMOConfig
 
 	public static void reload()
 	{
-		save();
+		//Not sure if this is necessary...?
+		file = new File(plugin.getDataFolder().getAbsolutePath() + "/mcmmo.yml");
+		config = YamlConfiguration.loadConfiguration(file);
 		loadDefaults();
 		loadVariables();
 	}
