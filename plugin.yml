@@ -4,6 +4,7 @@ description: Economy suppliment plugin, to provide payments based on actions.
 version: 0.13
 author: Mitsugaru
 depend: [Vault]
+softdepend: [PlayerPoints, mcMMO]
 
 commands:
   kcon:

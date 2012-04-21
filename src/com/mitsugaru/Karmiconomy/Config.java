@@ -52,24 +52,20 @@ public class Config
 			vehicleExit, vehicleExitDenyPay, vehicleExitDenyLimit,
 			blockPlaceStatic, blockDestroyStatic, craftItemStatic,
 			enchantItemStatic, itemDropStatic, commandStatic, pickup,
-			pickupStatic, pickupDenyPay, pickupDenyLimit, shootBowDenyForce/*
-														 * ,blockIgnite ,
-														 * blockIgniteValid
-														 */;
+			pickupStatic, pickupDenyPay, pickupDenyLimit, shootBowDenyForce;
 	public int listlimit, bedEnterLimit, bedLeaveLimit, blockDestroyLimit,
-	/* blockIgniteLimit, */blockPlaceLimit, shootBowLimit,
-			bucketEmptyLavaLimit, bucketEmptyWaterLimit, bucketFillLavaLimit,
-			bucketFillWaterLimit, craftLimit, enchantLimit, itemDropLimit,
-			chatLimit, deathLimit, gameModeCreativeLimit,
-			gameModeSurvivalLimit, kickLimit, joinLimit, quitLimit,
-			respawnLimit, sneakLimit, sprintLimit, vehicleEnterLimit,
-			vehicleExitLimit, paintingPlaceLimit, commandLimit,
-			worldChangeLimit, tameOcelotLimit, tameWolfLimit,
+			blockPlaceLimit, shootBowLimit, bucketEmptyLavaLimit,
+			bucketEmptyWaterLimit, bucketFillLavaLimit, bucketFillWaterLimit,
+			craftLimit, enchantLimit, itemDropLimit, chatLimit, deathLimit,
+			gameModeCreativeLimit, gameModeSurvivalLimit, kickLimit, joinLimit,
+			quitLimit, respawnLimit, sneakLimit, sprintLimit,
+			vehicleEnterLimit, vehicleExitLimit, paintingPlaceLimit,
+			commandLimit, worldChangeLimit, tameOcelotLimit, tameWolfLimit,
 			portalCreateNetherLimit, portalCreateEndLimit,
 			portalCreateCustomLimit, portalEnterLimit, eggThrowLimit,
 			pickupLimit;
-	public double bedEnterPay, bedLeavePay, blockDestroyPay, /* blockIgnitePay, */
-	blockPlacePay, shootBowPay, bucketEmptyLavaPay, bucketEmptyWaterPay,
+	public double bedEnterPay, bedLeavePay, blockDestroyPay, blockPlacePay,
+			shootBowPay, bucketEmptyLavaPay, bucketEmptyWaterPay,
 			bucketFillLavaPay, bucketFillWaterPay, craftPay, enchantPay,
 			itemDropPay, eggThrowPay, chatPay, deathPay, gameModePay, kickPay,
 			joinPay, quitPay, respawnPay, sneakPay, sprintPay, vehicleEnterPay,
@@ -112,13 +108,6 @@ public class Config
 		defaults.put("block.destroy.static", true);
 		defaults.put("block.destroy.limit", 100);
 		defaults.put("block.destroy.pay", 0.1);
-		/*
-		 * defaults.put("block.ignite.enabled", false);
-		 * defaults.put("block.ignite.denyOnLackPay", false);
-		 * defaults.put("block.ignite.static", true);
-		 * defaults.put("block.ignite.limit", 100);
-		 * defaults.put("block.ignite.pay", 0.1);
-		 */
 		defaults.put("block.place.enabled", false);
 		defaults.put("block.place.denyOnLackPay", false);
 		defaults.put("block.place.denyOnLimit", false);
@@ -254,17 +243,19 @@ public class Config
 		defaults.put("tame.wolf.enabled", false);
 		defaults.put("tame.wolf.limit", 10);
 		defaults.put("tame.wolf.pay", 10);
-		//TODO implement
-		/*defaults.put("vehicle.enter.enabled", false);
-		defaults.put("vehicle.enter.denyOnLackPay", false);
-		defaults.put("vehicle.enter.denyOnLimit", false);
-		defaults.put("vehicle.enter.limit", 100);
-		defaults.put("vehicle.enter.pay", 0.1);
-		defaults.put("vehicle.exit.enabled", false);
-		defaults.put("vehicle.exit.denyOnLackPay", false);
-		defaults.put("vehicle.exit.denyOnLimit", false);
-		defaults.put("vehicle.exit.limit", 100);
-		defaults.put("vehicle.exit.pay", 0.1);*/
+		// TODO implement
+		/*
+		 * defaults.put("vehicle.enter.enabled", false);
+		 * defaults.put("vehicle.enter.denyOnLackPay", false);
+		 * defaults.put("vehicle.enter.denyOnLimit", false);
+		 * defaults.put("vehicle.enter.limit", 100);
+		 * defaults.put("vehicle.enter.pay", 0.1);
+		 * defaults.put("vehicle.exit.enabled", false);
+		 * defaults.put("vehicle.exit.denyOnLackPay", false);
+		 * defaults.put("vehicle.exit.denyOnLimit", false);
+		 * defaults.put("vehicle.exit.limit", 100);
+		 * defaults.put("vehicle.exit.pay", 0.1);
+		 */
 		defaults.put("world.change.enabled", false);
 		defaults.put("world.change.limit", 15);
 		defaults.put("world.change.pay", 1.0);
@@ -345,8 +336,8 @@ public class Config
 		// Grab current version
 		final double ver = Double.parseDouble(plugin.getConfig().getString(
 				"version"));
-		//can remove old config options using the following:
-		//plugin.getConfig().set("path.to.remove", null);
+		// can remove old config options using the following:
+		// plugin.getConfig().set("path.to.remove", null);
 		// Update version number in config.yml
 		plugin.getConfig().set("version", plugin.getDescription().getVersion());
 		plugin.saveConfig();
@@ -412,13 +403,6 @@ public class Config
 		blockDestroyStatic = config.getBoolean("block.destroy.static", true);
 		blockDestroyLimit = config.getInt("block.destroy.limit", 100);
 		blockDestroyPay = config.getDouble("block.destroy.pay", 0.1);
-		/*
-		 * blockIgnite = config.getBoolean("block.ignite.enabled", false);
-		 * defaults.put("block.ignite.static", true); blockIgniteValid =
-		 * config.getBoolean("block.ignite.denyOnLackPay", false);
-		 * blockIgniteLimit = config.getInt("block.ignite.limit", 100);
-		 * defaults.put("block.ignite.pay", 0.1);
-		 */
 		// place
 		blockPlace = config.getBoolean("block.place.enabled", false);
 		blockPlaceStatic = config.getBoolean("block.place.static", true);
@@ -472,7 +456,8 @@ public class Config
 		shootBow = config.getBoolean("bow.shoot.enabled", false);
 		shootBowDenyLimit = config.getBoolean("bow.shoot.denyOnLimit", false);
 		shootBowDenyPay = config.getBoolean("bow.shoot.denyOnLackPay", false);
-		shootBowDenyForce = config.getBoolean("bow.shoot.denyOnLowForce", false);
+		shootBowDenyForce = config
+				.getBoolean("bow.shoot.denyOnLowForce", false);
 		shootBowForce = config.getDouble("bow.shoot.minimumforce", 0.0);
 		shootBowLimit = config.getInt("bow.shoot.limit", 100);
 		shootBowPay = config.getDouble("bow.shoot.pay", 0.1);
@@ -652,17 +637,21 @@ public class Config
 		 * TODO implement
 		 */
 		// enter
-		/*vehicleEnter = config.getBoolean("vehicle.enter.enabled", false);
-		vehicleEnterDenyPay = config.getBoolean("vehicle.enter.denyOnLackPay",
-				false);
-		vehicleEnterDenyLimit = config.getBoolean("vehicle.enter.denyOnLimit",
-				false);
-		vehicleEnterLimit = config.getInt("vehicle.enter.limit", 100);
-		vehicleEnterPay = config.getDouble("vehicle.enter.pay", 0.1);*/
+		/*
+		 * vehicleEnter = config.getBoolean("vehicle.enter.enabled", false);
+		 * vehicleEnterDenyPay =
+		 * config.getBoolean("vehicle.enter.denyOnLackPay", false);
+		 * vehicleEnterDenyLimit =
+		 * config.getBoolean("vehicle.enter.denyOnLimit", false);
+		 * vehicleEnterLimit = config.getInt("vehicle.enter.limit", 100);
+		 * vehicleEnterPay = config.getDouble("vehicle.enter.pay", 0.1);
+		 */
 		// exit
-		/*vehicleExit = config.getBoolean("vehicle.exit.enabled", false);
-		vehicleExitLimit = config.getInt("vehicle.exit.limit", 100);
-		vehicleExitPay = config.getDouble("vehicle.exit.pay", 0.1);*/
+		/*
+		 * vehicleExit = config.getBoolean("vehicle.exit.enabled", false);
+		 * vehicleExitLimit = config.getInt("vehicle.exit.limit", 100);
+		 * vehicleExitPay = config.getDouble("vehicle.exit.pay", 0.1);
+		 */
 		/**
 		 * World
 		 */
@@ -1004,7 +993,7 @@ public class Config
 					}
 					default:
 					{
-						//Typically ignore
+						// Typically ignore
 						if (debugUnhandled)
 						{
 							plugin.getLogger().warning(
@@ -1058,20 +1047,20 @@ public class Config
 		}
 		return limit;
 	}
-	
+
 	public boolean getDenyPay(Field field, Item item)
 	{
-		if(item != null)
+		if (item != null)
 		{
 			return getItemDenyPay(field, item);
 		}
 		else
 		{
-			switch(field.getTable())
+			switch (field.getTable())
 			{
 				case DATA:
 				{
-					switch(field)
+					switch (field)
 					{
 						case CHAT:
 							return chatDenyPay;
@@ -1112,7 +1101,7 @@ public class Config
 				}
 				case PORTAL:
 				{
-					switch(field)
+					switch (field)
 					{
 						case PORTAL_CREATE_NETHER:
 							return portalCreateNetherDenyPay;
@@ -1124,7 +1113,7 @@ public class Config
 				}
 				case BUCKET:
 				{
-					switch(field)
+					switch (field)
 					{
 						case BUCKET_EMPTY_LAVA:
 							return bucketEmptyLavaDenyPay;
@@ -1448,16 +1437,16 @@ public class Config
 				blockDestroyLimit);
 		final int iDropLimit = config
 				.getInt(path + ".dropLimit", itemDropLimit);
-		final boolean iCraftDenyPay = config.getBoolean(path + ".craftDenyOnPay",
-				craftItemDenyPay);
+		final boolean iCraftDenyPay = config.getBoolean(path
+				+ ".craftDenyOnPay", craftItemDenyPay);
 		final boolean iCraftDenyLimit = config.getBoolean(path
 				+ ".craftDenyOnLimit", craftItemDenyLimit);
 		final boolean iEnchantDenyPay = config.getBoolean(path
 				+ ".enchantDenyOnPay", enchantItemDenyPay);
 		final boolean iEnchantDenyLimit = config.getBoolean(path
 				+ ".enchantDenyOnLimit", enchantItemDenyLimit);
-		final boolean iPlaceDenyPay = config.getBoolean(path + ".placeDenyOnPay",
-				blockPlaceDenyPay);
+		final boolean iPlaceDenyPay = config.getBoolean(path
+				+ ".placeDenyOnPay", blockPlaceDenyPay);
 		final boolean iPlaceDenyLimit = config.getBoolean(path
 				+ ".placeDenyOnLimit", blockPlaceDenyLimit);
 		final boolean iDestroyDenyPay = config.getBoolean(path
@@ -1528,27 +1517,6 @@ public class Config
 			valueFile.set("290.enchantDenyOnPay", false);
 			valueFile.set("290.enchantDenyOnLimit", false);
 			valueFile.set("290.enchantLimit", 0);
-			/*
-			 * valueFile.set("15", 2); valueFile.set("17&0", 2);
-			 * valueFile.set("17&1", 2); valueFile.set("17&2", 2);
-			 * valueFile.set("19", 10); valueFile.set("20", 3);
-			 * valueFile.set("22", 36); valueFile.set("24", 2);
-			 * valueFile.set("35&0", 2); valueFile.set("35&1", 2);
-			 * valueFile.set("35&2", 2); valueFile.set("35&3", 2);
-			 * valueFile.set("35&4", 2); valueFile.set("35&5", 2);
-			 * valueFile.set("35&6", 2); valueFile.set("35&7", 2);
-			 * valueFile.set("35&8", 2); valueFile.set("35&9", 2);
-			 * valueFile.set("35&10", 2); valueFile.set("35&11", 2);
-			 * valueFile.set("35&12", 2); valueFile.set("35&13", 2);
-			 * valueFile.set("35&14", 2); valueFile.set("35&15", 2);
-			 * valueFile.set("41", 54); valueFile.set("45", 6);
-			 * valueFile.set("47", 6); valueFile.set("49", 6);
-			 * valueFile.set("57", 225); valueFile.set("89", 4);
-			 * valueFile.set("102", 12); valueFile.set("264", 25);
-			 * valueFile.set("265", 3); valueFile.set("266", 6);
-			 * valueFile.set("322", 10); valueFile.set("331", 2);
-			 * valueFile.set("351&4", 4);
-			 */
 			// Insert defaults into file if they're not present
 			try
 			{
@@ -1569,10 +1537,10 @@ public class Config
 	// Private class to hold item specific information
 	public class KCItemInfo
 	{
-		public double craftPay, enchantPay, placePay, /* ignitePay, */destroyPay,
-				dropPay, pickupPay;
-		public int craftLimit, enchantLimit, placeLimit, /* igniteLimit, */
-		destroyLimit, dropLimit, pickupLimit;
+		public double craftPay, enchantPay, placePay, destroyPay, dropPay,
+				pickupPay;
+		public int craftLimit, enchantLimit, placeLimit, destroyLimit,
+				dropLimit, pickupLimit;
 		public boolean craftDenyPay, craftDenyLimit, enchantDenyPay,
 				enchantDenyLimit, destroyDenyPay, destroyDenyLimit,
 				placeDenyPay, placeDenyLimit, dropDenyPay, dropDenyLimit,
@@ -1582,8 +1550,7 @@ public class Config
 				boolean craftDenyPay, boolean craftDenyLimit, int enchantLimit,
 				double enchantPay, boolean enchantDenyPay,
 				boolean enchantDenyLimit, int placeLimit, double placePay,
-				boolean placeDenyPay, boolean placeDenyLimit,
-				/* int igniteLimit, double ignitePay, */int destroyLimit,
+				boolean placeDenyPay, boolean placeDenyLimit, int destroyLimit,
 				double destroyPay, boolean destroyDenyPay,
 				boolean destroyDenyLimit, int dropLimit, double dropPay,
 				boolean dropDenyPay, boolean dropDenyLimit, int pickupLimit,
@@ -1592,13 +1559,11 @@ public class Config
 			this.craftPay = craftPay;
 			this.enchantPay = enchantPay;
 			this.placePay = placePay;
-			/* this.ignitePay = ignitePay; */
 			this.destroyPay = destroyPay;
 			this.dropPay = dropPay;
 			this.craftLimit = craftLimit;
 			this.enchantLimit = enchantLimit;
 			this.placeLimit = placeLimit;
-			/* this.igniteLimit = igniteLimit; */
 			this.destroyLimit = destroyLimit;
 			this.dropLimit = dropLimit;
 			this.craftDenyPay = craftDenyPay;

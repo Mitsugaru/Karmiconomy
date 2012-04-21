@@ -92,6 +92,14 @@ public class DatabaseHandler
 						+ Table.BUCKET.getName()
 						+ " (id INT UNSIGNED NOT NULL, bemptylava INT NOT NULL, bemptywater INT NOT NULL, bfilllava INT NOT NULL, bfillwater INT NOT NULL, PRIMARY KEY(id));");
 			}
+			if (!mysql.checkTable(Table.MCMMO.getName()))
+			{
+				plugin.getLogger().info(
+						Karmiconomy.TAG + " Created mcmmo table");
+				mysql.createTable("CREATE TABLE "
+						+ Table.MCMMO.getName()
+						+ "(id INT UNSIGNED NOT NULL, partyteleport INT NOT NULL, PRIMARY KEY(id)");
+			}
 		}
 		else
 		{
@@ -148,6 +156,7 @@ public class DatabaseHandler
 						+ Table.BUCKET.getName()
 						+ " (id INTEGER PRIMARY KEY, bemptylava INTEGER NOT NULL, bemptywater INTEGER NOT NULL, bfilllava INTEGER NOT NULL, bfillwater INTEGER NOT NULL);");
 			}
+			// TODO add mcmmo table
 		}
 	}
 
@@ -290,6 +299,7 @@ public class DatabaseHandler
 				statement.close();
 			}
 			rs.closeQuery();
+			// TODO import mcmmo
 			plugin.getLogger().info(
 					Karmiconomy.TAG + " Done importing SQLite into MySQL");
 		}
@@ -407,6 +417,7 @@ public class DatabaseHandler
 							+ Table.BUCKET.getName()
 							+ " (id, bemptylava, bemptywater, bfilllava, bfillwater) VALUES('"
 							+ id + "','0','0','0','0');");
+					// TODO add mcmmo
 					return true;
 				}
 				else
@@ -525,6 +536,7 @@ public class DatabaseHandler
 					+ Table.BUCKET.getName()
 					+ " SET bemptylava='0', bemptywater='0', bfilllava='0', bfillwater='0' WHERE id='"
 					+ id + "';");
+			// TODO reset mcmmo
 			// Drop everything in items for player id
 			standardQuery("DELETE FROM " + Table.ITEMS.getName()
 					+ " WHERE id='" + id + "';");
@@ -541,7 +553,7 @@ public class DatabaseHandler
 
 	public void resetValue(Field field, String name, Item item, String command)
 	{
-		// TODO reset specfied field
+		// TODO reset specified field
 	}
 
 	public void incrementData(Field field, String name, Item item,
@@ -647,6 +659,13 @@ public class DatabaseHandler
 							+ "' WHERE id='" + id + "';");
 					break;
 				}
+				case MCMMO:
+				{
+					standardQuery("UPDATE " + field.getTable().getName()
+							+ " SET " + field.getColumnName() + "='" + value
+							+ "' WHERE id='" + id + "';");
+					break;
+				}
 				default:
 				{
 					if (config.debugUnhandled)
@@ -739,7 +758,9 @@ public class DatabaseHandler
 									standardQuery("INSERT INTO "
 											+ field.getTable().getName()
 											+ " (id,itemid,data,durability,place,destroy,craft,enchant,playerDrop,pickup) VALUES('"
-											+ id + "','" + item.itemId()
+											+ id
+											+ "','"
+											+ item.itemId()
 											+ "','0','0','0','0','0','0','0','0');");
 								}
 							}
@@ -859,6 +880,18 @@ public class DatabaseHandler
 						}
 						break;
 					}
+					case MCMMO:
+					{
+						query = select("SELECT * FROM "
+								+ field.getTable().getName() + " WHERE id='"
+								+ id + "';");
+						if (query.getResult().next())
+						{
+							data = query.getResult().getInt(
+									field.getColumnName());
+						}
+						break;
+					}
 					default:
 					{
 						if (config.debugUnhandled)
@@ -906,7 +939,7 @@ public class DatabaseHandler
 				Table.DATA, "tamewolf"), WORLD_CHANGE(Table.DATA, "worldchange"), BUCKET_EMPTY_LAVA(
 				Table.BUCKET, "bemptylava"), BUCKET_EMPTY_WATER(Table.BUCKET,
 				"bemptywater"), BUCKET_FILL_LAVA(Table.BUCKET, "bfilllava"), BUCKET_FILL_WATER(
-				Table.BUCKET, "bfillwater");
+				Table.BUCKET, "bfillwater"), MCMMO_PARTY_TELEPORT(Table.MCMMO, "partyteleport");
 		private final Table table;
 		private final String columnname;
 
@@ -932,7 +965,8 @@ public class DatabaseHandler
 		MASTER(config.tablePrefix + "master"), ITEMS(config.tablePrefix
 				+ "items"), DATA(config.tablePrefix + "data"), COMMAND(
 				config.tablePrefix + "command"), PORTAL(config.tablePrefix
-				+ "portal"), BUCKET(config.tablePrefix + "bucket");
+				+ "portal"), BUCKET(config.tablePrefix + "bucket"), MCMMO(
+				config.tablePrefix + "mcmmo");
 		private final String table;
 
 		private Table(String table)

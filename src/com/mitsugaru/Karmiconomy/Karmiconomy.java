@@ -3,7 +3,12 @@ package com.mitsugaru.Karmiconomy;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import com.mitsugaru.Karmiconomy.events.KarmiconomyListener;
+import com.mitsugaru.Karmiconomy.events.KconEventLogic;
+import com.mitsugaru.Karmiconomy.events.McMMOListener;
 
 public class Karmiconomy extends JavaPlugin
 {
@@ -13,6 +18,7 @@ public class Karmiconomy extends JavaPlugin
 	private PermCheck perm;
 	private DatabaseHandler database;
 	private boolean economyFound;
+	public boolean mcmmo;
 	public static Map<String, String> sentMessages = new HashMap<String, String>();
 
 	/**
@@ -65,9 +71,23 @@ public class Karmiconomy extends JavaPlugin
 		// Setup commander
 		commander = new Commander(this);
 		getCommand("kcon").setExecutor(commander);
-		// Setup listener
+		// Setup listeners
+		KconEventLogic.init(this);
 		KarmiconomyListener listener = new KarmiconomyListener(this);
 		this.getServer().getPluginManager().registerEvents(listener, this);
+		Plugin mcmmoPlugin = getServer().getPluginManager()
+				.getPlugin("mcMMO");
+		if(mcmmoPlugin != null)
+		{
+			McMMOListener mcmmoListener = new McMMOListener(this);
+			this.getServer().getPluginManager().registerEvents(mcmmoListener, this);
+			mcmmo = true;
+			getLogger().info(TAG + " Hooked into mcMMO");
+		}
+		else
+		{
+			mcmmo = false;
+		}
 		// getLogger().info(TAG + " Enabled v" + getDescription().getVersion());
 	}
 
