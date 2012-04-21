@@ -171,19 +171,11 @@ public class KarmicEcon
 			{
 				return true;
 			}
-			else if (points > 0)
+			else 
 			{
 				plugin.getServer().dispatchCommand(
 						plugin.getServer().getConsoleSender(),
-						"points give " + player.getName() + " +" + points);
-				paid = true;
-			}
-			else if (points < 0)
-			{
-				points *= -1;
-				plugin.getServer().dispatchCommand(
-						plugin.getServer().getConsoleSender(),
-						"points give " + player.getName() + " -" + points);
+						"points give " + player.getName() + " " + points);
 				paid = true;
 			}
 		}
