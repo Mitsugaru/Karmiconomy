@@ -1,11 +1,13 @@
 package com.mitsugaru.Karmiconomy;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import com.mitsugaru.Karmiconomy.DatabaseHandler.Field;
@@ -70,8 +72,25 @@ public class KconMcMMOConfig
 	public static void reload()
 	{
 		//Not sure if this is necessary...?
-		file = new File(plugin.getDataFolder().getAbsolutePath() + "/mcmmo.yml");
-		config = YamlConfiguration.loadConfiguration(file);
+		try
+		{
+			config.load(file);
+		}
+		catch (FileNotFoundException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		catch (IOException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		catch (InvalidConfigurationException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		loadDefaults();
 		loadVariables();
 	}
