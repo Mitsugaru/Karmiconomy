@@ -98,7 +98,7 @@ public class DatabaseHandler
 						Karmiconomy.TAG + " Created mcmmo table");
 				mysql.createTable("CREATE TABLE "
 						+ Table.MCMMO.getName()
-						+ "(id INT UNSIGNED NOT NULL, partyteleport INT NOT NULL, PRIMARY KEY(id)");
+						+ "(id INT UNSIGNED NOT NULL, partyteleport INT NOT NULL, partyjoin INT NOT NULL, partyleave INT NOT NULL, partykick INT NOT NULL, partychange INT NOT NULL, PRIMARY KEY(id)");
 			}
 		}
 		else
@@ -939,7 +939,10 @@ public class DatabaseHandler
 				Table.DATA, "tamewolf"), WORLD_CHANGE(Table.DATA, "worldchange"), BUCKET_EMPTY_LAVA(
 				Table.BUCKET, "bemptylava"), BUCKET_EMPTY_WATER(Table.BUCKET,
 				"bemptywater"), BUCKET_FILL_LAVA(Table.BUCKET, "bfilllava"), BUCKET_FILL_WATER(
-				Table.BUCKET, "bfillwater"), MCMMO_PARTY_TELEPORT(Table.MCMMO, "partyteleport");
+				Table.BUCKET, "bfillwater"), MCMMO_PARTY_TELEPORT(Table.MCMMO,
+				"partyteleport"), MCMMO_PARTY_JOIN(Table.MCMMO, "partyjoin"), MCMMO_PARTY_LEAVE(
+				Table.MCMMO, "partyleave"), MCMMO_PARTY_KICK(Table.MCMMO,
+				"partykick"), MCMMO_PARTY_CHANGE(Table.MCMMO, "partychange");
 		private final Table table;
 		private final String columnname;
 

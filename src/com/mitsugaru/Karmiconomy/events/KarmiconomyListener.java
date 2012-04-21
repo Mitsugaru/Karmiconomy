@@ -52,6 +52,7 @@ public class KarmiconomyListener implements Listener
 	private Karmiconomy plugin;
 	private DatabaseHandler db;
 	private Config config;
+
 	// TODO create thread that resets this every so often? May not be necessary
 	// Maybe every 2 minutes?
 
@@ -69,7 +70,9 @@ public class KarmiconomyListener implements Listener
 		{
 			final Player player = event.getPlayer();
 			if (KconEventLogic.deny(Field.CHAT, player, config.chatDenyPay,
-					config.chatDenyLimit, null, null))
+					config.getPayValue(Field.CHAT, null, null),
+					config.chatDenyLimit,
+					config.getLimitValue(Field.CHAT, null, null), null, null))
 			{
 				// Cancel event
 				event.setCancelled(true);
@@ -92,7 +95,8 @@ public class KarmiconomyListener implements Listener
 		{
 			final Player player = event.getPlayer();
 			// Check if hit limit
-			if (!KconEventLogic.hitLimit(Field.CHAT, player, null, null))
+			if (!KconEventLogic.hitLimit(Field.CHAT, player,
+					config.getLimitValue(Field.CHAT, null, null), null, null))
 			{
 				// Try to pay
 				if (KarmicEcon.pay(Field.CHAT, player, null, null))
@@ -117,8 +121,14 @@ public class KarmiconomyListener implements Listener
 		if (!event.isCancelled() && config.command && event.getPlayer() != null)
 		{
 			final Player player = event.getPlayer();
-			if (KconEventLogic.deny(Field.COMMAND, player, config.commandDenyPay,
-					config.commandDenyLimit, null, event.getMessage()))
+			if (KconEventLogic.deny(
+					Field.COMMAND,
+					player,
+					config.commandDenyPay,
+					config.getPayValue(Field.CHAT, null, event.getMessage()),
+					config.commandDenyLimit,
+					config.getLimitValue(Field.COMMAND, null,
+							event.getMessage()), null, event.getMessage()))
 			{
 				// Deny
 				event.setCancelled(true);
@@ -142,10 +152,15 @@ public class KarmiconomyListener implements Listener
 			final Player player = event.getPlayer();
 			// Pay on command
 			// Check if hit limit
-			if (!KconEventLogic.hitLimit(Field.COMMAND, player, null, event.getMessage()))
+			if (!KconEventLogic.hitLimit(
+					Field.COMMAND,
+					player,
+					config.getLimitValue(Field.COMMAND, null,
+							event.getMessage()), null, event.getMessage()))
 			{
 				// Try to pay
-				if (KarmicEcon.pay(Field.COMMAND, player, null, event.getMessage()))
+				if (KarmicEcon.pay(Field.COMMAND, player, null,
+						event.getMessage()))
 				{
 					// Increment
 					db.incrementData(Field.COMMAND, player.getName(), null,
@@ -178,8 +193,11 @@ public class KarmiconomyListener implements Listener
 			{
 				final Player player = event.getPlayer();
 
-				if (KconEventLogic.deny(Field.BLOCK_PLACE, player, denyPay, denyLimit, placed,
-						null))
+				if (KconEventLogic.deny(Field.BLOCK_PLACE, player, denyPay,
+						config.getPayValue(Field.BLOCK_PLACE, placed, null),
+						denyLimit,
+						config.getLimitValue(Field.BLOCK_PLACE, placed, null),
+						placed, null))
 				{
 					// Deny
 					event.setCancelled(true);
@@ -215,7 +233,9 @@ public class KarmiconomyListener implements Listener
 			final Player player = event.getPlayer();
 			final Item placed = new Item(event.getBlockPlaced().getTypeId(),
 					event.getBlockPlaced().getData(), (short) 0);
-			if (!KconEventLogic.hitLimit(Field.BLOCK_PLACE, player, placed, null))
+			if (!KconEventLogic.hitLimit(Field.BLOCK_PLACE, player,
+					config.getLimitValue(Field.BLOCK_PLACE, placed, null),
+					placed, null))
 			{
 				// Try to pay
 				if (KarmicEcon.pay(Field.BLOCK_PLACE, player, placed, null))
@@ -258,8 +278,12 @@ public class KarmiconomyListener implements Listener
 			{
 				final Player player = event.getPlayer();
 
-				if (KconEventLogic.deny(Field.BLOCK_DESTROY, player, denyPay, denyLimit,
-						destroyed, null))
+				if (KconEventLogic
+						.deny(Field.BLOCK_DESTROY, player, denyPay, config
+								.getPayValue(Field.BLOCK_DESTROY, destroyed,
+										null), denyLimit, config.getLimitValue(
+								Field.BLOCK_DESTROY, destroyed, null),
+								destroyed, null))
 				{
 					// Deny
 					event.setCancelled(true);
@@ -289,10 +313,13 @@ public class KarmiconomyListener implements Listener
 			final Player player = event.getPlayer();
 			final Item destroyed = new Item(event.getBlock().getTypeId(), event
 					.getBlock().getData(), (short) 0);
-			if (!KconEventLogic.hitLimit(Field.BLOCK_DESTROY, player, destroyed, null))
+			if (!KconEventLogic.hitLimit(Field.BLOCK_DESTROY, player,
+					config.getLimitValue(Field.BLOCK_DESTROY, destroyed, null),
+					destroyed, null))
 			{
 				// Try to pay
-				if (KarmicEcon.pay(Field.BLOCK_DESTROY, player, destroyed, null))
+				if (KarmicEcon
+						.pay(Field.BLOCK_DESTROY, player, destroyed, null))
 				{
 					// Increment
 					db.incrementData(Field.BLOCK_DESTROY, player.getName(),
@@ -312,28 +339,6 @@ public class KarmiconomyListener implements Listener
 		}
 	}
 
-	/*
-	 * @EventHandler(priority = EventPriority.MONITOR) public void
-	 * blockIgniteValid(final BlockIgniteEvent event) { // Grab player if there
-	 * is one if (!event.isCancelled() && (config.blockIgniteDenyPay ||
-	 * config.blockIgniteDenyLimit) && event.getPlayer() != null) { final Player
-	 * player = event.getPlayer(); // TODO THIS IS NOT FOR PLAYERS? //may just
-	 * get rid of this event // pay by type if(config.debugEvents) { final
-	 * Map<String, String> details = new HashMap<String, String>();
-	 * details.put("Player", player.getName()); if(event.getBlock() != null) {
-	 * details.put("Block", event.getBlock().toString()); }
-	 * details.put("Cancelled", "true"); KconEventLogic.debugEvent(event, details); } } }
-	 * @EventHandler(priority = EventPriority.MONITOR) public void
-	 * blockIgnite(final BlockIgniteEvent event) { // Grab player if there is
-	 * one if (!event.isCancelled() && config.blockIgnite && event.getPlayer()
-	 * != null) { final Player player = event.getPlayer(); // TODO THIS IS NOT
-	 * FOR PLAYERS? //may just get rid of this event // pay by type
-	 * if(config.debugEvents) { final Map<String, String> details = new
-	 * HashMap<String, String>(); details.put("Player", player.getName());
-	 * if(event.getBlock() != null) { details.put("Block",
-	 * event.getBlock().toString()); } KconEventLogic.debugEvent(event, details); } } }
-	 */
-
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void craftItemValid(final CraftItemEvent event)
 	{
@@ -350,8 +355,12 @@ public class KarmiconomyListener implements Listener
 				{
 					final Player player = (Player) event.getWhoClicked();
 
-					if (KconEventLogic.deny(Field.ITEM_CRAFT, player, denyPay, denyLimit,
-							craft, null))
+					if (KconEventLogic
+							.deny(Field.ITEM_CRAFT, player, denyPay,
+									config.getPayValue(Field.ITEM_CRAFT, craft,
+											null), denyLimit, config
+											.getLimitValue(Field.ITEM_CRAFT,
+													craft, null), craft, null))
 					{
 						// Deny
 						event.setCancelled(true);
@@ -384,7 +393,9 @@ public class KarmiconomyListener implements Listener
 				final Player player = (Player) event.getWhoClicked();
 				final Item craft = new Item(event.getRecipe().getResult());
 				// Pay on craft
-				if (!KconEventLogic.hitLimit(Field.ITEM_CRAFT, player, craft, null))
+				if (!KconEventLogic.hitLimit(Field.ITEM_CRAFT, player,
+						config.getLimitValue(Field.ITEM_CRAFT, craft, null),
+						craft, null))
 				{
 					// Try to pay
 					if (KarmicEcon.pay(Field.ITEM_CRAFT, player, craft, null))
@@ -423,8 +434,12 @@ public class KarmiconomyListener implements Listener
 			{
 				final Player player = (Player) event.getEnchanter();
 
-				if (KconEventLogic.deny(Field.ITEM_ENCHANT, player, denyPay, denyLimit,
-						enchant, null))
+				if (KconEventLogic
+						.deny(Field.ITEM_ENCHANT, player, denyPay,
+								config.getPayValue(Field.ITEM_ENCHANT, enchant,
+										null), denyLimit, config.getLimitValue(
+										Field.ITEM_ENCHANT, enchant, null),
+								enchant, null))
 				{
 					// Deny
 					event.setCancelled(true);
@@ -460,7 +475,9 @@ public class KarmiconomyListener implements Listener
 			final Player player = event.getEnchanter();
 			// Pay on enchant
 			final Item enchant = new Item(event.getItem());
-			if (!KconEventLogic.hitLimit(Field.ITEM_ENCHANT, player, enchant, null))
+			if (!KconEventLogic.hitLimit(Field.ITEM_ENCHANT, player,
+					config.getLimitValue(Field.ITEM_ENCHANT, enchant, null),
+					enchant, null))
 			{
 				// Try to pay
 				if (KarmicEcon.pay(Field.ITEM_ENCHANT, player, enchant, null))
@@ -504,9 +521,14 @@ public class KarmiconomyListener implements Listener
 				{
 					case NETHER:
 					{
-						if (KconEventLogic.deny(Field.PORTAL_CREATE_NETHER, player,
-								config.portalCreateNetherDenyPay,
-								config.portalCreateNetherDenyLimit, null, null))
+						if (KconEventLogic.deny(Field.PORTAL_CREATE_NETHER,
+								player, config.portalCreateNetherDenyPay,
+								config.getPayValue(Field.PORTAL_CREATE_NETHER,
+										null, null),
+								config.portalCreateNetherDenyLimit, config
+										.getLimitValue(
+												Field.PORTAL_CREATE_NETHER,
+												null, null), null, null))
 						{
 							// Deny
 							cancel = true;
@@ -515,9 +537,13 @@ public class KarmiconomyListener implements Listener
 					}
 					case ENDER:
 					{
-						if (KconEventLogic.deny(Field.PORTAL_CREATE_END, player,
-								config.portalCreateEndDenyPay,
-								config.portalCreateEndDenyLimit, null, null))
+						if (KconEventLogic.deny(Field.PORTAL_CREATE_END,
+								player, config.portalCreateEndDenyPay, config
+										.getPayValue(Field.PORTAL_CREATE_END,
+												null, null),
+								config.portalCreateEndDenyLimit, config
+										.getLimitValue(Field.PORTAL_CREATE_END,
+												null, null), null, null))
 						{
 							// Deny
 							cancel = true;
@@ -526,9 +552,14 @@ public class KarmiconomyListener implements Listener
 					}
 					case CUSTOM:
 					{
-						if (KconEventLogic.deny(Field.PORTAL_CREATE_CUSTOM, player,
-								config.portalCreateCustomDenyPay,
-								config.portalCreateCustomDenyLimit, null, null))
+						if (KconEventLogic.deny(Field.PORTAL_CREATE_CUSTOM,
+								player, config.portalCreateCustomDenyPay,
+								config.getPayValue(Field.PORTAL_CREATE_CUSTOM,
+										null, null),
+								config.portalCreateCustomDenyLimit, config
+										.getLimitValue(
+												Field.PORTAL_CREATE_CUSTOM,
+												null, null), null, null))
 						{
 							// Deny
 							cancel = true;
@@ -584,12 +615,15 @@ public class KarmiconomyListener implements Listener
 				{
 					case NETHER:
 					{
-						if (!KconEventLogic.hitLimit(Field.PORTAL_CREATE_NETHER, player, null,
-								null))
+						if (!KconEventLogic.hitLimit(
+								Field.PORTAL_CREATE_NETHER, player, config
+										.getLimitValue(
+												Field.PORTAL_CREATE_NETHER,
+												null, null), null, null))
 						{
 							// Try to pay
-							if (KarmicEcon.pay(Field.PORTAL_CREATE_NETHER, player, null,
-									null))
+							if (KarmicEcon.pay(Field.PORTAL_CREATE_NETHER,
+									player, null, null))
 							{
 								// Increment
 								db.incrementData(Field.PORTAL_CREATE_NETHER,
@@ -600,11 +634,14 @@ public class KarmiconomyListener implements Listener
 					}
 					case ENDER:
 					{
-						if (!KconEventLogic.hitLimit(Field.PORTAL_CREATE_END, player, null,
-								null))
+						if (!KconEventLogic.hitLimit(Field.PORTAL_CREATE_END,
+								player, config.getLimitValue(
+										Field.PORTAL_CREATE_END, null, null),
+								null, null))
 						{
 							// Try to pay
-							if (KarmicEcon.pay(Field.PORTAL_CREATE_END, player, null, null))
+							if (KarmicEcon.pay(Field.PORTAL_CREATE_END, player,
+									null, null))
 							{
 								// Increment
 								db.incrementData(Field.PORTAL_CREATE_END,
@@ -615,12 +652,15 @@ public class KarmiconomyListener implements Listener
 					}
 					case CUSTOM:
 					{
-						if (!KconEventLogic.hitLimit(Field.PORTAL_CREATE_CUSTOM, player, null,
-								null))
+						if (!KconEventLogic.hitLimit(
+								Field.PORTAL_CREATE_CUSTOM, player, config
+										.getLimitValue(
+												Field.PORTAL_CREATE_CUSTOM,
+												null, null), null, null))
 						{
 							// Try to pay
-							if (KarmicEcon.pay(Field.PORTAL_CREATE_CUSTOM, player, null,
-									null))
+							if (KarmicEcon.pay(Field.PORTAL_CREATE_CUSTOM,
+									player, null, null))
 							{
 								// Increment
 								db.incrementData(Field.PORTAL_CREATE_CUSTOM,
@@ -665,7 +705,9 @@ public class KarmiconomyListener implements Listener
 			{
 				final Player player = (Player) event.getEntity();
 				// Pay on portal enter
-				if (!KconEventLogic.hitLimit(Field.PORTAL_ENTER, player, null, null))
+				if (!KconEventLogic.hitLimit(Field.PORTAL_ENTER, player,
+						config.getLimitValue(Field.PORTAL_ENTER, null, null),
+						null, null))
 				{
 					// Try to pay
 					if (KarmicEcon.pay(Field.PORTAL_ENTER, player, null, null))
@@ -703,8 +745,13 @@ public class KarmiconomyListener implements Listener
 							Field.BOW_SHOOT.name(), "" + event.getForce());
 				}
 
-				else if (KconEventLogic.deny(Field.BOW_SHOOT, player, config.shootBowDenyPay,
-						config.shootBowDenyLimit, null, null))
+				else if (KconEventLogic.deny(Field.BOW_SHOOT, player,
+
+				config.shootBowDenyPay,
+						config.getPayValue(Field.BOW_SHOOT, null, null),
+						config.shootBowDenyLimit,
+						config.getLimitValue(Field.BOW_SHOOT, null, null),
+						null, null))
 				{
 					cancel = true;
 				}
@@ -735,7 +782,9 @@ public class KarmiconomyListener implements Listener
 			if (event.getEntity() instanceof Player)
 			{
 				final Player player = (Player) event.getEntity();
-				if (!KconEventLogic.hitLimit(Field.BOW_SHOOT, player, null, null))
+				if (!KconEventLogic.hitLimit(Field.BOW_SHOOT, player,
+						config.getLimitValue(Field.BOW_SHOOT, null, null),
+						null, null))
 				{
 					// Try to pay
 					if (KarmicEcon.pay(Field.BOW_SHOOT, player, null, null))
@@ -776,8 +825,11 @@ public class KarmiconomyListener implements Listener
 					{
 						// Ocelot
 						if (KconEventLogic.deny(Field.TAME_OCELOT, player,
-								config.tameOcelotDenyPay,
-								config.tameOcelotDenyLimit, null, null))
+								config.tameOcelotDenyPay, config.getPayValue(
+										Field.TAME_OCELOT, null, null),
+								config.tameOcelotDenyLimit, config
+										.getLimitValue(Field.TAME_OCELOT, null,
+												null), null, null))
 						{
 							// Deny
 							cancel = true;
@@ -787,9 +839,14 @@ public class KarmiconomyListener implements Listener
 					case WOLF:
 					{
 						// Wolf
-						if (KconEventLogic.deny(Field.TAME_WOLF, player,
-								config.tameWolfDenyPay,
-								config.tameWolfDenyLimit, null, null))
+						if (KconEventLogic
+								.deny(Field.TAME_WOLF, player,
+										config.tameWolfDenyPay, config
+												.getPayValue(Field.TAME_WOLF,
+														null, null),
+										config.tameWolfDenyLimit, config
+												.getLimitValue(Field.TAME_WOLF,
+														null, null), null, null))
 						{
 							// Deny
 							cancel = true;
@@ -846,10 +903,13 @@ public class KarmiconomyListener implements Listener
 					case OCELOT:
 					{
 						// Ocelot
-						if (!KconEventLogic.hitLimit(Field.TAME_OCELOT, player, null, null))
+						if (!KconEventLogic.hitLimit(Field.TAME_OCELOT, player,
+								config.getLimitValue(Field.TAME_OCELOT, null,
+										null), null, null))
 						{
 							// Try to pay
-							if (KarmicEcon.pay(Field.TAME_OCELOT, player, null, null))
+							if (KarmicEcon.pay(Field.TAME_OCELOT, player, null,
+									null))
 							{
 								// Increment
 								db.incrementData(Field.TAME_OCELOT,
@@ -861,10 +921,13 @@ public class KarmiconomyListener implements Listener
 					case WOLF:
 					{
 						// Wolf
-						if (!KconEventLogic.hitLimit(Field.TAME_WOLF, player, null, null))
+						if (!KconEventLogic.hitLimit(Field.TAME_WOLF, player,
+								config.getLimitValue(Field.TAME_WOLF, null,
+										null), null, null))
 						{
 							// Try to pay
-							if (KarmicEcon.pay(Field.TAME_WOLF, player, null, null))
+							if (KarmicEcon.pay(Field.TAME_WOLF, player, null,
+									null))
 							{
 								// Increment
 								db.incrementData(Field.TAME_WOLF,
@@ -907,8 +970,12 @@ public class KarmiconomyListener implements Listener
 				&& event.getPlayer() != null)
 		{
 			final Player player = event.getPlayer();
-			if (KconEventLogic.deny(Field.PAINTING_PLACE, player, config.paintingPlaceDenyPay,
-					config.paintingPlaceDenyLimit, null, null))
+			if (KconEventLogic.deny(Field.PAINTING_PLACE, player,
+					config.paintingPlaceDenyPay,
+					config.getPayValue(Field.PAINTING_PLACE, null, null),
+					config.paintingPlaceDenyLimit,
+					config.getLimitValue(Field.PAINTING_PLACE, null, null),
+					null, null))
 			{
 				// Deny
 				event.setCancelled(true);
@@ -936,7 +1003,9 @@ public class KarmiconomyListener implements Listener
 		{
 			final Player player = event.getPlayer();
 			// Pay on place
-			if (!KconEventLogic.hitLimit(Field.PAINTING_PLACE, player, null, null))
+			if (!KconEventLogic.hitLimit(Field.PAINTING_PLACE, player,
+					config.getLimitValue(Field.PAINTING_PLACE, null, null),
+					null, null))
 			{
 				// Try to pay
 				if (KarmicEcon.pay(Field.PAINTING_PLACE, player, null, null))
@@ -967,8 +1036,12 @@ public class KarmiconomyListener implements Listener
 				&& event.getPlayer() != null)
 		{
 			final Player player = event.getPlayer();
-			if (KconEventLogic.deny(Field.BED_ENTER, player, config.bedEnterDenyPay,
-					config.bedEnterDenyLimit, null, null))
+			if (KconEventLogic.deny(Field.BED_ENTER, player,
+					config.bedEnterDenyPay,
+					config.getPayValue(Field.BED_ENTER, null, null),
+					config.bedEnterDenyLimit,
+					config.getLimitValue(Field.BED_ENTER, null, null), null,
+					null))
 			{
 				// Deny
 				event.setCancelled(true);
@@ -995,7 +1068,9 @@ public class KarmiconomyListener implements Listener
 		{
 			final Player player = event.getPlayer();
 			// Pay on enter
-			if (!KconEventLogic.hitLimit(Field.BED_ENTER, player, null, null))
+			if (!KconEventLogic.hitLimit(Field.BED_ENTER, player,
+					config.getLimitValue(Field.BED_ENTER, null, null), null,
+					null))
 			{
 				// Try to pay
 				if (KarmicEcon.pay(Field.BED_ENTER, player, null, null))
@@ -1025,7 +1100,9 @@ public class KarmiconomyListener implements Listener
 		{
 			final Player player = event.getPlayer();
 			// Pay on leave
-			if (!KconEventLogic.hitLimit(Field.BED_LEAVE, player, null, null))
+			if (!KconEventLogic.hitLimit(Field.BED_LEAVE, player,
+					config.getLimitValue(Field.BED_LEAVE, null, null), null,
+					null))
 			{
 				// Try to pay
 				if (KarmicEcon.pay(Field.BED_LEAVE, player, null, null))
@@ -1063,8 +1140,11 @@ public class KarmiconomyListener implements Listener
 				case LAVA_BUCKET:
 				{
 					if (KconEventLogic.deny(Field.BUCKET_EMPTY_LAVA, player,
-							config.bucketEmptyLavaDenyPay,
-							config.bucketEmptyLavaDenyLimit, null, null))
+							config.bucketEmptyLavaDenyPay, config.getPayValue(
+									Field.BUCKET_EMPTY_LAVA, null, null),
+							config.bucketEmptyLavaDenyLimit, config
+									.getLimitValue(Field.BUCKET_EMPTY_LAVA,
+											null, null), null, null))
 					{
 						// deny
 						cancel = true;
@@ -1074,8 +1154,11 @@ public class KarmiconomyListener implements Listener
 				case WATER_BUCKET:
 				{
 					if (KconEventLogic.deny(Field.BUCKET_EMPTY_WATER, player,
-							config.bucketEmptyWaterDenyPay,
-							config.bucketEmptyWaterDenyLimit, null, null))
+							config.bucketEmptyWaterDenyPay, config.getPayValue(
+									Field.BUCKET_EMPTY_WATER, null, null),
+							config.bucketEmptyWaterDenyLimit, config
+									.getLimitValue(Field.BUCKET_EMPTY_WATER,
+											null, null), null, null))
 					{
 						// Deny
 						cancel = true;
@@ -1126,10 +1209,14 @@ public class KarmiconomyListener implements Listener
 				case LAVA_BUCKET:
 				{
 					// Pay on empty
-					if (!KconEventLogic.hitLimit(Field.BUCKET_EMPTY_LAVA, player, null, null))
+					if (!KconEventLogic.hitLimit(Field.BUCKET_EMPTY_LAVA,
+							player, config.getLimitValue(
+									Field.BUCKET_EMPTY_LAVA, null, null), null,
+							null))
 					{
 						// Try to pay
-						if (KarmicEcon.pay(Field.BUCKET_EMPTY_LAVA, player, null, null))
+						if (KarmicEcon.pay(Field.BUCKET_EMPTY_LAVA, player,
+								null, null))
 						{
 							// Increment
 							db.incrementData(Field.BUCKET_EMPTY_LAVA,
@@ -1141,10 +1228,14 @@ public class KarmiconomyListener implements Listener
 				case WATER_BUCKET:
 				{
 					// Pay on empty
-					if (!KconEventLogic.hitLimit(Field.BUCKET_EMPTY_WATER, player, null, null))
+					if (!KconEventLogic.hitLimit(Field.BUCKET_EMPTY_WATER,
+							player, config.getLimitValue(
+									Field.BUCKET_EMPTY_WATER, null, null),
+							null, null))
 					{
 						// Try to pay
-						if (KarmicEcon.pay(Field.BUCKET_EMPTY_WATER, player, null, null))
+						if (KarmicEcon.pay(Field.BUCKET_EMPTY_WATER, player,
+								null, null))
 						{
 							// Increment
 							db.incrementData(Field.BUCKET_EMPTY_WATER,
@@ -1193,8 +1284,11 @@ public class KarmiconomyListener implements Listener
 				case STATIONARY_LAVA:
 				{
 					if (KconEventLogic.deny(Field.BUCKET_FILL_LAVA, player,
-							config.bucketFillLavaDenyPay,
-							config.bucketFillLavaDenyLimit, null, null))
+							config.bucketFillLavaDenyPay, config.getPayValue(
+									Field.BUCKET_FILL_LAVA, null, null),
+							config.bucketFillLavaDenyLimit, config
+									.getLimitValue(Field.BUCKET_FILL_LAVA,
+											null, null), null, null))
 					{
 						// Deny
 						cancel = true;
@@ -1204,8 +1298,11 @@ public class KarmiconomyListener implements Listener
 				case STATIONARY_WATER:
 				{
 					if (KconEventLogic.deny(Field.BUCKET_FILL_WATER, player,
-							config.bucketFillWaterDenyPay,
-							config.bucketFillWaterDenyLimit, null, null))
+							config.bucketFillWaterDenyPay, config.getPayValue(
+									Field.BUCKET_FILL_WATER, null, null),
+							config.bucketFillWaterDenyLimit, config
+									.getLimitValue(Field.BUCKET_FILL_WATER,
+											null, null), null, null))
 					{
 						// Deny
 						cancel = true;
@@ -1261,10 +1358,14 @@ public class KarmiconomyListener implements Listener
 				case STATIONARY_LAVA:
 				{
 					// Pay on fill
-					if (!KconEventLogic.hitLimit(Field.BUCKET_FILL_LAVA, player, null, null))
+					if (!KconEventLogic.hitLimit(Field.BUCKET_FILL_LAVA,
+							player, config.getLimitValue(
+									Field.BUCKET_FILL_LAVA, null, null), null,
+							null))
 					{
 						// Try to pay
-						if (KarmicEcon.pay(Field.BUCKET_FILL_LAVA, player, null, null))
+						if (KarmicEcon.pay(Field.BUCKET_FILL_LAVA, player,
+								null, null))
 						{
 							// Increment
 							db.incrementData(Field.BUCKET_FILL_LAVA,
@@ -1276,10 +1377,14 @@ public class KarmiconomyListener implements Listener
 				case STATIONARY_WATER:
 				{
 					// Pay on fill
-					if (!KconEventLogic.hitLimit(Field.BUCKET_FILL_WATER, player, null, null))
+					if (!KconEventLogic.hitLimit(Field.BUCKET_FILL_WATER,
+							player, config.getLimitValue(
+									Field.BUCKET_FILL_WATER, null, null), null,
+							null))
 					{
 						// Try to pay
-						if (KarmicEcon.pay(Field.BUCKET_FILL_WATER, player, null, null))
+						if (KarmicEcon.pay(Field.BUCKET_FILL_WATER, player,
+								null, null))
 						{
 							// Increment
 							db.incrementData(Field.BUCKET_FILL_WATER,
@@ -1326,7 +1431,9 @@ public class KarmiconomyListener implements Listener
 		{
 			final Player player = event.getPlayer();
 			// Pay on change
-			if (!KconEventLogic.hitLimit(Field.WORLD_CHANGE, player, null, null))
+			if (!KconEventLogic.hitLimit(Field.WORLD_CHANGE, player,
+					config.getLimitValue(Field.WORLD_CHANGE, null, null), null,
+					null))
 			{
 				// Try to pay
 				if (KarmicEcon.pay(Field.WORLD_CHANGE, player, null, null))
@@ -1356,7 +1463,8 @@ public class KarmiconomyListener implements Listener
 		{
 			final Player player = event.getEntity();
 			// Pay on death
-			if (!KconEventLogic.hitLimit(Field.DEATH, player, null, null))
+			if (!KconEventLogic.hitLimit(Field.DEATH, player,
+					config.getLimitValue(Field.DEATH, null, null), null, null))
 			{
 				// Try to pay
 				if (KarmicEcon.pay(Field.DEATH, player, null, null))
@@ -1390,7 +1498,10 @@ public class KarmiconomyListener implements Listener
 		{
 			final Player player = event.getPlayer();
 			// Pay on respawn
-			if (!KconEventLogic.hitLimit(Field.RESPAWN, player, null, null))
+			if (!KconEventLogic
+					.hitLimit(Field.RESPAWN, player,
+							config.getLimitValue(Field.RESPAWN, null, null),
+							null, null))
 			{
 				// Try to pay
 				if (KarmicEcon.pay(Field.RESPAWN, player, null, null))
@@ -1428,8 +1539,11 @@ public class KarmiconomyListener implements Listener
 			{
 				final Player player = event.getPlayer();
 
-				if (KconEventLogic.deny(Field.ITEM_PICKUP, player, denyPay, denyLimit, pickup,
-						null))
+				if (KconEventLogic.deny(Field.ITEM_PICKUP, player, denyPay,
+						config.getPayValue(Field.ITEM_PICKUP, pickup, null),
+						denyLimit,
+						config.getLimitValue(Field.ITEM_PICKUP, pickup, null),
+						pickup, null))
 				{
 					// Deny
 					event.setCancelled(true);
@@ -1459,7 +1573,9 @@ public class KarmiconomyListener implements Listener
 			final Player player = event.getPlayer();
 			// Pay on drop
 			final Item pickup = new Item(event.getItem().getItemStack());
-			if (!KconEventLogic.hitLimit(Field.ITEM_PICKUP, player, pickup, null))
+			if (!KconEventLogic.hitLimit(Field.ITEM_PICKUP, player,
+					config.getLimitValue(Field.ITEM_PICKUP, pickup, null),
+					pickup, null))
 			{
 				// Try to pay
 				if (KarmicEcon.pay(Field.ITEM_PICKUP, player, pickup, null))
@@ -1497,8 +1613,11 @@ public class KarmiconomyListener implements Listener
 			{
 				final Player player = event.getPlayer();
 
-				if (KconEventLogic.deny(Field.ITEM_DROP, player, denyPay, denyLimit, dropped,
-						null))
+				if (KconEventLogic.deny(Field.ITEM_DROP, player, denyPay,
+						config.getPayValue(Field.ITEM_DROP, dropped, null),
+						denyLimit,
+						config.getLimitValue(Field.ITEM_DROP, dropped, null),
+						dropped, null))
 				{
 					// Deny
 					event.setCancelled(true);
@@ -1528,7 +1647,9 @@ public class KarmiconomyListener implements Listener
 			final Player player = event.getPlayer();
 			// Pay on drop
 			final Item dropped = new Item(event.getItemDrop().getItemStack());
-			if (!KconEventLogic.hitLimit(Field.ITEM_DROP, player, dropped, null))
+			if (!KconEventLogic.hitLimit(Field.ITEM_DROP, player,
+					config.getLimitValue(Field.ITEM_DROP, dropped, null),
+					dropped, null))
 			{
 				// Try to pay
 				if (KarmicEcon.pay(Field.ITEM_DROP, player, dropped, null))
@@ -1559,7 +1680,9 @@ public class KarmiconomyListener implements Listener
 		{
 			final Player player = event.getPlayer();
 			// Pay on throw
-			if (!KconEventLogic.hitLimit(Field.EGG_THROW, player, null, null))
+			if (!KconEventLogic.hitLimit(Field.EGG_THROW, player,
+					config.getLimitValue(Field.EGG_THROW, null, null), null,
+					null))
 			{
 				// Try to pay
 				if (KarmicEcon.pay(Field.EGG_THROW, player, null, null))
@@ -1598,7 +1721,10 @@ public class KarmiconomyListener implements Listener
 				{
 					if (KconEventLogic.deny(Field.CREATIVE, player,
 							config.gameModeCreativeDenyPay,
-							config.gameModeCreativeDenyLimit, null, null))
+							config.getPayValue(Field.CREATIVE, null, null),
+							config.gameModeCreativeDenyLimit,
+							config.getLimitValue(Field.CREATIVE, null, null),
+							null, null))
 					{
 						// Deny
 						cancel = true;
@@ -1610,7 +1736,10 @@ public class KarmiconomyListener implements Listener
 				{
 					if (KconEventLogic.deny(Field.SURVIVAL, player,
 							config.gameModeSurvivalDenyPay,
-							config.gameModeSurvivalDenyLimit, null, null))
+							config.getPayValue(Field.SURVIVAL, null, null),
+							config.gameModeSurvivalDenyLimit,
+							config.getLimitValue(Field.SURVIVAL, null, null),
+							null, null))
 					{
 						// Deny
 						cancel = true;
@@ -1662,7 +1791,9 @@ public class KarmiconomyListener implements Listener
 			{
 				case CREATIVE:
 				{
-					if (!KconEventLogic.hitLimit(Field.CREATIVE, player, null, null))
+					if (!KconEventLogic.hitLimit(Field.CREATIVE, player,
+							config.getLimitValue(Field.CREATIVE, null, null),
+							null, null))
 					{
 						// Try to pay
 						if (KarmicEcon.pay(Field.CREATIVE, player, null, null))
@@ -1676,7 +1807,9 @@ public class KarmiconomyListener implements Listener
 				}
 				case SURVIVAL:
 				{
-					if (!KconEventLogic.hitLimit(Field.SURVIVAL, player, null, null))
+					if (!KconEventLogic.hitLimit(Field.SURVIVAL, player,
+							config.getLimitValue(Field.SURVIVAL, null, null),
+							null, null))
 					{
 						// Try to pay
 						if (KarmicEcon.pay(Field.SURVIVAL, player, null, null))
@@ -1745,7 +1878,9 @@ public class KarmiconomyListener implements Listener
 			if (config.join)
 			{
 				// Pay on join
-				if (!KconEventLogic.hitLimit(Field.JOIN, player, null, null))
+				if (!KconEventLogic.hitLimit(Field.JOIN, player,
+						config.getLimitValue(Field.JOIN, null, null), null,
+						null))
 				{
 					// Try to pay
 					if (KarmicEcon.pay(Field.JOIN, player, null, null))
@@ -1776,7 +1911,8 @@ public class KarmiconomyListener implements Listener
 		{
 			final Player player = event.getPlayer();
 			// Pay on kick
-			if (!KconEventLogic.hitLimit(Field.KICK, player, null, null))
+			if (!KconEventLogic.hitLimit(Field.KICK, player,
+					config.getLimitValue(Field.KICK, null, null), null, null))
 			{
 				// Try to pay
 				if (KarmicEcon.pay(Field.KICK, player, null, null))
@@ -1813,7 +1949,9 @@ public class KarmiconomyListener implements Listener
 			{
 
 				// Pay on quit
-				if (!KconEventLogic.hitLimit(Field.QUIT, player, null, null))
+				if (!KconEventLogic.hitLimit(Field.QUIT, player,
+						config.getLimitValue(Field.QUIT, null, null), null,
+						null))
 				{
 					// Try to pay
 					if (KarmicEcon.pay(Field.QUIT, player, null, null))
@@ -1845,7 +1983,9 @@ public class KarmiconomyListener implements Listener
 		{
 			final Player player = event.getPlayer();
 			if (KconEventLogic.deny(Field.SNEAK, player, config.sneakDenyPay,
-					config.sneakDenyLimit, null, null))
+					config.getPayValue(Field.SNEAK, null, null),
+					config.sneakDenyLimit,
+					config.getLimitValue(Field.SNEAK, null, null), null, null))
 			{
 				// Deny
 				event.setCancelled(true);
@@ -1868,7 +2008,8 @@ public class KarmiconomyListener implements Listener
 		{
 			final Player player = event.getPlayer();
 			// Pay on sneak
-			if (!KconEventLogic.hitLimit(Field.SNEAK, player, null, null))
+			if (!KconEventLogic.hitLimit(Field.SNEAK, player,
+					config.getLimitValue(Field.SNEAK, null, null), null, null))
 			{
 				// Try to pay
 				if (KarmicEcon.pay(Field.SNEAK, player, null, null))
@@ -1894,7 +2035,9 @@ public class KarmiconomyListener implements Listener
 		{
 			final Player player = event.getPlayer();
 			if (KconEventLogic.deny(Field.SPRINT, player, config.sprintDenyPay,
-					config.sprintDenyLimit, null, null))
+					config.getPayValue(Field.SPRINT, null, null),
+					config.sprintDenyLimit,
+					config.getLimitValue(Field.SPRINT, null, null), null, null))
 			{
 				// Deny
 				event.setCancelled(true);
@@ -1917,7 +2060,8 @@ public class KarmiconomyListener implements Listener
 		{
 			final Player player = event.getPlayer();
 			// Pay on sprint
-			if (!KconEventLogic.hitLimit(Field.SPRINT, player, null, null))
+			if (!KconEventLogic.hitLimit(Field.SPRINT, player,
+					config.getLimitValue(Field.SPRINT, null, null), null, null))
 			{
 				// Try to pay
 				if (KarmicEcon.pay(Field.SPRINT, player, null, null))

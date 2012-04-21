@@ -732,7 +732,14 @@ public class Config
 					case WORLD_CHANGE:
 						return worldChangePay;
 					default:
+					{
+						if (debugUnhandled)
+						{
+							plugin.getLogger().warning(
+									"Unhandled pay for field " + type.name());
+						}
 						break;
+					}
 				}
 				break;
 			}
@@ -807,7 +814,14 @@ public class Config
 						}
 					}
 					default:
+					{
+						if (debugUnhandled)
+						{
+							plugin.getLogger().warning(
+									"Unhandled pay for field " + type.name());
+						}
 						break;
+					}
 				}
 				break;
 			}
@@ -829,7 +843,14 @@ public class Config
 					case PORTAL_ENTER:
 						return portalEnterPay;
 					default:
+					{
+						if (debugUnhandled)
+						{
+							plugin.getLogger().warning(
+									"Unhandled pay for field " + type.name());
+						}
 						break;
+					}
 				}
 			}
 			case BUCKET:
@@ -845,7 +866,14 @@ public class Config
 					case BUCKET_FILL_WATER:
 						return bucketFillWaterPay;
 					default:
+					{
+						if (debugUnhandled)
+						{
+							plugin.getLogger().warning(
+									"Unhandled pay for field " + type.name());
+						}
 						break;
+					}
 				}
 			}
 			default:
@@ -916,7 +944,14 @@ public class Config
 					case WORLD_CHANGE:
 						return worldChangeLimit;
 					default:
+					{
+						if (debugUnhandled)
+						{
+							plugin.getLogger().warning(
+									"Unhandled limit for field " + type.name());
+						}
 						break;
+					}
 				}
 				break;
 			}
@@ -997,7 +1032,7 @@ public class Config
 						if (debugUnhandled)
 						{
 							plugin.getLogger().warning(
-									"Unhandled Deny Pay for " + type.name());
+									"Unhandled limi for " + type.name());
 						}
 						break;
 					}
@@ -1022,7 +1057,14 @@ public class Config
 					case PORTAL_ENTER:
 						return portalEnterLimit;
 					default:
+					{
+						if (debugUnhandled)
+						{
+							plugin.getLogger().warning(
+									"Unhandled limit for field " + type);
+						}
 						break;
+					}
 				}
 				break;
 			}
@@ -1039,7 +1081,14 @@ public class Config
 					case BUCKET_FILL_WATER:
 						return bucketFillWaterLimit;
 					default:
+					{
+						if (debugUnhandled)
+						{
+							plugin.getLogger().warning(
+									"Unhandled limit for field " + type);
+						}
 						break;
+					}
 				}
 			}
 			default:
@@ -1096,6 +1145,16 @@ public class Config
 							return tameOcelotDenyPay;
 						case TAME_WOLF:
 							return tameWolfDenyPay;
+						default:
+						{
+							if (debugUnhandled)
+							{
+								plugin.getLogger().warning(
+										"Unhandled deny pay for field "
+												+ field.name());
+							}
+							break;
+						}
 					}
 					break;
 				}
@@ -1109,6 +1168,16 @@ public class Config
 							return portalCreateEndDenyPay;
 						case PORTAL_CREATE_CUSTOM:
 							return portalCreateCustomDenyPay;
+						default:
+						{
+							if (debugUnhandled)
+							{
+								plugin.getLogger().warning(
+										"Unhandled deny pay for field "
+												+ field.name());
+							}
+							break;
+						}
 					}
 				}
 				case BUCKET:
@@ -1123,6 +1192,16 @@ public class Config
 							return bucketFillLavaDenyPay;
 						case BUCKET_FILL_WATER:
 							return bucketFillWaterDenyPay;
+						default:
+						{
+							if (debugUnhandled)
+							{
+								plugin.getLogger().warning(
+										"Unhandled deny pay for field "
+												+ field.name());
+							}
+							break;
+						}
 					}
 				}
 				default:

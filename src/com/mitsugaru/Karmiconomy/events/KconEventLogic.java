@@ -18,14 +18,14 @@ public class KconEventLogic
 	private static Karmiconomy plugin;
 	private static Config config;
 	private static DatabaseHandler db;
-	
+
 	public static void init(Karmiconomy kcon)
 	{
 		plugin = kcon;
 		config = kcon.getPluginConfig();
 		db = kcon.getDatabaseHandler();
 	}
-	
+
 	public static void debugEvent(Event event, Map<String, String> details)
 	{
 		plugin.getLogger().info("Event: " + event.getEventName());
@@ -36,11 +36,12 @@ public class KconEventLogic
 	}
 
 	public static boolean deny(Field field, Player player, boolean denyPay,
-			boolean denyLimit, Item item, String command)
+			double pay, boolean denyLimit, int configLimit, Item item,
+			String command)
 	{
 		if (denyPay)
 		{
-			if(KarmicEcon.denyPay(field, player, denyPay, item, command))
+			if (KarmicEcon.denyPay(field, player, pay, item, command))
 			{
 				switch (field.getTable())
 				{
@@ -76,8 +77,7 @@ public class KconEventLogic
 		}
 		if (denyLimit)
 		{
-			final int cLimit = config.getLimitValue(field, item, command);
-			if (cLimit == 0)
+			if (configLimit == 0)
 			{
 				switch (field.getTable())
 				{
@@ -109,12 +109,12 @@ public class KconEventLogic
 				}
 				return true;
 			}
-			else if (cLimit > 0)
+			else if (configLimit > 0)
 			{
 				// Deny by player limit
 				final int limit = db.getData(field, player.getName(), item,
 						command);
-				if (limit >= cLimit)
+				if (limit >= configLimit)
 				{
 					switch (field.getTable())
 					{
@@ -151,14 +151,13 @@ public class KconEventLogic
 		return false;
 	}
 
-	public static boolean hitLimit(Field field, Player player, Item item,
-			String command)
+	public static boolean hitLimit(Field field, Player player, int configLimit,
+			Item item, String command)
 	{
-		final int cLimit = config.getLimitValue(field, item, command);
 		final int limit = db.getData(field, player.getName(), item, command);
-		if (cLimit >= 0)
+		if (configLimit >= 0)
 		{
-			if (limit >= cLimit)
+			if (limit >= configLimit)
 			{
 				// They hit the config limit
 				return true;
@@ -167,8 +166,8 @@ public class KconEventLogic
 		return false;
 	}
 
-	public static void sendLackMessage(Player player, DenyType type, String action,
-			String extra)
+	public static void sendLackMessage(Player player, DenyType type,
+			String action, String extra)
 	{
 		final StringBuilder sb = new StringBuilder();
 		sb.append(ChatColor.RED + Karmiconomy.TAG);
