@@ -117,6 +117,10 @@ public class Commander implements CommandExecutor
 				if(perm.checkPermission(sender, "Karmiconomy.admin"))
 				{
 					config.reloadConfig();
+					if(plugin.mcmmo)
+					{
+						KconMcMMOConfig.reload();
+					}
 					sender.sendMessage(ChatColor.GREEN + Karmiconomy.TAG
 							+ ChatColor.WHITE + " Config reloaded.");
 				}

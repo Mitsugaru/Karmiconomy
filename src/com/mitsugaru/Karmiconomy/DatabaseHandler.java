@@ -98,7 +98,7 @@ public class DatabaseHandler
 						Karmiconomy.TAG + " Created mcmmo table");
 				mysql.createTable("CREATE TABLE "
 						+ Table.MCMMO.getName()
-						+ "(id INT UNSIGNED NOT NULL, partyteleport INT NOT NULL, partyjoin INT NOT NULL, partyleave INT NOT NULL, partykick INT NOT NULL, partychange INT NOT NULL, PRIMARY KEY(id)");
+						+ "(id INT UNSIGNED NOT NULL, partyteleport INT NOT NULL, partyjoin INT NOT NULL, partyleave INT NOT NULL, partykick INT NOT NULL, partychange INT NOT NULL, acrobaticslevel INT NOT NULL, archerylevel INT NOT NULL, axeslevel INT NOT NULL, excavationlevel INT NOT NULL, fishinglevel INT NOT NULL, herbalismlevel INT NOT NULL, mininglevel INT NOT NULL, repairlevel INT NOT NULL, swordslevel INT NOT NULL, taminglevel INT NOT NULL, unarmedlevel INT NOT NULL, woodcuttinglevel INT NOT NULL, acrobaticsgain INT NOT NULL, archerygain INT NOT NULL, axesgain INT NOT NULL, excavationgain INT NOT NULL, fishinggain INT NOT NULL, herbalismgain INT NOT NULL, mininggain INT NOT NULL, repairgain INT NOT NULL, swordsgain INT NOT NULL, taminggain INT NOT NULL, unarmedgain INT NOT NULL, woodcuttinggain INT NOT NULL, PRIMARY KEY(id)");
 			}
 		}
 		else
@@ -156,7 +156,14 @@ public class DatabaseHandler
 						+ Table.BUCKET.getName()
 						+ " (id INTEGER PRIMARY KEY, bemptylava INTEGER NOT NULL, bemptywater INTEGER NOT NULL, bfilllava INTEGER NOT NULL, bfillwater INTEGER NOT NULL);");
 			}
-			// TODO add mcmmo table
+			if (!sqlite.checkTable(Table.MCMMO.getName()))
+			{
+				plugin.getLogger().info(
+						Karmiconomy.TAG + " Created mcmmo table");
+				sqlite.createTable("CREATE TABLE "
+						+ Table.MCMMO.getName()
+						+ "(id INTEGER PRIMARY KEY, partyteleport INTEGER NOT NULL, partyjoin INTEGER NOT NULL, partyleave INTEGER NOT NULL, partykick INTEGER NOT NULL, partychange INTEGER NOT NULL, acrobaticslevel INTEGER NOT NULL, archerylevel INTEGER NOT NULL, axeslevel INTEGER NOT NULL, excavationlevel INTEGER NOT NULL, fishinglevel INTEGER NOT NULL, herbalismlevel INTEGER NOT NULL, mininglevel INTEGER NOT NULL, repairlevel INTEGER NOT NULL, swordslevel INTEGER NOT NULL, taminglevel INTEGER NOT NULL, unarmedlevel INTEGER NOT NULL, woodcuttinglevel INTEGER NOT NULL, acrobaticsgain INTEGER NOT NULL, archerygain INTEGER NOT NULL, axesgain INTEGER NOT NULL, excavationgain INTEGER NOT NULL, fishinggain INTEGER NOT NULL, herbalismgain INTEGER NOT NULL, mininggain INTEGER NOT NULL, repairgain INTEGER NOT NULL, swordsgain INTEGER NOT NULL, taminggain INTEGER NOT NULL, unarmedgain INTEGER NOT NULL, woodcuttinggain INTEGER NOT NULL");
+			}
 		}
 	}
 
@@ -231,7 +238,7 @@ public class DatabaseHandler
 			if (rs.getResult().next())
 			{
 				plugin.getLogger().info(
-						Karmiconomy.TAG + " Importing portal table...");
+						Karmiconomy.TAG + " Importing items table...");
 				PreparedStatement statement = mysql
 						.prepare("INSERT INTO "
 								+ Table.ITEMS.getName()
@@ -255,6 +262,50 @@ public class DatabaseHandler
 			}
 			rs.closeQuery();
 			// TODO import command
+			rs = sqlite.select("SELECT * FROM " + Table.MCMMO.getName() + ";");
+			if(rs.getResult().next())
+			{
+				plugin.getLogger().info(
+						Karmiconomy.TAG + " Importing mcmmo table...");
+				PreparedStatement statement = mysql.prepare("INSERT INTO "
+							+ Table.MCMMO.getName()
+							+ " (id, partyteleport , partyjoin , partyleave , partykick , partychange , acrobaticslevel , archerylevel , axeslevel , excavationlevel , fishinglevel , herbalismlevel , mininglevel , repairlevel , swordslevel , taminglevel , unarmedlevel , woodcuttinglevel , acrobaticsgain , archerygain , axesgain, excavationgain , fishinggain, herbalismgain, mininggain, repairgain, swordsgain, taminggain, unarmedgain, woodcuttinggain) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);");
+				do
+				{
+					statement.setInt(1, rs.getResult().getInt("id"));
+					statement.setInt(2, rs.getResult().getInt("partyteleport"));
+					statement.setString(3, rs.getResult().getString("partyjoin"));
+					statement.setString(4,
+							rs.getResult().getString("partyleave"));
+					statement.setInt(5, rs.getResult().getInt("partykick"));
+					statement.setInt(6, rs.getResult().getInt("partychange"));
+					statement.setInt(7, rs.getResult().getInt("acrobaticslevel"));
+					statement.setInt(8, rs.getResult().getInt("archerylevel"));
+					statement.setInt(9, rs.getResult().getInt("axeslevel"));
+					statement.setInt(10, rs.getResult().getInt("excavationlevel"));
+					statement.setInt(11, rs.getResult().getInt("fishinglevel"));
+					statement.setInt(12, rs.getResult().getInt("herbalismlevel"));
+					statement.setInt(13, rs.getResult().getInt("mininglevel"));
+					statement.setInt(14, rs.getResult().getInt("repairlevel"));
+					statement.setInt(15, rs.getResult().getInt("swordslevel"));
+					statement.setInt(16, rs.getResult().getInt("taminglevel"));
+					statement.setInt(17, rs.getResult().getInt("unarmedlevel"));
+					statement.setInt(18, rs.getResult().getInt("woodcuttinglevel"));
+					statement.setInt(19, rs.getResult().getInt("acrobaticsgain"));
+					statement.setInt(20, rs.getResult().getInt("archerygain"));
+					statement.setInt(21, rs.getResult().getInt("axesgain"));
+					statement.setInt(22, rs.getResult().getInt("excavationgain"));
+					statement.setInt(23, rs.getResult().getInt("fishinggain"));
+					statement.setInt(24, rs.getResult().getInt("herbalismgain"));
+					statement.setInt(25, rs.getResult().getInt("mininggain"));
+					statement.setInt(26, rs.getResult().getInt("repairgain"));
+					statement.setInt(27, rs.getResult().getInt("swordsgain"));
+					statement.setInt(28, rs.getResult().getInt("taminggain"));
+					statement.setInt(29, rs.getResult().getInt("unarmedgain"));
+					statement.setInt(30, rs.getResult().getInt("woodcuttinggain"));
+				}while(rs.getResult().next());
+				statement.close();
+			}
 			rs.closeQuery();
 			rs = sqlite.select("SELECT * FROM " + Table.PORTAL.getName() + ";");
 			if (rs.getResult().next())
@@ -417,7 +468,12 @@ public class DatabaseHandler
 							+ Table.BUCKET.getName()
 							+ " (id, bemptylava, bemptywater, bfilllava, bfillwater) VALUES('"
 							+ id + "','0','0','0','0');");
-					// TODO add mcmmo
+					// Add mcmmo
+					standardQuery("INSERT INTO "
+							+ Table.MCMMO.getName()
+							+ " (id, partyteleport , partyjoin , partyleave , partykick , partychange , acrobaticslevel , archerylevel , axeslevel , excavationlevel , fishinglevel , herbalismlevel , mininglevel , repairlevel , swordslevel , taminglevel , unarmedlevel , woodcuttinglevel , acrobaticsgain , archerygain , axesgain, excavationgain , fishinggain, herbalismgain, mininggain, repairgain, swordsgain, taminggain, unarmedgain, woodcuttinggain) VALUES('"
+							+ id
+							+ "','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0');");
 					return true;
 				}
 				else
@@ -536,7 +592,11 @@ public class DatabaseHandler
 					+ Table.BUCKET.getName()
 					+ " SET bemptylava='0', bemptywater='0', bfilllava='0', bfillwater='0' WHERE id='"
 					+ id + "';");
-			// TODO reset mcmmo
+			// Reset mcmmo
+			standardQuery("UPDATE "
+					+ Table.MCMMO.getName()
+					+ " SET partyteleport='0', partyjoin='0', partyleave='0', partykick='0', partychange='0', acrobaticslevel='0', archerylevel='0', axeslevel='0', excavationlevel='0', fishinglevel='0', herbalismlevel='0', mininglevel='0', repairlevel='0', swordslevel='0', taminglevel='0', unarmedlevel='0', woodcuttinglevel='0', acrobaticsgain='0', archerygain='0', axesgain='0', excavationgain='0', fishinggain='0', herbalismgain='0', mininggain='0', repairgain='0', swordsgain='0', taminggain='0', unarmedgain='0', woodcuttinggain='0' WHERE id='"
+					+ id + "';");
 			// Drop everything in items for player id
 			standardQuery("DELETE FROM " + Table.ITEMS.getName()
 					+ " WHERE id='" + id + "';");
@@ -942,7 +1002,26 @@ public class DatabaseHandler
 				Table.BUCKET, "bfillwater"), MCMMO_PARTY_TELEPORT(Table.MCMMO,
 				"partyteleport"), MCMMO_PARTY_JOIN(Table.MCMMO, "partyjoin"), MCMMO_PARTY_LEAVE(
 				Table.MCMMO, "partyleave"), MCMMO_PARTY_KICK(Table.MCMMO,
-				"partykick"), MCMMO_PARTY_CHANGE(Table.MCMMO, "partychange");
+				"partykick"), MCMMO_PARTY_CHANGE(Table.MCMMO, "partychange"), MCMMO_LEVEL_ACROBATICS(
+				Table.MCMMO, "acrobaticslevel"), MCMMO_LEVEL_ARCHERY(
+				Table.MCMMO, "archerylevel"), MCMMO_LEVEL_AXES(Table.MCMMO,
+				"axeslevel"), MCMMO_LEVEL_EXCAVATION(Table.MCMMO,
+				"excavationlevel"), MCMMO_LEVEL_FISHING(Table.MCMMO,
+				"fishinglevel"), MCMMO_LEVEL_HERBALISM(Table.MCMMO,
+				"herbalismlevel"), MCMMO_LEVEL_MINING(Table.MCMMO,
+				"mininglevel"), MCMMO_LEVEL_REPAIR(Table.MCMMO, "repairlevel"), MCMMO_LEVEL_SWORDS(
+				Table.MCMMO, "swordslevel"), MCMMO_LEVEL_TAMING(Table.MCMMO,
+				"taminglevel"), MCMMO_LEVEL_UNARMED(Table.MCMMO, "unarmedlevel"), MCMMO_LEVEL_WOODCUTTING(
+				Table.MCMMO, "woodcuttinglevel"), MCMMO_GAIN_ACROBATICS(
+				Table.MCMMO, "acrobaticsgain"), MCMMO_GAIN_ARCHERY(Table.MCMMO,
+				"archerygain"), MCMMO_GAIN_AXES(Table.MCMMO, "axesgain"), MCMMO_GAIN_EXCAVATION(
+				Table.MCMMO, "excavationgain"), MCMMO_GAIN_FISHING(Table.MCMMO,
+				"fishinggain"), MCMMO_GAIN_HERBALISM(Table.MCMMO,
+				"herbalismgain"), MCMMO_GAIN_MINING(Table.MCMMO, "mininggain"), MCMMO_GAIN_REPAIR(
+				Table.MCMMO, "repairgain"), MCMMO_GAIN_SWORDS(Table.MCMMO,
+				"swordsgain"), MCMMO_GAIN_TAMING(Table.MCMMO, "taminggain"), MCMMO_GAIN_UNARMED(
+				Table.MCMMO, "unarmedgain"), MCMMO_GAIN_WOODCUTTING(
+				Table.MCMMO, "woodcuttinggain");
 		private final Table table;
 		private final String columnname;
 

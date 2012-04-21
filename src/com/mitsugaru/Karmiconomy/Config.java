@@ -1604,7 +1604,6 @@ public class Config
 			}
 			catch (IOException e1)
 			{
-				// INFO Auto-generated catch block
 				plugin.getLogger().warning(
 						"File I/O Exception on saving karma list");
 				e1.printStackTrace();
