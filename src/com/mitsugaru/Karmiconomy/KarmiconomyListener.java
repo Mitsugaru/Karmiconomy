@@ -3,9 +3,6 @@ package com.mitsugaru.Karmiconomy;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.milkbowl.vault.economy.Economy;
-import net.milkbowl.vault.economy.EconomyResponse;
-
 import org.bukkit.ChatColor;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -51,16 +48,13 @@ public class KarmiconomyListener implements Listener
 {
 	private Karmiconomy plugin;
 	private DatabaseHandler db;
-	private Economy eco;
 	private Config config;
 	// TODO create thread that resets this every so often? May not be necessary
 	// Maybe every 2 minutes?
-	private Map<String, String> sentMessages = new HashMap<String, String>();
 
 	public KarmiconomyListener(Karmiconomy plugin)
 	{
 		this.plugin = plugin;
-		this.eco = plugin.getEconomy();
 		this.db = plugin.getDatabaseHandler();
 		this.config = plugin.getPluginConfig();
 	}
@@ -98,7 +92,7 @@ public class KarmiconomyListener implements Listener
 			if (!hitLimit(Field.CHAT, player, null, null))
 			{
 				// Try to pay
-				if (pay(Field.CHAT, player, null, null))
+				if (KarmicEcon.pay(Field.CHAT, player, null, null))
 				{
 					// Increment
 					db.incrementData(Field.CHAT, player.getName(), null, null);
@@ -148,7 +142,7 @@ public class KarmiconomyListener implements Listener
 			if (!hitLimit(Field.COMMAND, player, null, event.getMessage()))
 			{
 				// Try to pay
-				if (pay(Field.COMMAND, player, null, event.getMessage()))
+				if (KarmicEcon.pay(Field.COMMAND, player, null, event.getMessage()))
 				{
 					// Increment
 					db.incrementData(Field.COMMAND, player.getName(), null,
@@ -221,7 +215,7 @@ public class KarmiconomyListener implements Listener
 			if (!hitLimit(Field.BLOCK_PLACE, player, placed, null))
 			{
 				// Try to pay
-				if (pay(Field.BLOCK_PLACE, player, placed, null))
+				if (KarmicEcon.pay(Field.BLOCK_PLACE, player, placed, null))
 				{
 					// Increment
 					db.incrementData(Field.BLOCK_PLACE, player.getName(),
@@ -295,7 +289,7 @@ public class KarmiconomyListener implements Listener
 			if (!hitLimit(Field.BLOCK_DESTROY, player, destroyed, null))
 			{
 				// Try to pay
-				if (pay(Field.BLOCK_DESTROY, player, destroyed, null))
+				if (KarmicEcon.pay(Field.BLOCK_DESTROY, player, destroyed, null))
 				{
 					// Increment
 					db.incrementData(Field.BLOCK_DESTROY, player.getName(),
@@ -390,7 +384,7 @@ public class KarmiconomyListener implements Listener
 				if (!hitLimit(Field.ITEM_CRAFT, player, craft, null))
 				{
 					// Try to pay
-					if (pay(Field.ITEM_CRAFT, player, craft, null))
+					if (KarmicEcon.pay(Field.ITEM_CRAFT, player, craft, null))
 					{
 						// Increment
 						db.incrementData(Field.ITEM_CRAFT, player.getName(),
@@ -466,7 +460,7 @@ public class KarmiconomyListener implements Listener
 			if (!hitLimit(Field.ITEM_ENCHANT, player, enchant, null))
 			{
 				// Try to pay
-				if (pay(Field.ITEM_ENCHANT, player, enchant, null))
+				if (KarmicEcon.pay(Field.ITEM_ENCHANT, player, enchant, null))
 				{
 					// Increment
 					db.incrementData(Field.ITEM_ENCHANT, player.getName(),
@@ -591,7 +585,7 @@ public class KarmiconomyListener implements Listener
 								null))
 						{
 							// Try to pay
-							if (pay(Field.PORTAL_CREATE_NETHER, player, null,
+							if (KarmicEcon.pay(Field.PORTAL_CREATE_NETHER, player, null,
 									null))
 							{
 								// Increment
@@ -607,7 +601,7 @@ public class KarmiconomyListener implements Listener
 								null))
 						{
 							// Try to pay
-							if (pay(Field.PORTAL_CREATE_END, player, null, null))
+							if (KarmicEcon.pay(Field.PORTAL_CREATE_END, player, null, null))
 							{
 								// Increment
 								db.incrementData(Field.PORTAL_CREATE_END,
@@ -622,7 +616,7 @@ public class KarmiconomyListener implements Listener
 								null))
 						{
 							// Try to pay
-							if (pay(Field.PORTAL_CREATE_CUSTOM, player, null,
+							if (KarmicEcon.pay(Field.PORTAL_CREATE_CUSTOM, player, null,
 									null))
 							{
 								// Increment
@@ -671,7 +665,7 @@ public class KarmiconomyListener implements Listener
 				if (!hitLimit(Field.PORTAL_ENTER, player, null, null))
 				{
 					// Try to pay
-					if (pay(Field.PORTAL_ENTER, player, null, null))
+					if (KarmicEcon.pay(Field.PORTAL_ENTER, player, null, null))
 					{
 						// Increment
 						db.incrementData(Field.PORTAL_ENTER, player.getName(),
@@ -741,7 +735,7 @@ public class KarmiconomyListener implements Listener
 				if (!hitLimit(Field.BOW_SHOOT, player, null, null))
 				{
 					// Try to pay
-					if (pay(Field.BOW_SHOOT, player, null, null))
+					if (KarmicEcon.pay(Field.BOW_SHOOT, player, null, null))
 					{
 						// Increment
 						db.incrementData(Field.BOW_SHOOT, player.getName(),
@@ -852,7 +846,7 @@ public class KarmiconomyListener implements Listener
 						if (!hitLimit(Field.TAME_OCELOT, player, null, null))
 						{
 							// Try to pay
-							if (pay(Field.TAME_OCELOT, player, null, null))
+							if (KarmicEcon.pay(Field.TAME_OCELOT, player, null, null))
 							{
 								// Increment
 								db.incrementData(Field.TAME_OCELOT,
@@ -867,7 +861,7 @@ public class KarmiconomyListener implements Listener
 						if (!hitLimit(Field.TAME_WOLF, player, null, null))
 						{
 							// Try to pay
-							if (pay(Field.TAME_WOLF, player, null, null))
+							if (KarmicEcon.pay(Field.TAME_WOLF, player, null, null))
 							{
 								// Increment
 								db.incrementData(Field.TAME_WOLF,
@@ -942,7 +936,7 @@ public class KarmiconomyListener implements Listener
 			if (!hitLimit(Field.PAINTING_PLACE, player, null, null))
 			{
 				// Try to pay
-				if (pay(Field.PAINTING_PLACE, player, null, null))
+				if (KarmicEcon.pay(Field.PAINTING_PLACE, player, null, null))
 				{
 					// Increment
 					db.incrementData(Field.PAINTING_PLACE, player.getName(),
@@ -1001,7 +995,7 @@ public class KarmiconomyListener implements Listener
 			if (!hitLimit(Field.BED_ENTER, player, null, null))
 			{
 				// Try to pay
-				if (pay(Field.BED_ENTER, player, null, null))
+				if (KarmicEcon.pay(Field.BED_ENTER, player, null, null))
 				{
 					// Increment
 					db.incrementData(Field.BED_ENTER, player.getName(), null,
@@ -1031,7 +1025,7 @@ public class KarmiconomyListener implements Listener
 			if (!hitLimit(Field.BED_LEAVE, player, null, null))
 			{
 				// Try to pay
-				if (pay(Field.BED_LEAVE, player, null, null))
+				if (KarmicEcon.pay(Field.BED_LEAVE, player, null, null))
 				{
 					// Increment
 					db.incrementData(Field.BED_LEAVE, player.getName(), null,
@@ -1132,7 +1126,7 @@ public class KarmiconomyListener implements Listener
 					if (!hitLimit(Field.BUCKET_EMPTY_LAVA, player, null, null))
 					{
 						// Try to pay
-						if (pay(Field.BUCKET_EMPTY_LAVA, player, null, null))
+						if (KarmicEcon.pay(Field.BUCKET_EMPTY_LAVA, player, null, null))
 						{
 							// Increment
 							db.incrementData(Field.BUCKET_EMPTY_LAVA,
@@ -1147,7 +1141,7 @@ public class KarmiconomyListener implements Listener
 					if (!hitLimit(Field.BUCKET_EMPTY_WATER, player, null, null))
 					{
 						// Try to pay
-						if (pay(Field.BUCKET_EMPTY_WATER, player, null, null))
+						if (KarmicEcon.pay(Field.BUCKET_EMPTY_WATER, player, null, null))
 						{
 							// Increment
 							db.incrementData(Field.BUCKET_EMPTY_WATER,
@@ -1267,7 +1261,7 @@ public class KarmiconomyListener implements Listener
 					if (!hitLimit(Field.BUCKET_FILL_LAVA, player, null, null))
 					{
 						// Try to pay
-						if (pay(Field.BUCKET_FILL_LAVA, player, null, null))
+						if (KarmicEcon.pay(Field.BUCKET_FILL_LAVA, player, null, null))
 						{
 							// Increment
 							db.incrementData(Field.BUCKET_FILL_LAVA,
@@ -1282,7 +1276,7 @@ public class KarmiconomyListener implements Listener
 					if (!hitLimit(Field.BUCKET_FILL_WATER, player, null, null))
 					{
 						// Try to pay
-						if (pay(Field.BUCKET_FILL_WATER, player, null, null))
+						if (KarmicEcon.pay(Field.BUCKET_FILL_WATER, player, null, null))
 						{
 							// Increment
 							db.incrementData(Field.BUCKET_FILL_WATER,
@@ -1332,7 +1326,7 @@ public class KarmiconomyListener implements Listener
 			if (!hitLimit(Field.WORLD_CHANGE, player, null, null))
 			{
 				// Try to pay
-				if (pay(Field.WORLD_CHANGE, player, null, null))
+				if (KarmicEcon.pay(Field.WORLD_CHANGE, player, null, null))
 				{
 					// Increment
 					db.incrementData(Field.WORLD_CHANGE, player.getName(),
@@ -1362,7 +1356,7 @@ public class KarmiconomyListener implements Listener
 			if (!hitLimit(Field.DEATH, player, null, null))
 			{
 				// Try to pay
-				if (pay(Field.DEATH, player, null, null))
+				if (KarmicEcon.pay(Field.DEATH, player, null, null))
 				{
 					// Increment
 					db.incrementData(Field.DEATH, player.getName(), null, null);
@@ -1396,7 +1390,7 @@ public class KarmiconomyListener implements Listener
 			if (!hitLimit(Field.RESPAWN, player, null, null))
 			{
 				// Try to pay
-				if (pay(Field.RESPAWN, player, null, null))
+				if (KarmicEcon.pay(Field.RESPAWN, player, null, null))
 				{
 					// Increment
 					db.incrementData(Field.RESPAWN, player.getName(), null,
@@ -1465,7 +1459,7 @@ public class KarmiconomyListener implements Listener
 			if (!hitLimit(Field.ITEM_PICKUP, player, pickup, null))
 			{
 				// Try to pay
-				if (pay(Field.ITEM_PICKUP, player, pickup, null))
+				if (KarmicEcon.pay(Field.ITEM_PICKUP, player, pickup, null))
 				{
 					// Increment
 					db.incrementData(Field.ITEM_PICKUP, player.getName(),
@@ -1534,7 +1528,7 @@ public class KarmiconomyListener implements Listener
 			if (!hitLimit(Field.ITEM_DROP, player, dropped, null))
 			{
 				// Try to pay
-				if (pay(Field.ITEM_DROP, player, dropped, null))
+				if (KarmicEcon.pay(Field.ITEM_DROP, player, dropped, null))
 				{
 					// Increment
 					db.incrementData(Field.ITEM_DROP, player.getName(),
@@ -1565,7 +1559,7 @@ public class KarmiconomyListener implements Listener
 			if (!hitLimit(Field.EGG_THROW, player, null, null))
 			{
 				// Try to pay
-				if (pay(Field.EGG_THROW, player, null, null))
+				if (KarmicEcon.pay(Field.EGG_THROW, player, null, null))
 				{
 					// Increment
 					db.incrementData(Field.EGG_THROW, player.getName(), null,
@@ -1668,7 +1662,7 @@ public class KarmiconomyListener implements Listener
 					if (!hitLimit(Field.CREATIVE, player, null, null))
 					{
 						// Try to pay
-						if (pay(Field.CREATIVE, player, null, null))
+						if (KarmicEcon.pay(Field.CREATIVE, player, null, null))
 						{
 							// Increment
 							db.incrementData(Field.CREATIVE, player.getName(),
@@ -1682,7 +1676,7 @@ public class KarmiconomyListener implements Listener
 					if (!hitLimit(Field.SURVIVAL, player, null, null))
 					{
 						// Try to pay
-						if (pay(Field.SURVIVAL, player, null, null))
+						if (KarmicEcon.pay(Field.SURVIVAL, player, null, null))
 						{
 							// Increment
 							db.incrementData(Field.SURVIVAL, player.getName(),
@@ -1751,7 +1745,7 @@ public class KarmiconomyListener implements Listener
 				if (!hitLimit(Field.JOIN, player, null, null))
 				{
 					// Try to pay
-					if (pay(Field.JOIN, player, null, null))
+					if (KarmicEcon.pay(Field.JOIN, player, null, null))
 					{
 						// Increment
 						db.incrementData(Field.JOIN, player.getName(), null,
@@ -1782,7 +1776,7 @@ public class KarmiconomyListener implements Listener
 			if (!hitLimit(Field.KICK, player, null, null))
 			{
 				// Try to pay
-				if (pay(Field.KICK, player, null, null))
+				if (KarmicEcon.pay(Field.KICK, player, null, null))
 				{
 					// Increment
 					db.incrementData(Field.KICK, player.getName(), null, null);
@@ -1808,9 +1802,9 @@ public class KarmiconomyListener implements Listener
 		{
 			// Remove any message from cache
 			final Player player = event.getPlayer();
-			if (sentMessages.containsKey(player.getName()))
+			if (Karmiconomy.sentMessages.containsKey(player.getName()))
 			{
-				sentMessages.remove(player.getName());
+				Karmiconomy.sentMessages.remove(player.getName());
 			}
 			if (config.quit)
 			{
@@ -1819,7 +1813,7 @@ public class KarmiconomyListener implements Listener
 				if (!hitLimit(Field.QUIT, player, null, null))
 				{
 					// Try to pay
-					if (pay(Field.QUIT, player, null, null))
+					if (KarmicEcon.pay(Field.QUIT, player, null, null))
 					{
 						// Increment
 						db.incrementData(Field.QUIT, player.getName(), null,
@@ -1874,7 +1868,7 @@ public class KarmiconomyListener implements Listener
 			if (!hitLimit(Field.SNEAK, player, null, null))
 			{
 				// Try to pay
-				if (pay(Field.SNEAK, player, null, null))
+				if (KarmicEcon.pay(Field.SNEAK, player, null, null))
 				{
 					// Increment
 					db.incrementData(Field.SNEAK, player.getName(), null, null);
@@ -1923,7 +1917,7 @@ public class KarmiconomyListener implements Listener
 			if (!hitLimit(Field.SPRINT, player, null, null))
 			{
 				// Try to pay
-				if (pay(Field.SPRINT, player, null, null))
+				if (KarmicEcon.pay(Field.SPRINT, player, null, null))
 				{
 					// Increment
 					db.incrementData(Field.SPRINT, player.getName(), null, null);
@@ -2056,126 +2050,43 @@ public class KarmiconomyListener implements Listener
 		}
 	}
 
-	private boolean pay(Field field, Player player, Item item, String command)
-	{
-		final double amount = config.getPayValue(field, item, command);
-		EconomyResponse response = null;
-		if (amount == 0.0)
-		{
-			// Just record that it happened
-			return true;
-		}
-		else if (amount > 0.0)
-		{
-			response = eco.depositPlayer(player.getName(), amount);
-		}
-		else if (amount < 0.0)
-		{
-			response = eco.withdrawPlayer(player.getName(), (amount * -1));
-		}
-		if (response != null)
-		{
-			String message = "";
-			switch (response.type)
-			{
-				case FAILURE:
-				{
-					if (config.getDenyPay(field, item))
-					{
-						message = ChatColor.RED + Karmiconomy.TAG
-								+ " Could not pay " + ChatColor.GOLD + amount
-								+ ChatColor.RED + " for " + ChatColor.AQUA
-								+ field.name();
-						player.sendMessage(message);
-						sentMessages.put(player.getName(), message);
-						if (config.debugEconomy)
-						{
-							plugin.getLogger().severe(
-									"Eco Failure: " + response.errorMessage);
-						}
-					}
-					break;
-				}
-				case NOT_IMPLEMENTED:
-				{
-					message = ChatColor.RED + Karmiconomy.TAG
-							+ " Could not pay " + ChatColor.GOLD + amount
-							+ ChatColor.RED + " for " + ChatColor.AQUA
-							+ field.name();
-					player.sendMessage(message);
-					sentMessages.put(player.getName(), message);
-					if (config.debugEconomy)
-					{
-						plugin.getLogger()
-								.severe("Eco not implemented: "
-										+ response.errorMessage);
-					}
-					break;
-				}
-				case SUCCESS:
-				{
-					if (config.debugEconomy)
-					{
-						plugin.getLogger().info(
-								"Eco success for player '" + player.getName()
-										+ "' of amount: " + amount);
-					}
-					return true;
-				}
-				default:
-					break;
-			}
-		}
-		// Unsuccessful transaction
-		return false;
-	}
-
 	private boolean deny(Field field, Player player, boolean denyPay,
 			boolean denyLimit, Item item, String command)
 	{
 		if (denyPay)
 		{
-			// Deny by player balance
-			final double balance = eco.getBalance(player.getName());
-			double pay = config.getPayValue(field, item, command);
-			if (pay < 0.0)
+			if(KarmicEcon.denyPay(field, player, denyPay, item, command))
 			{
-				// Only care about negatives. Need to change to positive for
-				// comparison.
-				pay *= -1;
-				if (pay > balance)
+				switch (field.getTable())
 				{
-					switch (field.getTable())
+					case COMMAND:
 					{
-						case COMMAND:
-						{
-							sendLackMessage(player, DenyType.MONEY,
-									field.name(), command);
-							break;
-						}
-						case ITEMS:
-						{
-							sendLackMessage(player, DenyType.MONEY,
-									field.name(), item.name);
-							break;
-						}
-						default:
-						{
-							sendLackMessage(player, DenyType.MONEY,
-									field.name(), null);
-							break;
-						}
+						sendLackMessage(player, DenyType.MONEY, field.name(),
+								command);
+						break;
 					}
-
-					if (config.debugEvents)
+					case ITEMS:
 					{
-						plugin.getLogger().info(
-								"Denied " + field + " for player "
-										+ player.getName() + " for "
-										+ DenyType.MONEY);
+						sendLackMessage(player, DenyType.MONEY, field.name(),
+								item.name);
+						break;
 					}
-					return true;
+					default:
+					{
+						sendLackMessage(player, DenyType.MONEY, field.name(),
+								null);
+						break;
+					}
 				}
+
+				if (config.debugEvents)
+				{
+					plugin.getLogger().info(
+							"Denied " + field + " for player "
+									+ player.getName() + " for "
+									+ DenyType.MONEY);
+				}
+				return true;
 			}
 		}
 		if (denyLimit)
@@ -2297,16 +2208,16 @@ public class KarmiconomyListener implements Listener
 		boolean send = true;
 		// Only send message if they haven't already gotten it. Should stop
 		// against spamming.
-		if (sentMessages.containsKey(player.getName()))
+		if (Karmiconomy.sentMessages.containsKey(player.getName()))
 		{
-			if (sentMessages.get(player.getName()).equals(out))
+			if (Karmiconomy.sentMessages.get(player.getName()).equals(out))
 			{
 				send = false;
 			}
 		}
 		if (send)
 		{
-			sentMessages.put(player.getName(), out);
+			Karmiconomy.sentMessages.put(player.getName(), out);
 			player.sendMessage(out);
 		}
 
