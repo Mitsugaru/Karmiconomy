@@ -54,6 +54,7 @@ public class KarmicEcon
 	public static boolean denyPay(Field field, Player player, double pay, Item item,
 			String command)
 	{
+		boolean paid = false;
 		if (vault)
 		{
 			// Deny by player balance
@@ -65,7 +66,7 @@ public class KarmicEcon
 				pay *= -1;
 				if (pay > balance)
 				{
-					return true;
+					paid = true;
 				}
 			}
 		}
@@ -78,16 +79,17 @@ public class KarmicEcon
 				pay *= 1;
 				if (pay > playerPoints)
 				{
-					return true;
+					paid = true;
 				}
 			}
 		}
-		return false;
+		return paid;
 	}
 
 	public static boolean pay(Field field, Player player, Item item,
 			String command)
 	{
+		boolean paid = false;
 		final double amount = config.getPayValue(field, item, command);
 		if (amount == 0.0)
 		{
@@ -155,7 +157,7 @@ public class KarmicEcon
 											+ player.getName()
 											+ "' of amount: " + amount);
 						}
-						return true;
+						paid = true;;
 					}
 					default:
 						break;
@@ -174,6 +176,7 @@ public class KarmicEcon
 				plugin.getServer().dispatchCommand(
 						plugin.getServer().getConsoleSender(),
 						"points give " + player.getName() + " +" + points);
+				paid = true;
 			}
 			else if (points < 0)
 			{
@@ -181,9 +184,10 @@ public class KarmicEcon
 				plugin.getServer().dispatchCommand(
 						plugin.getServer().getConsoleSender(),
 						"points give " + player.getName() + " -" + points);
+				paid = true;
 			}
 		}
 		// Unsuccessful transaction
-		return false;
+		return paid;
 	}
 }
