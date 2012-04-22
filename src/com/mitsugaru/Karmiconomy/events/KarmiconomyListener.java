@@ -53,9 +53,6 @@ public class KarmiconomyListener implements Listener
 	private DatabaseHandler db;
 	private Config config;
 
-	// TODO create thread that resets this every so often? May not be necessary
-	// Maybe every 2 minutes?
-
 	public KarmiconomyListener(Karmiconomy plugin)
 	{
 		this.plugin = plugin;
