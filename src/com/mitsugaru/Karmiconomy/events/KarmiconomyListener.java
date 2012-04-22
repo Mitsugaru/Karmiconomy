@@ -1012,7 +1012,6 @@ public class KarmiconomyListener implements Listener
 							null, null);
 				}
 			}
-			// TODO also need to get painting break
 			if (config.debugEvents)
 			{
 				final Map<String, String> details = new HashMap<String, String>();
@@ -1408,7 +1407,6 @@ public class KarmiconomyListener implements Listener
 				details.put("Player", player.getName());
 				if (event.getBucket() != null)
 				{
-					// TODO change this the specific type
 					details.put("Bucket", event.getBucket().toString());
 				}
 				if (event.getBlockClicked() != null)
