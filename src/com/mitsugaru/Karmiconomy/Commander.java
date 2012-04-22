@@ -13,6 +13,9 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
+import com.mitsugaru.Karmiconomy.config.Config;
+import com.mitsugaru.Karmiconomy.config.McMMOConfig;
+
 @SuppressWarnings("unused")
 public class Commander implements CommandExecutor
 {
@@ -119,7 +122,7 @@ public class Commander implements CommandExecutor
 					config.reloadConfig();
 					if(plugin.mcmmo)
 					{
-						KconMcMMOConfig.reload();
+						McMMOConfig.reload();
 					}
 					sender.sendMessage(ChatColor.GREEN + Karmiconomy.TAG
 							+ ChatColor.WHITE + " Config reloaded.");
@@ -214,8 +217,8 @@ public class Commander implements CommandExecutor
 	// TODO revise
 	private void displayHelp(CommandSender sender)
 	{
-		sender.sendMessage(ChatColor.BLUE + "=====" + ChatColor.RED
-				+ "Karmiconomy" + ChatColor.BLUE + "=====");
+		sender.sendMessage(ChatColor.BLUE + "==========" + ChatColor.GOLD
+				+ "Karmiconomy" + ChatColor.BLUE + "==========");
 		/*sender.sendMessage(ChatColor.GREEN + "/ks" + ChatColor.YELLOW
 				+ " : Show karma");
 		if (perm.checkPermission(sender, "KarmicShare.give"))

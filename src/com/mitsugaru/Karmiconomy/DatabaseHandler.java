@@ -6,6 +6,8 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import com.mitsugaru.Karmiconomy.config.Config;
+
 import lib.Mitsugaru.SQLibrary.MySQL;
 import lib.Mitsugaru.SQLibrary.SQLite;
 import lib.Mitsugaru.SQLibrary.Database.Query;

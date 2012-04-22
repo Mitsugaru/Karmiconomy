@@ -6,8 +6,9 @@ import java.util.Map;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.mitsugaru.Karmiconomy.config.Config;
 import com.mitsugaru.Karmiconomy.events.KarmiconomyListener;
-import com.mitsugaru.Karmiconomy.events.KconEventLogic;
+import com.mitsugaru.Karmiconomy.events.EventLogic;
 import com.mitsugaru.Karmiconomy.events.McMMOListener;
 
 public class Karmiconomy extends JavaPlugin
@@ -72,7 +73,7 @@ public class Karmiconomy extends JavaPlugin
 		commander = new Commander(this);
 		getCommand("kcon").setExecutor(commander);
 		// Setup listeners
-		KconEventLogic.init(this);
+		EventLogic.init(this);
 		KarmiconomyListener listener = new KarmiconomyListener(this);
 		this.getServer().getPluginManager().registerEvents(listener, this);
 		Plugin mcmmoPlugin = getServer().getPluginManager()

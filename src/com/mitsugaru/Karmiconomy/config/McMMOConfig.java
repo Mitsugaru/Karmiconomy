@@ -1,4 +1,4 @@
-package com.mitsugaru.Karmiconomy;
+package com.mitsugaru.Karmiconomy.config;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -10,9 +10,12 @@ import java.util.Map.Entry;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 
+import com.mitsugaru.Karmiconomy.DatabaseHandler;
+import com.mitsugaru.Karmiconomy.Item;
+import com.mitsugaru.Karmiconomy.Karmiconomy;
 import com.mitsugaru.Karmiconomy.DatabaseHandler.Field;
 
-public class KconMcMMOConfig
+public class McMMOConfig
 {
 	private static Karmiconomy plugin;
 	private static File file;
@@ -43,7 +46,7 @@ public class KconMcMMOConfig
 			tamingLevelLimit, tamingXpLimit, unarmedLevelLimit, unarmedXpLimit, woodcuttingLevelLimit,
 			woodcuttingXpLimit;
 
-	public KconMcMMOConfig(Karmiconomy kcon)
+	public McMMOConfig(Karmiconomy kcon)
 	{
 		plugin = kcon;
 		// Grab file

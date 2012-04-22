@@ -6,14 +6,14 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 
-import com.mitsugaru.Karmiconomy.Config;
 import com.mitsugaru.Karmiconomy.DatabaseHandler;
 import com.mitsugaru.Karmiconomy.Item;
 import com.mitsugaru.Karmiconomy.KarmicEcon;
 import com.mitsugaru.Karmiconomy.Karmiconomy;
 import com.mitsugaru.Karmiconomy.DatabaseHandler.Field;
+import com.mitsugaru.Karmiconomy.config.Config;
 
-public class KconEventLogic
+public class EventLogic
 {
 	private static Karmiconomy plugin;
 	private static Config config;

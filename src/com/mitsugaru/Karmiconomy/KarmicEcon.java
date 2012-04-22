@@ -9,6 +9,7 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
 import com.mitsugaru.Karmiconomy.DatabaseHandler.Field;
+import com.mitsugaru.Karmiconomy.config.Config;
 
 public class KarmicEcon
 {

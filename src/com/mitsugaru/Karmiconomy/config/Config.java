@@ -4,7 +4,7 @@
  * 
  * @author Mitsugaru
  */
-package com.mitsugaru.Karmiconomy;
+package com.mitsugaru.Karmiconomy.config;
 
 import java.io.File;
 import java.io.IOException;
@@ -16,6 +16,9 @@ import java.util.Map.Entry;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 
+import com.mitsugaru.Karmiconomy.DatabaseHandler;
+import com.mitsugaru.Karmiconomy.Item;
+import com.mitsugaru.Karmiconomy.Karmiconomy;
 import com.mitsugaru.Karmiconomy.DatabaseHandler.Field;
 
 public class Config

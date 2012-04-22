@@ -15,19 +15,19 @@ import com.gmail.nossr50.events.party.McMMOPartyTeleportEvent;
 import com.mitsugaru.Karmiconomy.DatabaseHandler;
 import com.mitsugaru.Karmiconomy.KarmicEcon;
 import com.mitsugaru.Karmiconomy.Karmiconomy;
-import com.mitsugaru.Karmiconomy.KconMcMMOConfig;
 import com.mitsugaru.Karmiconomy.DatabaseHandler.Field;
+import com.mitsugaru.Karmiconomy.config.McMMOConfig;
 
 public class McMMOListener implements Listener
 {
 	private Karmiconomy plugin;
-	private KconMcMMOConfig config;
+	private McMMOConfig config;
 	private DatabaseHandler db;
 
 	public McMMOListener(Karmiconomy plugin)
 	{
 		this.plugin = plugin;
-		config = new KconMcMMOConfig(plugin);
+		config = new McMMOConfig(plugin);
 		db = plugin.getDatabaseHandler();
 	}
 	
@@ -41,7 +41,7 @@ public class McMMOListener implements Listener
 			{
 				case ACROBATICS:
 				{
-					if (!KconEventLogic
+					if (!EventLogic
 							.hitLimit(Field.MCMMO_GAIN_ACROBATICS, player, config
 									.getLimitValue(Field.MCMMO_GAIN_ACROBATICS, null,
 											null), null, null))
@@ -59,7 +59,7 @@ public class McMMOListener implements Listener
 				}
 				case ARCHERY:
 				{
-					if (!KconEventLogic
+					if (!EventLogic
 							.hitLimit(Field.MCMMO_GAIN_ARCHERY, player, config
 									.getLimitValue(Field.MCMMO_GAIN_ARCHERY, null,
 											null), null, null))
@@ -77,7 +77,7 @@ public class McMMOListener implements Listener
 				}
 				case AXES:
 				{
-					if (!KconEventLogic
+					if (!EventLogic
 							.hitLimit(Field.MCMMO_GAIN_AXES, player, config
 									.getLimitValue(Field.MCMMO_GAIN_AXES, null,
 											null), null, null))
@@ -95,7 +95,7 @@ public class McMMOListener implements Listener
 				}
 				case EXCAVATION:
 				{
-					if (!KconEventLogic
+					if (!EventLogic
 							.hitLimit(Field.MCMMO_GAIN_EXCAVATION, player, config
 									.getLimitValue(Field.MCMMO_GAIN_EXCAVATION, null,
 											null), null, null))
@@ -113,7 +113,7 @@ public class McMMOListener implements Listener
 				}
 				case FISHING:
 				{
-					if (!KconEventLogic
+					if (!EventLogic
 							.hitLimit(Field.MCMMO_GAIN_FISHING, player, config
 									.getLimitValue(Field.MCMMO_GAIN_FISHING, null,
 											null), null, null))
@@ -131,7 +131,7 @@ public class McMMOListener implements Listener
 				}
 				case HERBALISM:
 				{
-					if (!KconEventLogic
+					if (!EventLogic
 							.hitLimit(Field.MCMMO_GAIN_HERBALISM, player, config
 									.getLimitValue(Field.MCMMO_GAIN_HERBALISM, null,
 											null), null, null))
@@ -149,7 +149,7 @@ public class McMMOListener implements Listener
 				}
 				case MINING:
 				{
-					if (!KconEventLogic
+					if (!EventLogic
 							.hitLimit(Field.MCMMO_GAIN_MINING, player, config
 									.getLimitValue(Field.MCMMO_GAIN_MINING, null,
 											null), null, null))
@@ -167,7 +167,7 @@ public class McMMOListener implements Listener
 				}
 				case REPAIR:
 				{
-					if (!KconEventLogic
+					if (!EventLogic
 							.hitLimit(Field.MCMMO_GAIN_REPAIR, player, config
 									.getLimitValue(Field.MCMMO_GAIN_REPAIR, null,
 											null), null, null))
@@ -185,7 +185,7 @@ public class McMMOListener implements Listener
 				}
 				case SWORDS:
 				{
-					if (!KconEventLogic
+					if (!EventLogic
 							.hitLimit(Field.MCMMO_GAIN_SWORDS, player, config
 									.getLimitValue(Field.MCMMO_GAIN_SWORDS, null,
 											null), null, null))
@@ -203,7 +203,7 @@ public class McMMOListener implements Listener
 				}
 				case TAMING:
 				{
-					if (!KconEventLogic
+					if (!EventLogic
 							.hitLimit(Field.MCMMO_GAIN_TAMING, player, config
 									.getLimitValue(Field.MCMMO_GAIN_TAMING, null,
 											null), null, null))
@@ -221,7 +221,7 @@ public class McMMOListener implements Listener
 				}
 				case UNARMED:
 				{
-					if (!KconEventLogic
+					if (!EventLogic
 							.hitLimit(Field.MCMMO_GAIN_UNARMED, player, config
 									.getLimitValue(Field.MCMMO_GAIN_UNARMED, null,
 											null), null, null))
@@ -239,7 +239,7 @@ public class McMMOListener implements Listener
 				}
 				case WOODCUTTING:
 				{
-					if (!KconEventLogic
+					if (!EventLogic
 							.hitLimit(Field.MCMMO_GAIN_WOODCUTTING, player, config
 									.getLimitValue(Field.MCMMO_GAIN_WOODCUTTING, null,
 											null), null, null))
@@ -273,7 +273,7 @@ public class McMMOListener implements Listener
 				details.put("Skill", event.getSkill().name());
 				details.put("SkillLevel", "" + event.getSkillLevel());
 				details.put("XPGained", "" + event.getXpGained());
-				KconEventLogic.debugEvent(event, details);
+				EventLogic.debugEvent(event, details);
 			}
 		}
 	}
@@ -288,7 +288,7 @@ public class McMMOListener implements Listener
 			{
 				case ACROBATICS:
 				{
-					if (!KconEventLogic
+					if (!EventLogic
 							.hitLimit(Field.MCMMO_LEVEL_ACROBATICS, player, config
 									.getLimitValue(Field.MCMMO_LEVEL_ACROBATICS, null,
 											null), null, null))
@@ -306,7 +306,7 @@ public class McMMOListener implements Listener
 				}
 				case ARCHERY:
 				{
-					if (!KconEventLogic
+					if (!EventLogic
 							.hitLimit(Field.MCMMO_LEVEL_ARCHERY, player, config
 									.getLimitValue(Field.MCMMO_LEVEL_ARCHERY, null,
 											null), null, null))
@@ -324,7 +324,7 @@ public class McMMOListener implements Listener
 				}
 				case AXES:
 				{
-					if (!KconEventLogic
+					if (!EventLogic
 							.hitLimit(Field.MCMMO_LEVEL_AXES, player, config
 									.getLimitValue(Field.MCMMO_LEVEL_AXES, null,
 											null), null, null))
@@ -342,7 +342,7 @@ public class McMMOListener implements Listener
 				}
 				case EXCAVATION:
 				{
-					if (!KconEventLogic
+					if (!EventLogic
 							.hitLimit(Field.MCMMO_LEVEL_EXCAVATION, player, config
 									.getLimitValue(Field.MCMMO_LEVEL_EXCAVATION, null,
 											null), null, null))
@@ -360,7 +360,7 @@ public class McMMOListener implements Listener
 				}
 				case FISHING:
 				{
-					if (!KconEventLogic
+					if (!EventLogic
 							.hitLimit(Field.MCMMO_LEVEL_FISHING, player, config
 									.getLimitValue(Field.MCMMO_LEVEL_FISHING, null,
 											null), null, null))
@@ -378,7 +378,7 @@ public class McMMOListener implements Listener
 				}
 				case HERBALISM:
 				{
-					if (!KconEventLogic
+					if (!EventLogic
 							.hitLimit(Field.MCMMO_LEVEL_HERBALISM, player, config
 									.getLimitValue(Field.MCMMO_LEVEL_HERBALISM, null,
 											null), null, null))
@@ -396,7 +396,7 @@ public class McMMOListener implements Listener
 				}
 				case MINING:
 				{
-					if (!KconEventLogic
+					if (!EventLogic
 							.hitLimit(Field.MCMMO_LEVEL_MINING, player, config
 									.getLimitValue(Field.MCMMO_LEVEL_MINING, null,
 											null), null, null))
@@ -414,7 +414,7 @@ public class McMMOListener implements Listener
 				}
 				case REPAIR:
 				{
-					if (!KconEventLogic
+					if (!EventLogic
 							.hitLimit(Field.MCMMO_LEVEL_REPAIR, player, config
 									.getLimitValue(Field.MCMMO_LEVEL_REPAIR, null,
 											null), null, null))
@@ -432,7 +432,7 @@ public class McMMOListener implements Listener
 				}
 				case SWORDS:
 				{
-					if (!KconEventLogic
+					if (!EventLogic
 							.hitLimit(Field.MCMMO_LEVEL_SWORDS, player, config
 									.getLimitValue(Field.MCMMO_LEVEL_SWORDS, null,
 											null), null, null))
@@ -450,7 +450,7 @@ public class McMMOListener implements Listener
 				}
 				case TAMING:
 				{
-					if (!KconEventLogic
+					if (!EventLogic
 							.hitLimit(Field.MCMMO_LEVEL_TAMING, player, config
 									.getLimitValue(Field.MCMMO_LEVEL_TAMING, null,
 											null), null, null))
@@ -468,7 +468,7 @@ public class McMMOListener implements Listener
 				}
 				case UNARMED:
 				{
-					if (!KconEventLogic
+					if (!EventLogic
 							.hitLimit(Field.MCMMO_LEVEL_UNARMED, player, config
 									.getLimitValue(Field.MCMMO_LEVEL_UNARMED, null,
 											null), null, null))
@@ -486,7 +486,7 @@ public class McMMOListener implements Listener
 				}
 				case WOODCUTTING:
 				{
-					if (!KconEventLogic
+					if (!EventLogic
 							.hitLimit(Field.MCMMO_LEVEL_WOODCUTTING, player, config
 									.getLimitValue(Field.MCMMO_LEVEL_WOODCUTTING, null,
 											null), null, null))
@@ -520,7 +520,7 @@ public class McMMOListener implements Listener
 				details.put("Skill", event.getSkill().name());
 				details.put("SkillLevel", "" + event.getSkillLevel());
 				details.put("LvlsGained", "" + event.getLevelsGained());
-				KconEventLogic.debugEvent(event, details);
+				EventLogic.debugEvent(event, details);
 			}
 		}
 	}
@@ -528,15 +528,15 @@ public class McMMOListener implements Listener
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void partyTeleportValid(McMMOPartyTeleportEvent event)
 	{
-		if (!event.isCancelled() && KconMcMMOConfig.partyTeleport
+		if (!event.isCancelled() && McMMOConfig.partyTeleport
 				&& event.getPlayer() != null)
 		{
 			final Player player = event.getPlayer();
-			if (KconEventLogic
+			if (EventLogic
 					.deny(Field.MCMMO_PARTY_TELEPORT, player,
-							KconMcMMOConfig.partyTeleportDenyPay, config.getPayValue(
+							McMMOConfig.partyTeleportDenyPay, config.getPayValue(
 									Field.MCMMO_PARTY_TELEPORT, null, null),
-									KconMcMMOConfig.partyTeleportDenyLimit, config
+									McMMOConfig.partyTeleportDenyLimit, config
 									.getLimitValue(Field.MCMMO_PARTY_TELEPORT,
 											null, null), null, null))
 			{
@@ -549,7 +549,7 @@ public class McMMOListener implements Listener
 					details.put("Party", event.getParty());
 					details.put("To", event.getTo().toString());
 					details.put("Cancelled", "true");
-					KconEventLogic.debugEvent(event, details);
+					EventLogic.debugEvent(event, details);
 				}
 			}
 		}
@@ -558,12 +558,12 @@ public class McMMOListener implements Listener
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void partyTeleport(McMMOPartyTeleportEvent event)
 	{
-		if (!event.isCancelled() && KconMcMMOConfig.partyTeleport
+		if (!event.isCancelled() && McMMOConfig.partyTeleport
 				&& event.getPlayer() != null)
 		{
 			final Player player = event.getPlayer();
 			// Check if hit limit
-			if (!KconEventLogic
+			if (!EventLogic
 					.hitLimit(Field.MCMMO_PARTY_TELEPORT, player, config
 							.getLimitValue(Field.MCMMO_PARTY_TELEPORT, null,
 									null), null, null))
@@ -583,7 +583,7 @@ public class McMMOListener implements Listener
 				details.put("Player", player.getName());
 				details.put("Party", event.getParty());
 				details.put("To", event.getTo().toString());
-				KconEventLogic.debugEvent(event, details);
+				EventLogic.debugEvent(event, details);
 			}
 		}
 	}
@@ -591,7 +591,7 @@ public class McMMOListener implements Listener
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void partyChangeValid(McMMOPartyChangeEvent event)
 	{
-		if (!event.isCancelled() && KconMcMMOConfig.partyTeleport
+		if (!event.isCancelled() && McMMOConfig.partyTeleport
 				&& event.getPlayer() != null)
 		{
 			final Player player = event.getPlayer();
@@ -600,10 +600,10 @@ public class McMMOListener implements Listener
 			{
 				case JOINED_PARTY:
 				{
-					if (KconEventLogic.deny(Field.MCMMO_PARTY_JOIN, player,
-							KconMcMMOConfig.partyJoinDenyPay, config.getPayValue(
+					if (EventLogic.deny(Field.MCMMO_PARTY_JOIN, player,
+							McMMOConfig.partyJoinDenyPay, config.getPayValue(
 									Field.MCMMO_PARTY_JOIN, null, null),
-									KconMcMMOConfig.partyJoinDenyLimit, config.getLimitValue(
+									McMMOConfig.partyJoinDenyLimit, config.getLimitValue(
 									Field.MCMMO_PARTY_JOIN, null, null), null,
 							null))
 					{
@@ -613,10 +613,10 @@ public class McMMOListener implements Listener
 				}
 				case LEFT_PARTY:
 				{
-					if (KconEventLogic.deny(Field.MCMMO_PARTY_LEAVE, player,
-							KconMcMMOConfig.partyLeaveDenyPay, config.getPayValue(
+					if (EventLogic.deny(Field.MCMMO_PARTY_LEAVE, player,
+							McMMOConfig.partyLeaveDenyPay, config.getPayValue(
 									Field.MCMMO_PARTY_LEAVE, null, null),
-									KconMcMMOConfig.partyLeaveDenyLimit, config.getLimitValue(
+									McMMOConfig.partyLeaveDenyLimit, config.getLimitValue(
 									Field.MCMMO_PARTY_LEAVE, null, null), null,
 							null))
 					{
@@ -626,10 +626,10 @@ public class McMMOListener implements Listener
 				}
 				case KICKED_FROM_PARTY:
 				{
-					if (KconEventLogic.deny(Field.MCMMO_PARTY_KICK, player,
-							KconMcMMOConfig.partyKickDenyPay, config.getPayValue(
+					if (EventLogic.deny(Field.MCMMO_PARTY_KICK, player,
+							McMMOConfig.partyKickDenyPay, config.getPayValue(
 									Field.MCMMO_PARTY_KICK, null, null),
-									KconMcMMOConfig.partyKickDenyLimit, config.getLimitValue(
+									McMMOConfig.partyKickDenyLimit, config.getLimitValue(
 									Field.MCMMO_PARTY_KICK, null, null), null,
 							null))
 					{
@@ -639,10 +639,10 @@ public class McMMOListener implements Listener
 				}
 				case CHANGED_PARTIES:
 				{
-					if (KconEventLogic.deny(Field.MCMMO_PARTY_CHANGE, player,
-							KconMcMMOConfig.partyChangeDenyPay, config.getPayValue(
+					if (EventLogic.deny(Field.MCMMO_PARTY_CHANGE, player,
+							McMMOConfig.partyChangeDenyPay, config.getPayValue(
 									Field.MCMMO_PARTY_CHANGE, null, null),
-									KconMcMMOConfig.partyChangeDenyLimit, config.getLimitValue(
+									McMMOConfig.partyChangeDenyLimit, config.getLimitValue(
 									Field.MCMMO_PARTY_CHANGE, null, null),
 							null, null))
 					{
@@ -676,7 +676,7 @@ public class McMMOListener implements Listener
 				}
 				details.put("Reason", event.getReason().name());
 				details.put("Cancelled", "true");
-				KconEventLogic.debugEvent(event, details);
+				EventLogic.debugEvent(event, details);
 			}
 		}
 	}
@@ -684,7 +684,7 @@ public class McMMOListener implements Listener
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void partyChange(McMMOPartyChangeEvent event)
 	{
-		if (!event.isCancelled() && KconMcMMOConfig.partyTeleport
+		if (!event.isCancelled() && McMMOConfig.partyTeleport
 				&& event.getPlayer() != null)
 		{
 			final Player player = event.getPlayer();
@@ -693,7 +693,7 @@ public class McMMOListener implements Listener
 				case JOINED_PARTY:
 				{
 					// Check if hit limit
-					if (!KconEventLogic.hitLimit(Field.MCMMO_PARTY_JOIN,
+					if (!EventLogic.hitLimit(Field.MCMMO_PARTY_JOIN,
 							player, config.getLimitValue(
 									Field.MCMMO_PARTY_CHANGE, null, null),
 							null, null))
@@ -712,7 +712,7 @@ public class McMMOListener implements Listener
 				case LEFT_PARTY:
 				{
 					// Check if hit limit
-					if (!KconEventLogic.hitLimit(Field.MCMMO_PARTY_LEAVE,
+					if (!EventLogic.hitLimit(Field.MCMMO_PARTY_LEAVE,
 							player, config.getLimitValue(
 									Field.MCMMO_PARTY_LEAVE, null, null), null,
 							null))
@@ -731,7 +731,7 @@ public class McMMOListener implements Listener
 				case KICKED_FROM_PARTY:
 				{
 					// Check if hit limit
-					if (!KconEventLogic.hitLimit(Field.MCMMO_PARTY_KICK,
+					if (!EventLogic.hitLimit(Field.MCMMO_PARTY_KICK,
 							player, config.getLimitValue(
 									Field.MCMMO_PARTY_KICK, null, null), null,
 							null))
@@ -750,7 +750,7 @@ public class McMMOListener implements Listener
 				case CHANGED_PARTIES:
 				{
 					// Check if hit limit
-					if (!KconEventLogic.hitLimit(Field.MCMMO_PARTY_CHANGE,
+					if (!EventLogic.hitLimit(Field.MCMMO_PARTY_CHANGE,
 							player, config.getLimitValue(
 									Field.MCMMO_PARTY_CHANGE, null, null),
 							null, null))
@@ -790,7 +790,7 @@ public class McMMOListener implements Listener
 					details.put("NewParty", event.getNewParty());
 				}
 				details.put("Reason", event.getReason().name());
-				KconEventLogic.debugEvent(event, details);
+				EventLogic.debugEvent(event, details);
 			}
 		}
 	}
