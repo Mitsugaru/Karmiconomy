@@ -75,17 +75,14 @@ public class HeroesConfig
 		}
 		catch (FileNotFoundException e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		catch (IOException e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		catch (InvalidConfigurationException e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		loadDefaults();
@@ -117,6 +114,36 @@ public class HeroesConfig
 		int limit = -1;
 		switch (field)
 		{
+			case HEROES_CHANGE_LEVEL:
+				return changeLevelLimit;
+			case HEROES_CLASS_CHANGE:
+				return classChangeLimit;
+			case HEROES_COMBAT_ENTER:
+				return combatEnterLimit;
+			case HEROES_COMBAT_LEAVE:
+				return combatLeaveLimit;
+			case HEROES_EXP_CHANGE:
+				return expChangeLimit;
+			case HEROES_KILL_ATTACK_MOB:
+				return killAttackMobLimit;
+			case HEROES_KILL_ATTACK_PLAYER:
+				return killAttackPlayerLimit;
+			case HEROES_KILL_DEFEND_MOB:
+				return killDefendMobLimit;
+			case HEROES_KILL_DEFEND_PLAYER:
+				return killDefendPlayerLimit;
+			case HEROES_PARTY_JOIN:
+				return partyJoinLimit;
+			case HEROES_PARTY_LEAVE:
+				return partyLeaveLimit;
+			case HEROES_REGAIN_HEALTH:
+				return regainHealthLimit;
+			case HEROES_REGAIN_MANA:
+				return regainManaLimit;
+			case HEROES_SKILL_COMPLETE:
+				return skillCompleteLimit;
+			case HEROES_SKILL_USE:
+				return skillUseLimit;
 			default:
 			{
 				if (plugin.getPluginConfig().debugUnhandled)
@@ -135,6 +162,36 @@ public class HeroesConfig
 		double pay = 0.0;
 		switch (field)
 		{
+			case HEROES_CHANGE_LEVEL:
+				return changeLevelPay;
+			case HEROES_CLASS_CHANGE:
+				return classChangePay;
+			case HEROES_COMBAT_ENTER:
+				return combatEnterPay;
+			case HEROES_COMBAT_LEAVE:
+				return combatLeavePay;
+			case HEROES_EXP_CHANGE:
+				return expChangePay;
+			case HEROES_KILL_ATTACK_MOB:
+				return killAttackMobPay;
+			case HEROES_KILL_ATTACK_PLAYER:
+				return killAttackPlayerPay;
+			case HEROES_KILL_DEFEND_MOB:
+				return killDefendMobPay;
+			case HEROES_KILL_DEFEND_PLAYER:
+				return killDefendPlayerPay;
+			case HEROES_PARTY_JOIN:
+				return partyJoinPay;
+			case HEROES_PARTY_LEAVE:
+				return partyLeavePay;
+			case HEROES_REGAIN_HEALTH:
+				return regainHealthPay;
+			case HEROES_REGAIN_MANA:
+				return regainManaPay;
+			case HEROES_SKILL_COMPLETE:
+				return skillCompletePay;
+			case HEROES_SKILL_USE:
+				return skillUsePay;
 			default:
 			{
 				if (plugin.getPluginConfig().debugUnhandled)
