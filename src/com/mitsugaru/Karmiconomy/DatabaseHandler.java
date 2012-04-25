@@ -265,47 +265,57 @@ public class DatabaseHandler
 			rs.closeQuery();
 			// TODO import command
 			rs = sqlite.select("SELECT * FROM " + Table.MCMMO.getName() + ";");
-			if(rs.getResult().next())
+			if (rs.getResult().next())
 			{
 				plugin.getLogger().info(
 						Karmiconomy.TAG + " Importing mcmmo table...");
-				PreparedStatement statement = mysql.prepare("INSERT INTO "
-							+ Table.MCMMO.getName()
-							+ " (id, partyteleport , partyjoin , partyleave , partykick , partychange , acrobaticslevel , archerylevel , axeslevel , excavationlevel , fishinglevel , herbalismlevel , mininglevel , repairlevel , swordslevel , taminglevel , unarmedlevel , woodcuttinglevel , acrobaticsgain , archerygain , axesgain, excavationgain , fishinggain, herbalismgain, mininggain, repairgain, swordsgain, taminggain, unarmedgain, woodcuttinggain) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);");
+				PreparedStatement statement = mysql
+						.prepare("INSERT INTO "
+								+ Table.MCMMO.getName()
+								+ " (id, partyteleport , partyjoin , partyleave , partykick , partychange , acrobaticslevel , archerylevel , axeslevel , excavationlevel , fishinglevel , herbalismlevel , mininglevel , repairlevel , swordslevel , taminglevel , unarmedlevel , woodcuttinglevel , acrobaticsgain , archerygain , axesgain, excavationgain , fishinggain, herbalismgain, mininggain, repairgain, swordsgain, taminggain, unarmedgain, woodcuttinggain) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);");
 				do
 				{
 					statement.setInt(1, rs.getResult().getInt("id"));
 					statement.setInt(2, rs.getResult().getInt("partyteleport"));
-					statement.setString(3, rs.getResult().getString("partyjoin"));
+					statement.setString(3, rs.getResult()
+							.getString("partyjoin"));
 					statement.setString(4,
 							rs.getResult().getString("partyleave"));
 					statement.setInt(5, rs.getResult().getInt("partykick"));
 					statement.setInt(6, rs.getResult().getInt("partychange"));
-					statement.setInt(7, rs.getResult().getInt("acrobaticslevel"));
+					statement.setInt(7, rs.getResult()
+							.getInt("acrobaticslevel"));
 					statement.setInt(8, rs.getResult().getInt("archerylevel"));
 					statement.setInt(9, rs.getResult().getInt("axeslevel"));
-					statement.setInt(10, rs.getResult().getInt("excavationlevel"));
+					statement.setInt(10,
+							rs.getResult().getInt("excavationlevel"));
 					statement.setInt(11, rs.getResult().getInt("fishinglevel"));
-					statement.setInt(12, rs.getResult().getInt("herbalismlevel"));
+					statement.setInt(12, rs.getResult()
+							.getInt("herbalismlevel"));
 					statement.setInt(13, rs.getResult().getInt("mininglevel"));
 					statement.setInt(14, rs.getResult().getInt("repairlevel"));
 					statement.setInt(15, rs.getResult().getInt("swordslevel"));
 					statement.setInt(16, rs.getResult().getInt("taminglevel"));
 					statement.setInt(17, rs.getResult().getInt("unarmedlevel"));
-					statement.setInt(18, rs.getResult().getInt("woodcuttinglevel"));
-					statement.setInt(19, rs.getResult().getInt("acrobaticsgain"));
+					statement.setInt(18,
+							rs.getResult().getInt("woodcuttinglevel"));
+					statement.setInt(19, rs.getResult()
+							.getInt("acrobaticsgain"));
 					statement.setInt(20, rs.getResult().getInt("archerygain"));
 					statement.setInt(21, rs.getResult().getInt("axesgain"));
-					statement.setInt(22, rs.getResult().getInt("excavationgain"));
+					statement.setInt(22, rs.getResult()
+							.getInt("excavationgain"));
 					statement.setInt(23, rs.getResult().getInt("fishinggain"));
-					statement.setInt(24, rs.getResult().getInt("herbalismgain"));
+					statement
+							.setInt(24, rs.getResult().getInt("herbalismgain"));
 					statement.setInt(25, rs.getResult().getInt("mininggain"));
 					statement.setInt(26, rs.getResult().getInt("repairgain"));
 					statement.setInt(27, rs.getResult().getInt("swordsgain"));
 					statement.setInt(28, rs.getResult().getInt("taminggain"));
 					statement.setInt(29, rs.getResult().getInt("unarmedgain"));
-					statement.setInt(30, rs.getResult().getInt("woodcuttinggain"));
-				}while(rs.getResult().next());
+					statement.setInt(30,
+							rs.getResult().getInt("woodcuttinggain"));
+				} while (rs.getResult().next());
 				statement.close();
 			}
 			rs.closeQuery();
@@ -352,7 +362,63 @@ public class DatabaseHandler
 				statement.close();
 			}
 			rs.closeQuery();
-			// TODO import mcmmo
+			// import mcmmo
+			rs = sqlite.select("SELECT * FROM " + Table.MCMMO.getName() + ";");
+			if (rs.getResult().next())
+			{
+				plugin.getLogger().info(
+						Karmiconomy.TAG + " Importing mcmmo table...");
+				PreparedStatement statement = mysql
+						.prepare("INSERT INTO "
+								+ Table.MCMMO.getName()
+								+ " (id, partyteleport, partyjoin, partyleave, partykick, partychange, acrobaticslevel, archerylevel, axeslevel, excavationlevel, fishinglevel, herbalismlevel, mininglevel, repairlevel, swordslevel, taminglevel, unarmedlevel, woodcuttinglevel, acrobaticsgain, archerygain, axesgain, excavationgain, fishinggain, herbalismgain, mininggain, repairgain, swordsgain, taminggain, unarmedgain, woodcuttinggain) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
+				do
+				{
+					statement.setInt(1, rs.getResult().getInt("id"));
+					statement.setInt(2, rs.getResult().getInt("partyteleport"));
+					statement.setInt(3, rs.getResult().getInt("partyjoin"));
+					statement.setInt(4, rs.getResult().getInt("partyleave"));
+					statement.setInt(5, rs.getResult().getInt("partykick"));
+					statement.setInt(6, rs.getResult().getInt("partychange"));
+					statement.setInt(7, rs.getResult()
+							.getInt("acrobaticslevel"));
+					statement.setInt(8, rs.getResult().getInt("archerylevel"));
+					statement.setInt(9, rs.getResult().getInt("axeslevel"));
+					statement.setInt(10,
+							rs.getResult().getInt("excavationlevel"));
+					statement.setInt(11, rs.getResult().getInt("fishinglevel"));
+					statement.setInt(12, rs.getResult()
+							.getInt("herbalismlevel"));
+					statement.setInt(13, rs.getResult().getInt("mininglevel"));
+					statement.setInt(14, rs.getResult().getInt("repairlevel"));
+					statement.setInt(15, rs.getResult().getInt("swordslevel"));
+					statement.setInt(16, rs.getResult().getInt("taminglevel"));
+					statement.setInt(17, rs.getResult().getInt("unarmedlevel"));
+					statement.setInt(18,
+							rs.getResult().getInt("woodcuttinglevel"));
+					statement.setInt(19, rs.getResult()
+							.getInt("acrobaticsgain"));
+					statement.setInt(20, rs.getResult().getInt("archerygain"));
+					statement.setInt(21, rs.getResult().getInt("axesgain"));
+					statement.setInt(22, rs.getResult()
+							.getInt("excavationgain"));
+					statement.setInt(23, rs.getResult().getInt("fishinggain"));
+					statement
+							.setInt(24, rs.getResult().getInt("herbalismgain"));
+					statement.setInt(25, rs.getResult().getInt("mininggain"));
+					statement.setInt(26, rs.getResult().getInt("repairgain"));
+					statement.setInt(27, rs.getResult().getInt("swordsgain"));
+					statement.setInt(28, rs.getResult().getInt("taminggain"));
+					statement.setInt(29, rs.getResult().getInt("unarmedgain"));
+					statement.setInt(30,
+							rs.getResult().getInt("woodcuttinggain"));
+					statement.executeUpdate();
+
+				} while (rs.getResult().next());
+				statement.close();
+			}
+			rs.closeQuery();
+			// TODO import heroes
 			plugin.getLogger().info(
 					Karmiconomy.TAG + " Done importing SQLite into MySQL");
 		}
