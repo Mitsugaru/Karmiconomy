@@ -18,13 +18,14 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 import com.mitsugaru.Karmiconomy.Item;
 import com.mitsugaru.Karmiconomy.Karmiconomy;
-import com.mitsugaru.Karmiconomy.DatabaseHandler.Field;
+import com.mitsugaru.Karmiconomy.database.Field;
 
 public class Config
 {
 	// Class variables
 	private Karmiconomy plugin;
-	public String host, port, database, user, password, tablePrefix;
+	public String host, port, database, user, password;
+	public static String tablePrefix;
 	public boolean debugTime, debugEvents, debugEconomy, debugUnhandled,
 			useMySQL, importSQL, chat, chatDenyPay, chatDenyLimit, command,
 			commandDenyPay, commandDenyLimit, blockPlace, blockPlaceDenyPay,

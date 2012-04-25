@@ -8,8 +8,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
-import com.mitsugaru.Karmiconomy.DatabaseHandler.Field;
 import com.mitsugaru.Karmiconomy.config.Config;
+import com.mitsugaru.Karmiconomy.database.Field;
 
 public class KarmicEcon
 {
@@ -87,11 +87,10 @@ public class KarmicEcon
 		return paid;
 	}
 
-	public static boolean pay(Field field, Player player, Item item,
+	public static boolean pay(Field field, Player player, double amount, Item item,
 			String command)
 	{
 		boolean paid = false;
-		final double amount = config.getPayValue(field, item, command);
 		if (amount == 0.0)
 		{
 			// Just record that it happened

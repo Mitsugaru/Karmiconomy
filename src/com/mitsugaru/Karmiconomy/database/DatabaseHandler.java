@@ -1,4 +1,4 @@
-package com.mitsugaru.Karmiconomy;
+package com.mitsugaru.Karmiconomy.database;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -6,6 +6,8 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import com.mitsugaru.Karmiconomy.Item;
+import com.mitsugaru.Karmiconomy.Karmiconomy;
 import com.mitsugaru.Karmiconomy.config.Config;
 
 import lib.Mitsugaru.SQLibrary.MySQL;
@@ -19,7 +21,8 @@ public class DatabaseHandler
 	private SQLite sqlite;
 	private MySQL mysql;
 	private boolean useMySQL;
-	private final DateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy");
+	private static final DateFormat dateFormat = new SimpleDateFormat(
+			"MM-dd-yyyy");
 
 	public DatabaseHandler(Karmiconomy plugin, Config conf)
 	{
@@ -102,6 +105,7 @@ public class DatabaseHandler
 						+ Table.MCMMO.getName()
 						+ " (id INT UNSIGNED NOT NULL, partyteleport INT NOT NULL, partyjoin INT NOT NULL, partyleave INT NOT NULL, partykick INT NOT NULL, partychange INT NOT NULL, acrobaticslevel INT NOT NULL, archerylevel INT NOT NULL, axeslevel INT NOT NULL, excavationlevel INT NOT NULL, fishinglevel INT NOT NULL, herbalismlevel INT NOT NULL, mininglevel INT NOT NULL, repairlevel INT NOT NULL, swordslevel INT NOT NULL, taminglevel INT NOT NULL, unarmedlevel INT NOT NULL, woodcuttinglevel INT NOT NULL, acrobaticsgain INT NOT NULL, archerygain INT NOT NULL, axesgain INT NOT NULL, excavationgain INT NOT NULL, fishinggain INT NOT NULL, herbalismgain INT NOT NULL, mininggain INT NOT NULL, repairgain INT NOT NULL, swordsgain INT NOT NULL, taminggain INT NOT NULL, unarmedgain INT NOT NULL, woodcuttinggain INT NOT NULL, PRIMARY KEY(id));");
 			}
+			// TODO heroes table
 		}
 		else
 		{
@@ -166,6 +170,7 @@ public class DatabaseHandler
 						+ Table.MCMMO.getName()
 						+ " (id INTEGER PRIMARY KEY, partyteleport INTEGER NOT NULL, partyjoin INTEGER NOT NULL, partyleave INTEGER NOT NULL, partykick INTEGER NOT NULL, partychange INTEGER NOT NULL, acrobaticslevel INTEGER NOT NULL, archerylevel INTEGER NOT NULL, axeslevel INTEGER NOT NULL, excavationlevel INTEGER NOT NULL, fishinglevel INTEGER NOT NULL, herbalismlevel INTEGER NOT NULL, mininglevel INTEGER NOT NULL, repairlevel INTEGER NOT NULL, swordslevel INTEGER NOT NULL, taminglevel INTEGER NOT NULL, unarmedlevel INTEGER NOT NULL, woodcuttinglevel INTEGER NOT NULL, acrobaticsgain INTEGER NOT NULL, archerygain INTEGER NOT NULL, axesgain INTEGER NOT NULL, excavationgain INTEGER NOT NULL, fishinggain INTEGER NOT NULL, herbalismgain INTEGER NOT NULL, mininggain INTEGER NOT NULL, repairgain INTEGER NOT NULL, swordsgain INTEGER NOT NULL, taminggain INTEGER NOT NULL, unarmedgain INTEGER NOT NULL, woodcuttinggain INTEGER NOT NULL);");
 			}
+			// TODO heroes table
 		}
 	}
 
@@ -502,6 +507,14 @@ public class DatabaseHandler
 		return id;
 	}
 
+	/**
+	 * Attempts to add player. Does not allow for players that contain the
+	 * special character of single quotes.
+	 * 
+	 * @param Name
+	 *            of player to be added.
+	 * @return True if attempted to be added. Else, false.
+	 */
 	public boolean addPlayer(String name)
 	{
 		if (!name.contains("'"))
@@ -542,6 +555,7 @@ public class DatabaseHandler
 							+ " (id, partyteleport , partyjoin , partyleave , partykick , partychange , acrobaticslevel , archerylevel , axeslevel , excavationlevel , fishinglevel , herbalismlevel , mininglevel , repairlevel , swordslevel , taminglevel , unarmedlevel , woodcuttinglevel , acrobaticsgain , archerygain , axesgain, excavationgain , fishinggain, herbalismgain, mininggain, repairgain, swordsgain, taminggain, unarmedgain, woodcuttinggain) VALUES('"
 							+ id
 							+ "','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0');");
+					// TODO add heroes
 					return true;
 				}
 				else
@@ -561,6 +575,15 @@ public class DatabaseHandler
 		return false;
 	}
 
+	/**
+	 * Check if player data needs to be reset due to new day based off of server
+	 * time and their last on field.
+	 * 
+	 * @param Name
+	 *            of player.
+	 * @return True if the current date and the players last on date is
+	 *         different.
+	 */
 	public boolean checkDateReset(String name)
 	{
 		boolean valid = false;
@@ -628,6 +651,13 @@ public class DatabaseHandler
 		return same;
 	}
 
+	/**
+	 * Reset all values for a player
+	 * 
+	 * @param Name
+	 *            of player
+	 * @return True if tables were attempted to be dropped. Else, false.
+	 */
 	public boolean resetAllValues(String name)
 	{
 		boolean drop = false;
@@ -665,6 +695,7 @@ public class DatabaseHandler
 					+ Table.MCMMO.getName()
 					+ " SET partyteleport='0', partyjoin='0', partyleave='0', partykick='0', partychange='0', acrobaticslevel='0', archerylevel='0', axeslevel='0', excavationlevel='0', fishinglevel='0', herbalismlevel='0', mininglevel='0', repairlevel='0', swordslevel='0', taminglevel='0', unarmedlevel='0', woodcuttinglevel='0', acrobaticsgain='0', archerygain='0', axesgain='0', excavationgain='0', fishinggain='0', herbalismgain='0', mininggain='0', repairgain='0', swordsgain='0', taminggain='0', unarmedgain='0', woodcuttinggain='0' WHERE id='"
 					+ id + "';");
+			// TODO reset heroes
 			// Drop everything in items for player id
 			standardQuery("DELETE FROM " + Table.ITEMS.getName()
 					+ " WHERE id='" + id + "';");
@@ -815,6 +846,20 @@ public class DatabaseHandler
 
 	}
 
+	/**
+	 * Get the data for a given field of a given player. If necessary, include
+	 * itemm and command for appropriate fields.
+	 * 
+	 * @param Field
+	 *            to retrieve
+	 * @param Name
+	 *            of player
+	 * @param Item
+	 *            to get data of
+	 * @param Command
+	 *            to get data of
+	 * @return the integer value for the associated field and parameters
+	 */
 	public int getData(Field field, String name, Item item, String command)
 	{
 		boolean validId = false;
@@ -1020,6 +1065,18 @@ public class DatabaseHandler
 						}
 						break;
 					}
+					case HEROES:
+					{
+						query = select("SELECT * FROM "
+								+ field.getTable().getName() + " WHERE id='"
+								+ id + "';");
+						if (query.getResult().next())
+						{
+							data = query.getResult().getInt(
+									field.getColumnName());
+						}
+						break;
+					}
 					default:
 					{
 						if (config.debugUnhandled)
@@ -1044,95 +1101,5 @@ public class DatabaseHandler
 			}
 		}
 		return data;
-	}
-
-	public enum Field
-	{
-		// TODO eggs, painting break?, vehicle
-		BOW_SHOOT(Table.DATA, "bowshoot"), BED_ENTER(Table.DATA, "bedenter"), BED_LEAVE(
-				Table.DATA, "bedleave"), BLOCK_PLACE(Table.ITEMS, "place"), BLOCK_DESTROY(
-				Table.ITEMS, "destroy"), ITEM_CRAFT(Table.ITEMS, "craft"), ITEM_ENCHANT(
-				Table.ITEMS, "enchant"), ITEM_DROP(Table.ITEMS, "playerDrop"), ITEM_PICKUP(
-				Table.ITEMS, "pickup"), EGG_THROW(Table.DATA, "eggThrow"), CHAT(
-				Table.DATA, "chat"), COMMAND(Table.COMMAND, "command"), DEATH(
-				Table.DATA, "death"), CREATIVE(Table.DATA, "creative"), SURVIVAL(
-				Table.DATA, "survival"), JOIN(Table.DATA, "playerJoin"), KICK(
-				Table.DATA, "kick"), QUIT(Table.DATA, "quit"), RESPAWN(
-				Table.DATA, "respawn"), SNEAK(Table.DATA, "sneak"), SPRINT(
-				Table.DATA, "sprint"), PAINTING_PLACE(Table.DATA,
-				"paintingplace"), PORTAL_CREATE_NETHER(Table.PORTAL,
-				"pcreatenether"), PORTAL_CREATE_END(Table.PORTAL, "pcreateend"), PORTAL_CREATE_CUSTOM(
-				Table.PORTAL, "pcreatecustom"), PORTAL_ENTER(Table.PORTAL,
-				"portalenter"), TAME_OCELOT(Table.DATA, "tameocelot"), TAME_WOLF(
-				Table.DATA, "tamewolf"), WORLD_CHANGE(Table.DATA, "worldchange"), BUCKET_EMPTY_LAVA(
-				Table.BUCKET, "bemptylava"), BUCKET_EMPTY_WATER(Table.BUCKET,
-				"bemptywater"), BUCKET_FILL_LAVA(Table.BUCKET, "bfilllava"), BUCKET_FILL_WATER(
-				Table.BUCKET, "bfillwater"), MCMMO_PARTY_TELEPORT(Table.MCMMO,
-				"partyteleport"), MCMMO_PARTY_JOIN(Table.MCMMO, "partyjoin"), MCMMO_PARTY_LEAVE(
-				Table.MCMMO, "partyleave"), MCMMO_PARTY_KICK(Table.MCMMO,
-				"partykick"), MCMMO_PARTY_CHANGE(Table.MCMMO, "partychange"), MCMMO_LEVEL_ACROBATICS(
-				Table.MCMMO, "acrobaticslevel"), MCMMO_LEVEL_ARCHERY(
-				Table.MCMMO, "archerylevel"), MCMMO_LEVEL_AXES(Table.MCMMO,
-				"axeslevel"), MCMMO_LEVEL_EXCAVATION(Table.MCMMO,
-				"excavationlevel"), MCMMO_LEVEL_FISHING(Table.MCMMO,
-				"fishinglevel"), MCMMO_LEVEL_HERBALISM(Table.MCMMO,
-				"herbalismlevel"), MCMMO_LEVEL_MINING(Table.MCMMO,
-				"mininglevel"), MCMMO_LEVEL_REPAIR(Table.MCMMO, "repairlevel"), MCMMO_LEVEL_SWORDS(
-				Table.MCMMO, "swordslevel"), MCMMO_LEVEL_TAMING(Table.MCMMO,
-				"taminglevel"), MCMMO_LEVEL_UNARMED(Table.MCMMO, "unarmedlevel"), MCMMO_LEVEL_WOODCUTTING(
-				Table.MCMMO, "woodcuttinglevel"), MCMMO_GAIN_ACROBATICS(
-				Table.MCMMO, "acrobaticsgain"), MCMMO_GAIN_ARCHERY(Table.MCMMO,
-				"archerygain"), MCMMO_GAIN_AXES(Table.MCMMO, "axesgain"), MCMMO_GAIN_EXCAVATION(
-				Table.MCMMO, "excavationgain"), MCMMO_GAIN_FISHING(Table.MCMMO,
-				"fishinggain"), MCMMO_GAIN_HERBALISM(Table.MCMMO,
-				"herbalismgain"), MCMMO_GAIN_MINING(Table.MCMMO, "mininggain"), MCMMO_GAIN_REPAIR(
-				Table.MCMMO, "repairgain"), MCMMO_GAIN_SWORDS(Table.MCMMO,
-				"swordsgain"), MCMMO_GAIN_TAMING(Table.MCMMO, "taminggain"), MCMMO_GAIN_UNARMED(
-				Table.MCMMO, "unarmedgain"), MCMMO_GAIN_WOODCUTTING(
-				Table.MCMMO, "woodcuttinggain");
-		private final Table table;
-		private final String columnname;
-
-		private Field(Table table, String columnname)
-		{
-			this.table = table;
-			this.columnname = columnname;
-		}
-
-		public Table getTable()
-		{
-			return table;
-		}
-
-		public String getColumnName()
-		{
-			return columnname;
-		}
-	}
-
-	public enum Table
-	{
-		MASTER(config.tablePrefix + "master"), ITEMS(config.tablePrefix
-				+ "items"), DATA(config.tablePrefix + "data"), COMMAND(
-				config.tablePrefix + "command"), PORTAL(config.tablePrefix
-				+ "portal"), BUCKET(config.tablePrefix + "bucket"), MCMMO(
-				config.tablePrefix + "mcmmo");
-		private final String table;
-
-		private Table(String table)
-		{
-			this.table = table;
-		}
-
-		public String getName()
-		{
-			return table;
-		}
-
-		@Override
-		public String toString()
-		{
-			return table;
-		}
 	}
 }

@@ -39,12 +39,12 @@ import org.bukkit.event.player.PlayerToggleSprintEvent;
 import org.bukkit.event.vehicle.VehicleEnterEvent;
 import org.bukkit.event.vehicle.VehicleExitEvent;
 
-import com.mitsugaru.Karmiconomy.DatabaseHandler;
 import com.mitsugaru.Karmiconomy.Item;
 import com.mitsugaru.Karmiconomy.KarmicEcon;
 import com.mitsugaru.Karmiconomy.Karmiconomy;
-import com.mitsugaru.Karmiconomy.DatabaseHandler.Field;
 import com.mitsugaru.Karmiconomy.config.Config;
+import com.mitsugaru.Karmiconomy.database.DatabaseHandler;
+import com.mitsugaru.Karmiconomy.database.Field;
 import com.mitsugaru.Karmiconomy.events.EventLogic.DenyType;
 
 public class KarmiconomyListener implements Listener
@@ -96,7 +96,8 @@ public class KarmiconomyListener implements Listener
 					config.getLimitValue(Field.CHAT, null, null), null, null))
 			{
 				// Try to pay
-				if (KarmicEcon.pay(Field.CHAT, player, null, null))
+				if (KarmicEcon.pay(Field.CHAT, player,
+						config.getPayValue(Field.CHAT, null, null), null, null))
 				{
 					// Increment
 					db.incrementData(Field.CHAT, player.getName(), null, null);
@@ -156,8 +157,11 @@ public class KarmiconomyListener implements Listener
 							event.getMessage()), null, event.getMessage()))
 			{
 				// Try to pay
-				if (KarmicEcon.pay(Field.COMMAND, player, null,
-						event.getMessage()))
+				if (KarmicEcon.pay(
+						Field.COMMAND,
+						player,
+						config.getPayValue(Field.COMMAND, null,
+								event.getMessage()), null, event.getMessage()))
 				{
 					// Increment
 					db.incrementData(Field.COMMAND, player.getName(), null,
@@ -235,7 +239,9 @@ public class KarmiconomyListener implements Listener
 					placed, null))
 			{
 				// Try to pay
-				if (KarmicEcon.pay(Field.BLOCK_PLACE, player, placed, null))
+				if (KarmicEcon.pay(Field.BLOCK_PLACE, player,
+						config.getPayValue(Field.BLOCK_PLACE, placed, null),
+						placed, null))
 				{
 					// Increment
 					db.incrementData(Field.BLOCK_PLACE, player.getName(),
@@ -315,8 +321,9 @@ public class KarmiconomyListener implements Listener
 					destroyed, null))
 			{
 				// Try to pay
-				if (KarmicEcon
-						.pay(Field.BLOCK_DESTROY, player, destroyed, null))
+				if (KarmicEcon.pay(Field.BLOCK_DESTROY, player, config
+						.getPayValue(Field.BLOCK_DESTROY, destroyed, null),
+						destroyed, null))
 				{
 					// Increment
 					db.incrementData(Field.BLOCK_DESTROY, player.getName(),
@@ -395,7 +402,9 @@ public class KarmiconomyListener implements Listener
 						craft, null))
 				{
 					// Try to pay
-					if (KarmicEcon.pay(Field.ITEM_CRAFT, player, craft, null))
+					if (KarmicEcon.pay(Field.ITEM_CRAFT, player,
+							config.getPayValue(Field.ITEM_CRAFT, craft, null),
+							craft, null))
 					{
 						// Increment
 						db.incrementData(Field.ITEM_CRAFT, player.getName(),
@@ -477,7 +486,9 @@ public class KarmiconomyListener implements Listener
 					enchant, null))
 			{
 				// Try to pay
-				if (KarmicEcon.pay(Field.ITEM_ENCHANT, player, enchant, null))
+				if (KarmicEcon.pay(Field.ITEM_ENCHANT, player,
+						config.getPayValue(Field.ITEM_ENCHANT, enchant, null),
+						enchant, null))
 				{
 					// Increment
 					db.incrementData(Field.ITEM_ENCHANT, player.getName(),
@@ -518,10 +529,11 @@ public class KarmiconomyListener implements Listener
 				{
 					case NETHER:
 					{
-						if (EventLogic.deny(Field.PORTAL_CREATE_NETHER,
-								player, config.portalCreateNetherDenyPay,
-								config.getPayValue(Field.PORTAL_CREATE_NETHER,
-										null, null),
+						if (EventLogic.deny(Field.PORTAL_CREATE_NETHER, player,
+								config.portalCreateNetherDenyPay, config
+										.getPayValue(
+												Field.PORTAL_CREATE_NETHER,
+												null, null),
 								config.portalCreateNetherDenyLimit, config
 										.getLimitValue(
 												Field.PORTAL_CREATE_NETHER,
@@ -534,8 +546,8 @@ public class KarmiconomyListener implements Listener
 					}
 					case ENDER:
 					{
-						if (EventLogic.deny(Field.PORTAL_CREATE_END,
-								player, config.portalCreateEndDenyPay, config
+						if (EventLogic.deny(Field.PORTAL_CREATE_END, player,
+								config.portalCreateEndDenyPay, config
 										.getPayValue(Field.PORTAL_CREATE_END,
 												null, null),
 								config.portalCreateEndDenyLimit, config
@@ -549,10 +561,11 @@ public class KarmiconomyListener implements Listener
 					}
 					case CUSTOM:
 					{
-						if (EventLogic.deny(Field.PORTAL_CREATE_CUSTOM,
-								player, config.portalCreateCustomDenyPay,
-								config.getPayValue(Field.PORTAL_CREATE_CUSTOM,
-										null, null),
+						if (EventLogic.deny(Field.PORTAL_CREATE_CUSTOM, player,
+								config.portalCreateCustomDenyPay, config
+										.getPayValue(
+												Field.PORTAL_CREATE_CUSTOM,
+												null, null),
 								config.portalCreateCustomDenyLimit, config
 										.getLimitValue(
 												Field.PORTAL_CREATE_CUSTOM,
@@ -612,15 +625,17 @@ public class KarmiconomyListener implements Listener
 				{
 					case NETHER:
 					{
-						if (!EventLogic.hitLimit(
-								Field.PORTAL_CREATE_NETHER, player, config
-										.getLimitValue(
+						if (!EventLogic
+								.hitLimit(Field.PORTAL_CREATE_NETHER, player,
+										config.getLimitValue(
 												Field.PORTAL_CREATE_NETHER,
 												null, null), null, null))
 						{
 							// Try to pay
 							if (KarmicEcon.pay(Field.PORTAL_CREATE_NETHER,
-									player, null, null))
+									player, config.getPayValue(
+											Field.PORTAL_CREATE_NETHER, null,
+											null), null, null))
 							{
 								// Increment
 								db.incrementData(Field.PORTAL_CREATE_NETHER,
@@ -638,7 +653,8 @@ public class KarmiconomyListener implements Listener
 						{
 							// Try to pay
 							if (KarmicEcon.pay(Field.PORTAL_CREATE_END, player,
-									null, null))
+									config.getPayValue(Field.PORTAL_CREATE_END,
+											null, null), null, null))
 							{
 								// Increment
 								db.incrementData(Field.PORTAL_CREATE_END,
@@ -649,15 +665,17 @@ public class KarmiconomyListener implements Listener
 					}
 					case CUSTOM:
 					{
-						if (!EventLogic.hitLimit(
-								Field.PORTAL_CREATE_CUSTOM, player, config
-										.getLimitValue(
+						if (!EventLogic
+								.hitLimit(Field.PORTAL_CREATE_CUSTOM, player,
+										config.getLimitValue(
 												Field.PORTAL_CREATE_CUSTOM,
 												null, null), null, null))
 						{
 							// Try to pay
 							if (KarmicEcon.pay(Field.PORTAL_CREATE_CUSTOM,
-									player, null, null))
+									player, config.getPayValue(
+											Field.PORTAL_CREATE_CUSTOM, null,
+											null), null, null))
 							{
 								// Increment
 								db.incrementData(Field.PORTAL_CREATE_CUSTOM,
@@ -707,7 +725,9 @@ public class KarmiconomyListener implements Listener
 						null, null))
 				{
 					// Try to pay
-					if (KarmicEcon.pay(Field.PORTAL_ENTER, player, null, null))
+					if (KarmicEcon.pay(Field.PORTAL_ENTER, player,
+							config.getPayValue(Field.PORTAL_ENTER, null, null),
+							null, null))
 					{
 						// Increment
 						db.incrementData(Field.PORTAL_ENTER, player.getName(),
@@ -784,7 +804,9 @@ public class KarmiconomyListener implements Listener
 						null, null))
 				{
 					// Try to pay
-					if (KarmicEcon.pay(Field.BOW_SHOOT, player, null, null))
+					if (KarmicEcon.pay(Field.BOW_SHOOT, player,
+							config.getPayValue(Field.BOW_SHOOT, null, null),
+							null, null))
 					{
 						// Increment
 						db.incrementData(Field.BOW_SHOOT, player.getName(),
@@ -905,8 +927,9 @@ public class KarmiconomyListener implements Listener
 										null), null, null))
 						{
 							// Try to pay
-							if (KarmicEcon.pay(Field.TAME_OCELOT, player, null,
-									null))
+							if (KarmicEcon.pay(Field.TAME_OCELOT, player,
+									config.getPayValue(Field.TAME_OCELOT, null,
+											null), null, null))
 							{
 								// Increment
 								db.incrementData(Field.TAME_OCELOT,
@@ -923,8 +946,9 @@ public class KarmiconomyListener implements Listener
 										null), null, null))
 						{
 							// Try to pay
-							if (KarmicEcon.pay(Field.TAME_WOLF, player, null,
-									null))
+							if (KarmicEcon.pay(Field.TAME_WOLF, player, config
+									.getPayValue(Field.TAME_WOLF, null, null),
+									null, null))
 							{
 								// Increment
 								db.incrementData(Field.TAME_WOLF,
@@ -1005,7 +1029,9 @@ public class KarmiconomyListener implements Listener
 					null, null))
 			{
 				// Try to pay
-				if (KarmicEcon.pay(Field.PAINTING_PLACE, player, null, null))
+				if (KarmicEcon.pay(Field.PAINTING_PLACE, player,
+						config.getPayValue(Field.PAINTING_PLACE, null, null),
+						null, null))
 				{
 					// Increment
 					db.incrementData(Field.PAINTING_PLACE, player.getName(),
@@ -1069,7 +1095,9 @@ public class KarmiconomyListener implements Listener
 					null))
 			{
 				// Try to pay
-				if (KarmicEcon.pay(Field.BED_ENTER, player, null, null))
+				if (KarmicEcon.pay(Field.BED_ENTER, player,
+						config.getPayValue(Field.BED_ENTER, null, null), null,
+						null))
 				{
 					// Increment
 					db.incrementData(Field.BED_ENTER, player.getName(), null,
@@ -1101,7 +1129,9 @@ public class KarmiconomyListener implements Listener
 					null))
 			{
 				// Try to pay
-				if (KarmicEcon.pay(Field.BED_LEAVE, player, null, null))
+				if (KarmicEcon.pay(Field.BED_LEAVE, player,
+						config.getPayValue(Field.BED_LEAVE, null, null), null,
+						null))
 				{
 					// Increment
 					db.incrementData(Field.BED_LEAVE, player.getName(), null,
@@ -1205,14 +1235,14 @@ public class KarmiconomyListener implements Listener
 				case LAVA_BUCKET:
 				{
 					// Pay on empty
-					if (!EventLogic.hitLimit(Field.BUCKET_EMPTY_LAVA,
-							player, config.getLimitValue(
-									Field.BUCKET_EMPTY_LAVA, null, null), null,
-							null))
+					if (!EventLogic.hitLimit(Field.BUCKET_EMPTY_LAVA, player,
+							config.getLimitValue(Field.BUCKET_EMPTY_LAVA, null,
+									null), null, null))
 					{
 						// Try to pay
 						if (KarmicEcon.pay(Field.BUCKET_EMPTY_LAVA, player,
-								null, null))
+								config.getPayValue(Field.BUCKET_EMPTY_LAVA,
+										null, null), null, null))
 						{
 							// Increment
 							db.incrementData(Field.BUCKET_EMPTY_LAVA,
@@ -1224,14 +1254,14 @@ public class KarmiconomyListener implements Listener
 				case WATER_BUCKET:
 				{
 					// Pay on empty
-					if (!EventLogic.hitLimit(Field.BUCKET_EMPTY_WATER,
-							player, config.getLimitValue(
-									Field.BUCKET_EMPTY_WATER, null, null),
-							null, null))
+					if (!EventLogic.hitLimit(Field.BUCKET_EMPTY_WATER, player,
+							config.getLimitValue(Field.BUCKET_EMPTY_WATER,
+									null, null), null, null))
 					{
 						// Try to pay
 						if (KarmicEcon.pay(Field.BUCKET_EMPTY_WATER, player,
-								null, null))
+								config.getPayValue(Field.BUCKET_EMPTY_WATER,
+										null, null), null, null))
 						{
 							// Increment
 							db.incrementData(Field.BUCKET_EMPTY_WATER,
@@ -1354,14 +1384,14 @@ public class KarmiconomyListener implements Listener
 				case STATIONARY_LAVA:
 				{
 					// Pay on fill
-					if (!EventLogic.hitLimit(Field.BUCKET_FILL_LAVA,
-							player, config.getLimitValue(
-									Field.BUCKET_FILL_LAVA, null, null), null,
-							null))
+					if (!EventLogic.hitLimit(Field.BUCKET_FILL_LAVA, player,
+							config.getLimitValue(Field.BUCKET_FILL_LAVA, null,
+									null), null, null))
 					{
 						// Try to pay
 						if (KarmicEcon.pay(Field.BUCKET_FILL_LAVA, player,
-								null, null))
+								config.getPayValue(Field.BUCKET_FILL_LAVA,
+										null, null), null, null))
 						{
 							// Increment
 							db.incrementData(Field.BUCKET_FILL_LAVA,
@@ -1373,14 +1403,14 @@ public class KarmiconomyListener implements Listener
 				case STATIONARY_WATER:
 				{
 					// Pay on fill
-					if (!EventLogic.hitLimit(Field.BUCKET_FILL_WATER,
-							player, config.getLimitValue(
-									Field.BUCKET_FILL_WATER, null, null), null,
-							null))
+					if (!EventLogic.hitLimit(Field.BUCKET_FILL_WATER, player,
+							config.getLimitValue(Field.BUCKET_FILL_WATER, null,
+									null), null, null))
 					{
 						// Try to pay
 						if (KarmicEcon.pay(Field.BUCKET_FILL_WATER, player,
-								null, null))
+								config.getPayValue(Field.BUCKET_FILL_WATER,
+										null, null), null, null))
 						{
 							// Increment
 							db.incrementData(Field.BUCKET_FILL_WATER,
@@ -1431,7 +1461,9 @@ public class KarmiconomyListener implements Listener
 					null))
 			{
 				// Try to pay
-				if (KarmicEcon.pay(Field.WORLD_CHANGE, player, null, null))
+				if (KarmicEcon.pay(Field.WORLD_CHANGE, player,
+						config.getPayValue(Field.WORLD_CHANGE, null, null),
+						null, null))
 				{
 					// Increment
 					db.incrementData(Field.WORLD_CHANGE, player.getName(),
@@ -1462,7 +1494,10 @@ public class KarmiconomyListener implements Listener
 					config.getLimitValue(Field.DEATH, null, null), null, null))
 			{
 				// Try to pay
-				if (KarmicEcon.pay(Field.DEATH, player, null, null))
+				if (KarmicEcon
+						.pay(Field.DEATH, player,
+								config.getPayValue(Field.DEATH, null, null),
+								null, null))
 				{
 					// Increment
 					db.incrementData(Field.DEATH, player.getName(), null, null);
@@ -1499,7 +1534,9 @@ public class KarmiconomyListener implements Listener
 							null, null))
 			{
 				// Try to pay
-				if (KarmicEcon.pay(Field.RESPAWN, player, null, null))
+				if (KarmicEcon.pay(Field.RESPAWN, player,
+						config.getPayValue(Field.RESPAWN, null, null), null,
+						null))
 				{
 					// Increment
 					db.incrementData(Field.RESPAWN, player.getName(), null,
@@ -1573,7 +1610,9 @@ public class KarmiconomyListener implements Listener
 					pickup, null))
 			{
 				// Try to pay
-				if (KarmicEcon.pay(Field.ITEM_PICKUP, player, pickup, null))
+				if (KarmicEcon.pay(Field.ITEM_PICKUP, player,
+						config.getPayValue(Field.ITEM_PICKUP, pickup, null),
+						pickup, null))
 				{
 					// Increment
 					db.incrementData(Field.ITEM_PICKUP, player.getName(),
@@ -1647,7 +1686,9 @@ public class KarmiconomyListener implements Listener
 					dropped, null))
 			{
 				// Try to pay
-				if (KarmicEcon.pay(Field.ITEM_DROP, player, dropped, null))
+				if (KarmicEcon.pay(Field.ITEM_DROP, player,
+						config.getPayValue(Field.ITEM_DROP, dropped, null),
+						dropped, null))
 				{
 					// Increment
 					db.incrementData(Field.ITEM_DROP, player.getName(),
@@ -1680,7 +1721,9 @@ public class KarmiconomyListener implements Listener
 					null))
 			{
 				// Try to pay
-				if (KarmicEcon.pay(Field.EGG_THROW, player, null, null))
+				if (KarmicEcon.pay(Field.EGG_THROW, player,
+						config.getPayValue(Field.EGG_THROW, null, null), null,
+						null))
 				{
 					// Increment
 					db.incrementData(Field.EGG_THROW, player.getName(), null,
@@ -1791,7 +1834,9 @@ public class KarmiconomyListener implements Listener
 							null, null))
 					{
 						// Try to pay
-						if (KarmicEcon.pay(Field.CREATIVE, player, null, null))
+						if (KarmicEcon.pay(Field.CREATIVE, player,
+								config.getPayValue(Field.CREATIVE, null, null),
+								null, null))
 						{
 							// Increment
 							db.incrementData(Field.CREATIVE, player.getName(),
@@ -1807,7 +1852,9 @@ public class KarmiconomyListener implements Listener
 							null, null))
 					{
 						// Try to pay
-						if (KarmicEcon.pay(Field.SURVIVAL, player, null, null))
+						if (KarmicEcon.pay(Field.SURVIVAL, player,
+								config.getPayValue(Field.SURVIVAL, null, null),
+								null, null))
 						{
 							// Increment
 							db.incrementData(Field.SURVIVAL, player.getName(),
@@ -1878,7 +1925,9 @@ public class KarmiconomyListener implements Listener
 						null))
 				{
 					// Try to pay
-					if (KarmicEcon.pay(Field.JOIN, player, null, null))
+					if (KarmicEcon.pay(Field.JOIN, player,
+							config.getPayValue(Field.JOIN, null, null), null,
+							null))
 					{
 						// Increment
 						db.incrementData(Field.JOIN, player.getName(), null,
@@ -1910,7 +1959,8 @@ public class KarmiconomyListener implements Listener
 					config.getLimitValue(Field.KICK, null, null), null, null))
 			{
 				// Try to pay
-				if (KarmicEcon.pay(Field.KICK, player, null, null))
+				if (KarmicEcon.pay(Field.KICK, player,
+						config.getPayValue(Field.KICK, null, null), null, null))
 				{
 					// Increment
 					db.incrementData(Field.KICK, player.getName(), null, null);
@@ -1949,7 +1999,9 @@ public class KarmiconomyListener implements Listener
 						null))
 				{
 					// Try to pay
-					if (KarmicEcon.pay(Field.QUIT, player, null, null))
+					if (KarmicEcon.pay(Field.QUIT, player,
+							config.getPayValue(Field.QUIT, null, null), null,
+							null))
 					{
 						// Increment
 						db.incrementData(Field.QUIT, player.getName(), null,
@@ -2007,7 +2059,10 @@ public class KarmiconomyListener implements Listener
 					config.getLimitValue(Field.SNEAK, null, null), null, null))
 			{
 				// Try to pay
-				if (KarmicEcon.pay(Field.SNEAK, player, null, null))
+				if (KarmicEcon
+						.pay(Field.SNEAK, player,
+								config.getPayValue(Field.SNEAK, null, null),
+								null, null))
 				{
 					// Increment
 					db.incrementData(Field.SNEAK, player.getName(), null, null);
@@ -2059,7 +2114,9 @@ public class KarmiconomyListener implements Listener
 					config.getLimitValue(Field.SPRINT, null, null), null, null))
 			{
 				// Try to pay
-				if (KarmicEcon.pay(Field.SPRINT, player, null, null))
+				if (KarmicEcon.pay(Field.SPRINT, player,
+						config.getPayValue(Field.SPRINT, null, null), null,
+						null))
 				{
 					// Increment
 					db.incrementData(Field.SPRINT, player.getName(), null, null);

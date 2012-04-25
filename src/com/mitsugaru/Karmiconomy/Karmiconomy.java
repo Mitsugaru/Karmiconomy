@@ -7,6 +7,7 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.mitsugaru.Karmiconomy.config.Config;
+import com.mitsugaru.Karmiconomy.database.DatabaseHandler;
 import com.mitsugaru.Karmiconomy.events.KarmiconomyListener;
 import com.mitsugaru.Karmiconomy.events.EventLogic;
 import com.mitsugaru.Karmiconomy.events.McMMOListener;

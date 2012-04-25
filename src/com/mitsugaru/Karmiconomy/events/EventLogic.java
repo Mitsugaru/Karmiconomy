@@ -6,12 +6,12 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 
-import com.mitsugaru.Karmiconomy.DatabaseHandler;
 import com.mitsugaru.Karmiconomy.Item;
 import com.mitsugaru.Karmiconomy.KarmicEcon;
 import com.mitsugaru.Karmiconomy.Karmiconomy;
-import com.mitsugaru.Karmiconomy.DatabaseHandler.Field;
 import com.mitsugaru.Karmiconomy.config.Config;
+import com.mitsugaru.Karmiconomy.database.DatabaseHandler;
+import com.mitsugaru.Karmiconomy.database.Field;
 
 public class EventLogic
 {

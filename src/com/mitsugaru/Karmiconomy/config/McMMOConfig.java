@@ -10,10 +10,10 @@ import java.util.Map.Entry;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import com.mitsugaru.Karmiconomy.DatabaseHandler;
 import com.mitsugaru.Karmiconomy.Item;
 import com.mitsugaru.Karmiconomy.Karmiconomy;
-import com.mitsugaru.Karmiconomy.DatabaseHandler.Field;
+import com.mitsugaru.Karmiconomy.database.DatabaseHandler;
+import com.mitsugaru.Karmiconomy.database.Field;
 
 public class McMMOConfig
 {
@@ -408,7 +408,7 @@ public class McMMOConfig
 				if (plugin.getPluginConfig().debugUnhandled)
 				{
 					plugin.getLogger().warning(
-							"Unhandled limit for " + field.name());
+							"Unhandled mcmmo limit for " + field.name());
 				}
 				break;
 			}
@@ -484,7 +484,7 @@ public class McMMOConfig
 				if (plugin.getPluginConfig().debugUnhandled)
 				{
 					plugin.getLogger().warning(
-							"Unhandled pay for " + field.name());
+							"Unhandled mcmmo pay for " + field.name());
 				}
 				break;
 			}
