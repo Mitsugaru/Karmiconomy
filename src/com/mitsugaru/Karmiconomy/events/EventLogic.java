@@ -151,7 +151,7 @@ public class EventLogic
 		return false;
 	}
 
-	public static boolean hitLimit(Field field, Player player, int configLimit,
+	private static boolean hitLimit(Field field, Player player, int configLimit,
 			Item item, String command)
 	{
 		final int limit = db.getData(field, player.getName(), item, command);
@@ -164,6 +164,22 @@ public class EventLogic
 			}
 		}
 		return false;
+	}
+
+	//TODO pass in a "config" object that can handle the method calls for limmit and amount
+	public static void hitPayIncrement(Field field, Player player,
+			int configLimit, double amount, Item item, String command)
+	{
+		// Check if hit limit
+		if (!EventLogic.hitLimit(field, player, configLimit, item, command))
+		{
+			// Attempt to pay
+			if (KarmicEcon.pay(field, player, amount, item, command))
+			{
+				// Increment
+				db.incrementData(field, player.getName(), item, command);
+			}
+		}
 	}
 
 	public static void sendLackMessage(Player player, DenyType type,

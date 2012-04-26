@@ -12,7 +12,6 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 import com.mitsugaru.Karmiconomy.Item;
 import com.mitsugaru.Karmiconomy.Karmiconomy;
-import com.mitsugaru.Karmiconomy.database.DatabaseHandler;
 import com.mitsugaru.Karmiconomy.database.Field;
 
 public class McMMOConfig
