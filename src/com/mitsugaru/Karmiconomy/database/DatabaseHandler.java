@@ -100,12 +100,19 @@ public class DatabaseHandler
 			if (!mysql.checkTable(Table.MCMMO.getName()))
 			{
 				plugin.getLogger().info(
-						Karmiconomy.TAG + " Created mcmmo table");
+						Karmiconomy.TAG + " Created mcMMO table");
 				mysql.createTable("CREATE TABLE "
 						+ Table.MCMMO.getName()
 						+ " (id INT UNSIGNED NOT NULL, partyteleport INT NOT NULL, partyjoin INT NOT NULL, partyleave INT NOT NULL, partykick INT NOT NULL, partychange INT NOT NULL, acrobaticslevel INT NOT NULL, archerylevel INT NOT NULL, axeslevel INT NOT NULL, excavationlevel INT NOT NULL, fishinglevel INT NOT NULL, herbalismlevel INT NOT NULL, mininglevel INT NOT NULL, repairlevel INT NOT NULL, swordslevel INT NOT NULL, taminglevel INT NOT NULL, unarmedlevel INT NOT NULL, woodcuttinglevel INT NOT NULL, acrobaticsgain INT NOT NULL, archerygain INT NOT NULL, axesgain INT NOT NULL, excavationgain INT NOT NULL, fishinggain INT NOT NULL, herbalismgain INT NOT NULL, mininggain INT NOT NULL, repairgain INT NOT NULL, swordsgain INT NOT NULL, taminggain INT NOT NULL, unarmedgain INT NOT NULL, woodcuttinggain INT NOT NULL, PRIMARY KEY(id));");
 			}
-			// TODO heroes table
+			if (!mysql.checkTable(Table.HEROES.getName()))
+			{
+				plugin.getLogger().info(
+						Karmiconomy.TAG + " Created Heroes table");
+				mysql.createTable("CREATE TABLE "
+						+ Table.HEROES.getName()
+						+ " (id INT UNSIGNED NOT NULL, classchange INT NOT NULL, expchange INT NOT NULL, changelevel INT NOT NULL, combatenter INT NOT NULL, combatleave INT NOT NULL, partyjoin INT NOT NULL, partyleave INT NOT NULL, killattackmob INT NOT NULL, killattackplayer INT NOT NULL, killdefendmob INT NOT NULL, killdefendplayer INT NOT NULL, regainhealth INT NOT NULL, regainmana INT NOT NULL, skillcomplete INT NOT NULL, skilldamage INT NOT NULL, skilluse INT NOT NULL, weapondamage INT NOT NULL, PRIMARY KEY(id));");
+			}
 		}
 		else
 		{
@@ -165,12 +172,19 @@ public class DatabaseHandler
 			if (!sqlite.checkTable(Table.MCMMO.getName()))
 			{
 				plugin.getLogger().info(
-						Karmiconomy.TAG + " Created mcmmo table");
+						Karmiconomy.TAG + " Created mcMMO table");
 				sqlite.createTable("CREATE TABLE "
 						+ Table.MCMMO.getName()
 						+ " (id INTEGER PRIMARY KEY, partyteleport INTEGER NOT NULL, partyjoin INTEGER NOT NULL, partyleave INTEGER NOT NULL, partykick INTEGER NOT NULL, partychange INTEGER NOT NULL, acrobaticslevel INTEGER NOT NULL, archerylevel INTEGER NOT NULL, axeslevel INTEGER NOT NULL, excavationlevel INTEGER NOT NULL, fishinglevel INTEGER NOT NULL, herbalismlevel INTEGER NOT NULL, mininglevel INTEGER NOT NULL, repairlevel INTEGER NOT NULL, swordslevel INTEGER NOT NULL, taminglevel INTEGER NOT NULL, unarmedlevel INTEGER NOT NULL, woodcuttinglevel INTEGER NOT NULL, acrobaticsgain INTEGER NOT NULL, archerygain INTEGER NOT NULL, axesgain INTEGER NOT NULL, excavationgain INTEGER NOT NULL, fishinggain INTEGER NOT NULL, herbalismgain INTEGER NOT NULL, mininggain INTEGER NOT NULL, repairgain INTEGER NOT NULL, swordsgain INTEGER NOT NULL, taminggain INTEGER NOT NULL, unarmedgain INTEGER NOT NULL, woodcuttinggain INTEGER NOT NULL);");
 			}
-			// TODO heroes table
+			if (!sqlite.checkTable(Table.HEROES.getName()))
+			{
+				plugin.getLogger().info(
+						Karmiconomy.TAG + " Created Heroes table");
+				sqlite.createTable("CREATE TABLE "
+						+ Table.HEROES.getName()
+						+ " (id INTEGER PRIMARY KEY, classchange INTEGER NOT NULL, expchange INTEGER NOT NULL, changelevel INTEGER NOT NULL, combatenter INTEGER NOT NULL, combatleave INTEGER NOT NULL, partyjoin INTEGER NOT NULL, partyleave INTEGER NOT NULL, killattackmob INTEGER NOT NULL, killattackplayer INTEGER NOT NULL, killdefendmob INTEGER NOT NULL, killdefendplayer INTEGER NOT NULL, regainhealth INTEGER NOT NULL, regainmana INTEGER NOT NULL, skillcomplete INTEGER NOT NULL, skilldamage INTEGER NOT NULL, skilluse INTEGER NOT NULL, weapondamage INTEGER NOT NULL);");
+			}
 		}
 	}
 
@@ -191,7 +205,7 @@ public class DatabaseHandler
 						Karmiconomy.TAG + " Importing master table...");
 				PreparedStatement statement = mysql.prepare("INSERT INTO "
 						+ Table.MASTER.getName()
-						+ " (id, playername, laston) VALUES(?,?,?);");
+						+ " (id, playername, laston) VALUES('0','0','0');");
 				do
 				{
 					// import master
@@ -213,7 +227,7 @@ public class DatabaseHandler
 				PreparedStatement statement = mysql
 						.prepare("INSERT INTO "
 								+ Table.DATA.getName()
-								+ " (id, bedenter, bedleave, bowshoot, chat, death, creative, survival, playerJoin, kick, quit, respawn, worldchange, tameocelot, tamewolf, paintingplace, eggThrow, sneak, sprint) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
+								+ " (id, bedenter, bedleave, bowshoot, chat, death, creative, survival, playerJoin, kick, quit, respawn, worldchange, tameocelot, tamewolf, paintingplace, eggThrow, sneak, sprint) VALUES('0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0');");
 				do
 				{
 					statement.setInt(1, rs.getResult().getInt("id"));
@@ -249,7 +263,7 @@ public class DatabaseHandler
 				PreparedStatement statement = mysql
 						.prepare("INSERT INTO "
 								+ Table.ITEMS.getName()
-								+ "(id, itemid, data, durability, place, destroy, craft, enchant, playerDrop, pickup) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
+								+ "(id, itemid, data, durability, place, destroy, craft, enchant, playerDrop, pickup) VALUES ('0', '0', '0', '0', '0', '0', '0', '0', '0', '0');");
 				do
 				{
 					statement.setInt(1, rs.getResult().getInt("id"));
@@ -277,7 +291,7 @@ public class DatabaseHandler
 				PreparedStatement statement = mysql
 						.prepare("INSERT INTO "
 								+ Table.MCMMO.getName()
-								+ " (id, partyteleport , partyjoin , partyleave , partykick , partychange , acrobaticslevel , archerylevel , axeslevel , excavationlevel , fishinglevel , herbalismlevel , mininglevel , repairlevel , swordslevel , taminglevel , unarmedlevel , woodcuttinglevel , acrobaticsgain , archerygain , axesgain, excavationgain , fishinggain, herbalismgain, mininggain, repairgain, swordsgain, taminggain, unarmedgain, woodcuttinggain) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);");
+								+ " (id, partyteleport , partyjoin , partyleave , partykick , partychange , acrobaticslevel , archerylevel , axeslevel , excavationlevel , fishinglevel , herbalismlevel , mininglevel , repairlevel , swordslevel , taminglevel , unarmedlevel , woodcuttinglevel , acrobaticsgain , archerygain , axesgain, excavationgain , fishinggain, herbalismgain, mininggain, repairgain, swordsgain, taminggain, unarmedgain, woodcuttinggain) VALUES('0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0');");
 				do
 				{
 					statement.setInt(1, rs.getResult().getInt("id"));
@@ -332,7 +346,7 @@ public class DatabaseHandler
 				PreparedStatement statement = mysql
 						.prepare("INSERT INTO "
 								+ Table.PORTAL.getName()
-								+ " (id,pcreatenether, pcreateend, pcreatecustom, portalenter) VALUES (?,?,?,?,?);");
+								+ " (id,pcreatenether, pcreateend, pcreatecustom, portalenter) VALUES ('0','0','0','0','0');");
 				do
 				{
 					statement.setInt(1, rs.getResult().getInt("id"));
@@ -353,7 +367,7 @@ public class DatabaseHandler
 				PreparedStatement statement = mysql
 						.prepare("INSERT INTO "
 								+ Table.BUCKET.getName()
-								+ " (id,bemptylava, bemptywater, bfilllava, bfillwater) VALUES (?,?,?,?,?);");
+								+ " (id,bemptylava, bemptywater, bfilllava, bfillwater) VALUES ('0','0','0','0','0');");
 				do
 				{
 					statement.setInt(1, rs.getResult().getInt("id"));
@@ -376,7 +390,7 @@ public class DatabaseHandler
 				PreparedStatement statement = mysql
 						.prepare("INSERT INTO "
 								+ Table.MCMMO.getName()
-								+ " (id, partyteleport, partyjoin, partyleave, partykick, partychange, acrobaticslevel, archerylevel, axeslevel, excavationlevel, fishinglevel, herbalismlevel, mininglevel, repairlevel, swordslevel, taminglevel, unarmedlevel, woodcuttinglevel, acrobaticsgain, archerygain, axesgain, excavationgain, fishinggain, herbalismgain, mininggain, repairgain, swordsgain, taminggain, unarmedgain, woodcuttinggain) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
+								+ " (id, partyteleport, partyjoin, partyleave, partykick, partychange, acrobaticslevel, archerylevel, axeslevel, excavationlevel, fishinglevel, herbalismlevel, mininglevel, repairlevel, swordslevel, taminglevel, unarmedlevel, woodcuttinglevel, acrobaticsgain, archerygain, axesgain, excavationgain, fishinggain, herbalismgain, mininggain, repairgain, swordsgain, taminggain, unarmedgain, woodcuttinggain) VALUES ('0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0');");
 				do
 				{
 					statement.setInt(1, rs.getResult().getInt("id"));
@@ -423,7 +437,45 @@ public class DatabaseHandler
 				statement.close();
 			}
 			rs.closeQuery();
-			// TODO import heroes
+			// import heroes
+			rs = sqlite.select("SELECT * FROM " + Table.HEROES.getName() + ";");
+			if (rs.getResult().next())
+			{
+				plugin.getLogger().info(
+						Karmiconomy.TAG + " Importing mcmmo table...");
+				PreparedStatement statement = mysql
+						.prepare("INSERT INTO "
+								+ Table.HEROES.getName()
+								+ " (id, classchange, expchange, changelevel, combatenter, combatleave, partyjoin, partyleave, killattackmob, killattackplayer, killdefendmob, killdefendplayer, regainhealth, regainmana, skillcomplete, skilldamage, skilluse, weapondamage) VALUES ('0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0');");
+				do
+				{
+					statement.setInt(1, rs.getResult().getInt("id"));
+					statement.setInt(2, rs.getResult().getInt("classchange"));
+					statement.setInt(3, rs.getResult().getInt("expchange"));
+					statement.setInt(4, rs.getResult().getInt("changelevel"));
+					statement.setInt(5, rs.getResult().getInt("combatenter"));
+					statement.setInt(6, rs.getResult().getInt("combatleave"));
+					statement.setInt(7, rs.getResult().getInt("partyjoin"));
+					statement.setInt(8, rs.getResult().getInt("partyleave"));
+					statement.setInt(9, rs.getResult().getInt("killattackmob"));
+					statement.setInt(10,
+							rs.getResult().getInt("killattackplayer"));
+					statement
+							.setInt(11, rs.getResult().getInt("killdefendmob"));
+					statement.setInt(12,
+							rs.getResult().getInt("killdefendplayer"));
+					statement.setInt(13, rs.getResult().getInt("regainhealth"));
+					statement.setInt(14, rs.getResult().getInt("regainmana"));
+					statement
+							.setInt(15, rs.getResult().getInt("skillcomplete"));
+					statement.setInt(16, rs.getResult().getInt("skilldamage"));
+					statement.setInt(17, rs.getResult().getInt("skilluse"));
+					statement.setInt(18, rs.getResult().getInt("weapondamage"));
+					statement.executeUpdate();
+				} while (rs.getResult().next());
+				statement.close();
+			}
+			rs.closeQuery();
 			plugin.getLogger().info(
 					Karmiconomy.TAG + " Done importing SQLite into MySQL");
 		}
@@ -555,7 +607,12 @@ public class DatabaseHandler
 							+ " (id, partyteleport , partyjoin , partyleave , partykick , partychange , acrobaticslevel , archerylevel , axeslevel , excavationlevel , fishinglevel , herbalismlevel , mininglevel , repairlevel , swordslevel , taminglevel , unarmedlevel , woodcuttinglevel , acrobaticsgain , archerygain , axesgain, excavationgain , fishinggain, herbalismgain, mininggain, repairgain, swordsgain, taminggain, unarmedgain, woodcuttinggain) VALUES('"
 							+ id
 							+ "','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0');");
-					// TODO add heroes
+					// add Heroes
+					standardQuery("INSERT INTO "
+							+ Table.HEROES.getName()
+							+ " (id, classchange, expchange, changelevel, combatenter, combatleave, partyjoin, partyleave, killattackmob, killattackplayer, killdefendmob, killdefendplayer, regainhealth, regainmana, skillcomplete, skilldamage, skilluse, weapondamage) VALUES ('"
+							+ id
+							+ "', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0');");
 					return true;
 				}
 				else
@@ -695,7 +752,11 @@ public class DatabaseHandler
 					+ Table.MCMMO.getName()
 					+ " SET partyteleport='0', partyjoin='0', partyleave='0', partykick='0', partychange='0', acrobaticslevel='0', archerylevel='0', axeslevel='0', excavationlevel='0', fishinglevel='0', herbalismlevel='0', mininglevel='0', repairlevel='0', swordslevel='0', taminglevel='0', unarmedlevel='0', woodcuttinglevel='0', acrobaticsgain='0', archerygain='0', axesgain='0', excavationgain='0', fishinggain='0', herbalismgain='0', mininggain='0', repairgain='0', swordsgain='0', taminggain='0', unarmedgain='0', woodcuttinggain='0' WHERE id='"
 					+ id + "';");
-			// TODO reset heroes
+			// Reset heroes
+			standardQuery("UPDATE "
+					+ Table.HEROES.getName()
+					+ " SET classchange='0', expchange='0', changelevel='0', combatenter='0', combatleave='0', partyjoin='0', partyleave='0', killattackmob='0', killattackplayer='0', killdefendmob='0', killdefendplayer='0', regainhealth='0', regainmana='0', skillcomplete='0', skilldamage='0', skilluse='0', weapondamage='0' WHERE id='"
+					+ id + "';");
 			// Drop everything in items for player id
 			standardQuery("DELETE FROM " + Table.ITEMS.getName()
 					+ " WHERE id='" + id + "';");
@@ -819,6 +880,13 @@ public class DatabaseHandler
 					break;
 				}
 				case MCMMO:
+				{
+					standardQuery("UPDATE " + field.getTable().getName()
+							+ " SET " + field.getColumnName() + "='" + value
+							+ "' WHERE id='" + id + "';");
+					break;
+				}
+				case HEROES:
 				{
 					standardQuery("UPDATE " + field.getTable().getName()
 							+ " SET " + field.getColumnName() + "='" + value

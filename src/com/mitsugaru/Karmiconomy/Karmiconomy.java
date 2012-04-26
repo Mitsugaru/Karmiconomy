@@ -8,6 +8,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.mitsugaru.Karmiconomy.config.Config;
 import com.mitsugaru.Karmiconomy.database.DatabaseHandler;
+import com.mitsugaru.Karmiconomy.events.HeroesListener;
 import com.mitsugaru.Karmiconomy.events.KarmiconomyListener;
 import com.mitsugaru.Karmiconomy.events.EventLogic;
 import com.mitsugaru.Karmiconomy.events.McMMOListener;
@@ -20,7 +21,7 @@ public class Karmiconomy extends JavaPlugin
 	private PermCheck perm;
 	private DatabaseHandler database;
 	private boolean economyFound;
-	public boolean mcmmo;
+	public boolean mcmmo, heroes;
 	public static Map<String, String> sentMessages = new HashMap<String, String>();
 
 	/**
@@ -89,6 +90,18 @@ public class Karmiconomy extends JavaPlugin
 		else
 		{
 			mcmmo = false;
+		}
+		Plugin heroesPlugin = getServer().getPluginManager().getPlugin("Heroes");
+		if(heroesPlugin != null)
+		{
+			HeroesListener heroesListener = new HeroesListener(this);
+			this.getServer().getPluginManager().registerEvents(heroesListener, this);
+			heroes = true;
+			getLogger().info(TAG + " Hooked into Heroes");
+		}
+		else
+		{
+			heroes = false;
 		}
 		// getLogger().info(TAG + " Enabled v" + getDescription().getVersion());
 	}

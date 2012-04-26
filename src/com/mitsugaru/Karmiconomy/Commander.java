@@ -14,6 +14,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
 import com.mitsugaru.Karmiconomy.config.Config;
+import com.mitsugaru.Karmiconomy.config.HeroesConfig;
 import com.mitsugaru.Karmiconomy.config.McMMOConfig;
 
 @SuppressWarnings("unused")
@@ -123,6 +124,10 @@ public class Commander implements CommandExecutor
 					if(plugin.mcmmo)
 					{
 						McMMOConfig.reload();
+					}
+					if(plugin.heroes)
+					{
+						HeroesConfig.reload();
 					}
 					sender.sendMessage(ChatColor.GREEN + Karmiconomy.TAG
 							+ ChatColor.WHITE + " Config reloaded.");
