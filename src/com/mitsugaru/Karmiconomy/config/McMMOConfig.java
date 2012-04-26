@@ -73,7 +73,6 @@ public class McMMOConfig
 
 	public static void reload()
 	{
-		//Not sure if this is necessary...?
 		try
 		{
 			config.load(file);
