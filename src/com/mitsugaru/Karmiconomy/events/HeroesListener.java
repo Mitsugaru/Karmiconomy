@@ -267,9 +267,9 @@ public class HeroesListener implements Listener
 			if (player != null)
 			{
 				if (EventLogic.deny(Field.HEROES_PARTY_LEAVE, player,
-						HeroesConfig.regainHealthDenyPay, config.getPayValue(
+						HeroesConfig.partyLeaveDenyPay, config.getPayValue(
 								Field.HEROES_PARTY_LEAVE, null, null),
-						HeroesConfig.regainHealthDenyLimit, config
+						HeroesConfig.partyLeaveDenyLimit, config
 								.getLimitValue(Field.HEROES_PARTY_LEAVE, null,
 										null), null, null))
 				{
