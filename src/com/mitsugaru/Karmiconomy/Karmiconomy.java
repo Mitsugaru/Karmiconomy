@@ -7,11 +7,13 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.mitsugaru.Karmiconomy.config.Config;
+import com.mitsugaru.Karmiconomy.config.LocalizeConfig;
 import com.mitsugaru.Karmiconomy.database.DatabaseHandler;
 import com.mitsugaru.Karmiconomy.events.HeroesListener;
 import com.mitsugaru.Karmiconomy.events.KarmiconomyListener;
 import com.mitsugaru.Karmiconomy.events.EventLogic;
 import com.mitsugaru.Karmiconomy.events.McMMOListener;
+import com.mitsugaru.Karmiconomy.permissions.PermCheck;
 
 public class Karmiconomy extends JavaPlugin
 {
@@ -58,6 +60,8 @@ public class Karmiconomy extends JavaPlugin
 		database = new DatabaseHandler(this, config);
 		// Check update
 		config.checkUpdate();
+		//Localization config
+		LocalizeConfig.init(this);
 		// Setup economy
 		KarmicEcon ke = new KarmicEcon(this);
 		economyFound = ke.setupEconomy();

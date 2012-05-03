@@ -114,7 +114,7 @@ public class KarmiconomyListener implements Listener
 					Field.COMMAND,
 					player,
 					config.commandDenyPay,
-					config.getPayValue(Field.CHAT, null, event.getMessage()),
+					config.getPayValue(Field.COMMAND, null, event.getMessage()),
 					config.commandDenyLimit,
 					config.getLimitValue(Field.COMMAND, null,
 							event.getMessage()), null, event.getMessage()))

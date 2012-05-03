@@ -79,14 +79,10 @@ public class Config
 	private final Map<Item, KCItemInfo> values = new HashMap<Item, KCItemInfo>();
 
 	// TODO ability to change config in-game
-
-	// IDEA Ability to change the colors for all parameters
-	// such as item name, amount, data value, id value, enchantment name,
-	// enchantment lvl, page numbers, maybe even header titles
 	/**
 	 * Constructor and initializer
 	 * 
-	 * @param KarmicShare
+	 * @param Karmiconomy   
 	 *            plugin
 	 */
 	public Config(Karmiconomy plugin)

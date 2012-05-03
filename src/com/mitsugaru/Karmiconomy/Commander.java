@@ -5,6 +5,7 @@
  */
 package com.mitsugaru.Karmiconomy;
 
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -15,7 +16,10 @@ import org.bukkit.command.CommandSender;
 
 import com.mitsugaru.Karmiconomy.config.Config;
 import com.mitsugaru.Karmiconomy.config.HeroesConfig;
+import com.mitsugaru.Karmiconomy.config.LocalizeConfig;
 import com.mitsugaru.Karmiconomy.config.McMMOConfig;
+import com.mitsugaru.Karmiconomy.permissions.PermCheck;
+import com.mitsugaru.Karmiconomy.permissions.Permission;
 
 @SuppressWarnings("unused")
 public class Commander implements CommandExecutor
@@ -66,6 +70,9 @@ public class Commander implements CommandExecutor
 		else
 		{
 			final String com = args[0].toLowerCase();
+			final EnumMap<LocalString.Field, String> info = new EnumMap<LocalString.Field, String>(
+					LocalString.Field.class);
+			info.put(LocalString.Field.TAG, Karmiconomy.TAG);
 			if (com.equals("version") || com.equals("ver"))
 			{
 				// Version and author
@@ -118,9 +125,10 @@ public class Commander implements CommandExecutor
 			}*/
 			else if(com.equals("reload"))
 			{
-				if(perm.checkPermission(sender, "Karmiconomy.admin"))
+				if(perm.checkPermission(sender, Permission.ADMIN.getNode()))
 				{
 					config.reloadConfig();
+					LocalizeConfig.reload();
 					if(plugin.mcmmo)
 					{
 						McMMOConfig.reload();
@@ -129,19 +137,18 @@ public class Commander implements CommandExecutor
 					{
 						HeroesConfig.reload();
 					}
-					sender.sendMessage(ChatColor.GREEN + Karmiconomy.TAG
-							+ ChatColor.WHITE + " Config reloaded.");
+					sender.sendMessage(LocalString.RELOAD_CONFIG.parseString(info));
 				}
 				else
 				{
-					sender.sendMessage(ChatColor.RED + Karmiconomy.TAG
-							+ " Lack permission: Karmiconomy.admin");
+					info.put(LocalString.Field.EXTRA, Permission.ADMIN.getNode());
+					sender.sendMessage(LocalString.PERMISSION_DENY.parseString(info));
 				}
 			}
 			else
 			{
-				sender.sendMessage(ChatColor.RED + Karmiconomy.TAG
-						+ " Unknown command '" + ChatColor.GOLD + com + ChatColor.RED + "'. Bad syntax.");
+				info.put(LocalString.Field.EXTRA, com);
+				sender.sendMessage(LocalString.UNKNOWN_COMMAND.parseString(info));
 			}
 		}
 		if (config.debugTime)
@@ -187,7 +194,6 @@ public class Commander implements CommandExecutor
 		}
 	}
 
-	// TODO revise
 	private void showVersion(CommandSender sender, String[] args)
 	{
 		sender.sendMessage(ChatColor.BLUE + bar + "=====");
@@ -219,7 +225,6 @@ public class Commander implements CommandExecutor
 	 * @param sender
 	 *            to display to
 	 */
-	// TODO revise
 	private void displayHelp(CommandSender sender)
 	{
 		sender.sendMessage(ChatColor.BLUE + "==========" + ChatColor.GOLD
@@ -247,8 +252,7 @@ public class Commander implements CommandExecutor
 		sender.sendMessage(ChatColor.GREEN + "/ks value [prev|next|page#]"
 				+ ChatColor.YELLOW
 				+ " : List karma multiplier values, and page through list");*/
-		sender.sendMessage(ChatColor.GREEN + "/kcon help" + ChatColor.YELLOW
-				+ " : Show help menu");
+		sender.sendMessage(LocalString.HELP_HELP.parseString(null));
 		/*if (perm.checkPermission(sender, "KarmicShare.info"))
 		{
 			sender.sendMessage(ChatColor.GREEN + "/ks info" + ChatColor.YELLOW
@@ -266,11 +270,9 @@ public class Commander implements CommandExecutor
 		}*/
 		if(perm.checkPermission(sender, "Karmiconomy.admin"))
 		{
-			sender.sendMessage(ChatColor.GREEN + "/kcon reload" + ChatColor.YELLOW
-					+ " : Reload all config files");
+			sender.sendMessage(LocalString.HELP_ADMIN_RELOAD.parseString(null));
 		}
-		sender.sendMessage(ChatColor.GREEN + "/kcon version" + ChatColor.YELLOW
-				+ " : Show version and config");
+		sender.sendMessage(LocalString.HELP_VERSION.parseString(null));
 	}
 
 	/**

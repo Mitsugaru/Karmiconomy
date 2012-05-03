@@ -1,9 +1,10 @@
 package com.mitsugaru.Karmiconomy;
 
+import java.util.EnumMap;
+
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
 
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -52,8 +53,8 @@ public class KarmicEcon
 		return true;
 	}
 
-	public static boolean denyPay(Field field, Player player, double pay, Item item,
-			String command)
+	public static boolean denyPay(Field field, Player player, double pay,
+			Item item, String command)
 	{
 		boolean paid = false;
 		if (vault)
@@ -87,8 +88,8 @@ public class KarmicEcon
 		return paid;
 	}
 
-	public static boolean pay(Field field, Player player, double amount, Item item,
-			String command)
+	public static boolean pay(Field field, Player player, double amount,
+			Item item, String command)
 	{
 		boolean paid = false;
 		if (amount == 0.0)
@@ -110,16 +111,19 @@ public class KarmicEcon
 			if (response != null)
 			{
 				String message = "";
+				final EnumMap<LocalString.Field, String> info = new EnumMap<LocalString.Field, String>(
+						LocalString.Field.class);
+				info.put(LocalString.Field.TAG, Karmiconomy.TAG);
+				info.put(LocalString.Field.AMOUNT, "" + amount);
+				info.put(LocalString.Field.EVENT, field.name());
 				switch (response.type)
 				{
 					case FAILURE:
 					{
 						if (config.getDenyPay(field, item))
 						{
-							message = ChatColor.RED + Karmiconomy.TAG
-									+ " Could not pay " + ChatColor.GOLD
-									+ amount + ChatColor.RED + " for "
-									+ ChatColor.AQUA + field.name();
+							message = LocalString.ECONOMY_FAILURE
+									.parseString(info);
 							player.sendMessage(message);
 							Karmiconomy.sentMessages.put(player.getName(),
 									message);
@@ -134,10 +138,8 @@ public class KarmicEcon
 					}
 					case NOT_IMPLEMENTED:
 					{
-						message = ChatColor.RED + Karmiconomy.TAG
-								+ " Could not pay " + ChatColor.GOLD + amount
-								+ ChatColor.RED + " for " + ChatColor.AQUA
-								+ field.name();
+						message = LocalString.ECONOMY_FAILURE
+								.parseString(info);
 						player.sendMessage(message);
 						Karmiconomy.sentMessages.put(player.getName(), message);
 						if (config.debugEconomy)
@@ -157,7 +159,8 @@ public class KarmicEcon
 											+ player.getName()
 											+ "' of amount: " + amount);
 						}
-						paid = true;;
+						paid = true;
+						;
 					}
 					default:
 						break;
@@ -171,7 +174,7 @@ public class KarmicEcon
 			{
 				return true;
 			}
-			else 
+			else
 			{
 				plugin.getServer().dispatchCommand(
 						plugin.getServer().getConsoleSender(),

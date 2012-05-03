@@ -1,5 +1,6 @@
 package com.mitsugaru.Karmiconomy.events;
 
+import java.util.EnumMap;
 import java.util.Map;
 
 import org.bukkit.ChatColor;
@@ -9,7 +10,9 @@ import org.bukkit.event.Event;
 import com.mitsugaru.Karmiconomy.Item;
 import com.mitsugaru.Karmiconomy.KarmicEcon;
 import com.mitsugaru.Karmiconomy.Karmiconomy;
+import com.mitsugaru.Karmiconomy.LocalString;
 import com.mitsugaru.Karmiconomy.config.Config;
+import com.mitsugaru.Karmiconomy.config.LocalizeConfig;
 import com.mitsugaru.Karmiconomy.database.DatabaseHandler;
 import com.mitsugaru.Karmiconomy.database.Field;
 
@@ -151,8 +154,8 @@ public class EventLogic
 		return false;
 	}
 
-	private static boolean hitLimit(Field field, Player player, int configLimit,
-			Item item, String command)
+	private static boolean hitLimit(Field field, Player player,
+			int configLimit, Item item, String command)
 	{
 		final int limit = db.getData(field, player.getName(), item, command);
 		if (configLimit >= 0)
@@ -166,7 +169,6 @@ public class EventLogic
 		return false;
 	}
 
-	//TODO pass in a "config" object that can handle the method calls for limmit and amount
 	public static void hitPayIncrement(Field field, Player player,
 			int configLimit, double amount, Item item, String command)
 	{
@@ -185,26 +187,27 @@ public class EventLogic
 	public static void sendLackMessage(Player player, DenyType type,
 			String action, String extra)
 	{
-		final StringBuilder sb = new StringBuilder();
-		sb.append(ChatColor.RED + Karmiconomy.TAG);
+		final EnumMap<LocalString.Field, String> info = new EnumMap<LocalString.Field, String>(
+				LocalString.Field.class);
+		info.put(LocalString.Field.TAG, Karmiconomy.TAG);
 		switch (type)
 		{
 			case MONEY:
-				sb.append(" Lack money ");
+				info.put(LocalString.Field.REASON, LocalizeConfig.reasonMoney);
 				break;
 			case LIMIT:
-				sb.append(" Hit limit ");
+				info.put(LocalString.Field.REASON, LocalizeConfig.reasonLimit);
 				break;
 			default:
-				sb.append(" Unknown DenyType ");
+				info.put(LocalString.Field.REASON, LocalizeConfig.reasonUnknown);
 				break;
 		}
-		sb.append("for action: " + ChatColor.AQUA + action);
+		info.put(LocalString.Field.EVENT, action);
 		if (extra != null)
 		{
-			sb.append(ChatColor.RED + " of " + ChatColor.GOLD + extra);
+			info.put(LocalString.Field.EXTRA, " of " + ChatColor.GOLD + extra);
 		}
-		final String out = sb.toString();
+		final String out = LocalString.LACK_MESSAGE.parseString(info);
 		boolean send = true;
 		// Only send message if they haven't already gotten it. Should stop
 		// against spamming.
