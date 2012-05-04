@@ -89,7 +89,7 @@ public class Karmiconomy extends JavaPlugin
 			McMMOListener mcmmoListener = new McMMOListener(this);
 			this.getServer().getPluginManager().registerEvents(mcmmoListener, this);
 			mcmmo = true;
-			getLogger().info(TAG + " Hooked into mcMMO");
+			getLogger().info("Hooked into mcMMO");
 		}
 		else
 		{
@@ -101,7 +101,7 @@ public class Karmiconomy extends JavaPlugin
 			HeroesListener heroesListener = new HeroesListener(this);
 			this.getServer().getPluginManager().registerEvents(heroesListener, this);
 			heroes = true;
-			getLogger().info(TAG + " Hooked into Heroes");
+			getLogger().info("Hooked into Heroes");
 		}
 		else
 		{
