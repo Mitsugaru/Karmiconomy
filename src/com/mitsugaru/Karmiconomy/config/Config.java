@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -1381,6 +1382,29 @@ public class Config
 			}
 		}
 		return false;
+	}
+	
+	public boolean checkWorld(Field field, String worldName)
+	{
+		boolean valid = false;
+		final List<String> list = plugin.getConfig().getStringList(field.getConfigPath() + ".worlds");
+		if(list == null)
+		{
+			//No worlds specified, so allow all
+			valid = true;
+		}
+		else
+		{
+			for(String world : list)
+			{
+				if(world.equalsIgnoreCase(worldName))
+				{
+					valid = true;
+					break;
+				}
+			}
+		}
+		return valid;
 	}
 
 	/**

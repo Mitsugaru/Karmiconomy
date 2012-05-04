@@ -65,20 +65,24 @@ public class KarmiconomyListener implements Listener
 		if (!event.isCancelled() && config.chat && event.getPlayer() != null)
 		{
 			final Player player = event.getPlayer();
-			if (EventLogic.deny(Field.CHAT, player, config.chatDenyPay,
-					config.getPayValue(Field.CHAT, null, null),
-					config.chatDenyLimit,
-					config.getLimitValue(Field.CHAT, null, null), null, null))
+			if (config.checkWorld(Field.CHAT, player.getWorld().getName()))
 			{
-				// Cancel event
-				event.setCancelled(true);
-				if (config.debugEvents)
+				if (EventLogic.deny(Field.CHAT, player, config.chatDenyPay,
+						config.getPayValue(Field.CHAT, null, null),
+						config.chatDenyLimit,
+						config.getLimitValue(Field.CHAT, null, null), null,
+						null))
 				{
-					final Map<String, String> details = new HashMap<String, String>();
-					details.put("Player", player.getName());
-					details.put("Message", event.getMessage());
-					details.put("Cancelled", "true");
-					EventLogic.debugEvent(event, details);
+					// Cancel event
+					event.setCancelled(true);
+					if (config.debugEvents)
+					{
+						final Map<String, String> details = new HashMap<String, String>();
+						details.put("Player", player.getName());
+						details.put("Message", event.getMessage());
+						details.put("Cancelled", "true");
+						EventLogic.debugEvent(event, details);
+					}
 				}
 			}
 		}
@@ -91,9 +95,12 @@ public class KarmiconomyListener implements Listener
 		{
 			final Player player = event.getPlayer();
 			// TODO filter?
-			EventLogic.hitPayIncrement(Field.CHAT, player,
-					config.getLimitValue(Field.CHAT, null, null),
-					config.getPayValue(Field.CHAT, null, null), null, null);
+			if (config.checkWorld(Field.CHAT, player.getWorld().getName()))
+			{
+				EventLogic.hitPayIncrement(Field.CHAT, player,
+						config.getLimitValue(Field.CHAT, null, null),
+						config.getPayValue(Field.CHAT, null, null), null, null);
+			}
 			if (config.debugEvents)
 			{
 				final Map<String, String> details = new HashMap<String, String>();
@@ -110,24 +117,28 @@ public class KarmiconomyListener implements Listener
 		if (!event.isCancelled() && config.command && event.getPlayer() != null)
 		{
 			final Player player = event.getPlayer();
-			if (EventLogic.deny(
-					Field.COMMAND,
-					player,
-					config.commandDenyPay,
-					config.getPayValue(Field.COMMAND, null, event.getMessage()),
-					config.commandDenyLimit,
-					config.getLimitValue(Field.COMMAND, null,
-							event.getMessage()), null, event.getMessage()))
+			if (config.checkWorld(Field.COMMAND, player.getWorld().getName()))
 			{
-				// Deny
-				event.setCancelled(true);
-				if (config.debugEvents)
+				if (EventLogic.deny(
+						Field.COMMAND,
+						player,
+						config.commandDenyPay,
+						config.getPayValue(Field.COMMAND, null,
+								event.getMessage()),
+						config.commandDenyLimit,
+						config.getLimitValue(Field.COMMAND, null,
+								event.getMessage()), null, event.getMessage()))
 				{
-					final Map<String, String> details = new HashMap<String, String>();
-					details.put("Player", player.getName());
-					details.put("Message", event.getMessage());
-					details.put("Cancelled", "true");
-					EventLogic.debugEvent(event, details);
+					// Deny
+					event.setCancelled(true);
+					if (config.debugEvents)
+					{
+						final Map<String, String> details = new HashMap<String, String>();
+						details.put("Player", player.getName());
+						details.put("Message", event.getMessage());
+						details.put("Cancelled", "true");
+						EventLogic.debugEvent(event, details);
+					}
 				}
 			}
 		}
@@ -141,15 +152,16 @@ public class KarmiconomyListener implements Listener
 			final Player player = event.getPlayer();
 			// Pay on command
 			// Check if hit limit
-			EventLogic
-					.hitPayIncrement(
-							Field.COMMAND,
-							player,
-							config.getLimitValue(Field.COMMAND, null,
-									event.getMessage()),
-							config.getPayValue(Field.COMMAND, null,
-									event.getMessage()), null,
-							event.getMessage());
+			if (config.checkWorld(Field.COMMAND, player.getWorld().getName()))
+			{
+				EventLogic.hitPayIncrement(
+						Field.COMMAND,
+						player,
+						config.getLimitValue(Field.COMMAND, null,
+								event.getMessage()),
+						config.getPayValue(Field.COMMAND, null,
+								event.getMessage()), null, event.getMessage());
+			}
 			// TODO pay based on command match
 			if (config.debugEvents)
 			{
@@ -175,30 +187,35 @@ public class KarmiconomyListener implements Listener
 			if ((denyPay || denyLimit) && event.getPlayer() != null)
 			{
 				final Player player = event.getPlayer();
-
-				if (EventLogic.deny(Field.BLOCK_PLACE, player, denyPay,
-						config.getPayValue(Field.BLOCK_PLACE, placed, null),
-						denyLimit,
-						config.getLimitValue(Field.BLOCK_PLACE, placed, null),
-						placed, null))
+				if (config.checkWorld(Field.BLOCK_PLACE, player.getWorld()
+						.getName()))
 				{
-					// Deny
-					event.setCancelled(true);
-					if (config.debugEvents)
+					if (EventLogic
+							.deny(Field.BLOCK_PLACE, player, denyPay, config
+									.getPayValue(Field.BLOCK_PLACE, placed,
+											null), denyLimit, config
+									.getLimitValue(Field.BLOCK_PLACE, placed,
+											null), placed, null))
 					{
-						final Map<String, String> details = new HashMap<String, String>();
-						details.put("Player", player.getName());
-						if (event.getBlock() != null)
+						// Deny
+						event.setCancelled(true);
+						if (config.debugEvents)
 						{
-							details.put("Block", event.getBlock().toString());
+							final Map<String, String> details = new HashMap<String, String>();
+							details.put("Player", player.getName());
+							if (event.getBlock() != null)
+							{
+								details.put("Block", event.getBlock()
+										.toString());
+							}
+							if (event.getBlockAgainst() != null)
+							{
+								details.put("Block against", event
+										.getBlockAgainst().toString());
+							}
+							details.put("Cancelled", "true");
+							EventLogic.debugEvent(event, details);
 						}
-						if (event.getBlockAgainst() != null)
-						{
-							details.put("Block against", event
-									.getBlockAgainst().toString());
-						}
-						details.put("Cancelled", "true");
-						EventLogic.debugEvent(event, details);
 					}
 				}
 			}
@@ -214,12 +231,17 @@ public class KarmiconomyListener implements Listener
 			// Pay on block place
 
 			final Player player = event.getPlayer();
-			final Item placed = new Item(event.getBlockPlaced().getTypeId(),
-					event.getBlockPlaced().getData(), (short) 0);
-			EventLogic.hitPayIncrement(Field.BLOCK_PLACE, player,
-					config.getLimitValue(Field.BLOCK_PLACE, placed, null),
-					config.getPayValue(Field.BLOCK_PLACE, placed, null),
-					placed, null);
+			if (config.checkWorld(Field.BLOCK_PLACE, player.getWorld()
+					.getName()))
+			{
+				final Item placed = new Item(
+						event.getBlockPlaced().getTypeId(), event
+								.getBlockPlaced().getData(), (short) 0);
+				EventLogic.hitPayIncrement(Field.BLOCK_PLACE, player,
+						config.getLimitValue(Field.BLOCK_PLACE, placed, null),
+						config.getPayValue(Field.BLOCK_PLACE, placed, null),
+						placed, null);
+			}
 			if (config.debugEvents)
 			{
 				final Map<String, String> details = new HashMap<String, String>();
@@ -252,26 +274,29 @@ public class KarmiconomyListener implements Listener
 			if ((denyPay || denyLimit) && event.getPlayer() != null)
 			{
 				final Player player = event.getPlayer();
-
-				if (EventLogic
-						.deny(Field.BLOCK_DESTROY, player, denyPay, config
-								.getPayValue(Field.BLOCK_DESTROY, destroyed,
-										null), denyLimit, config.getLimitValue(
-								Field.BLOCK_DESTROY, destroyed, null),
-								destroyed, null))
+				if (config.checkWorld(Field.BLOCK_DESTROY, player.getWorld()
+						.getName()))
 				{
-					// Deny
-					event.setCancelled(true);
-					if (config.debugEvents)
+					if (EventLogic.deny(Field.BLOCK_DESTROY, player, denyPay,
+							config.getPayValue(Field.BLOCK_DESTROY, destroyed,
+									null), denyLimit, config.getLimitValue(
+									Field.BLOCK_DESTROY, destroyed, null),
+							destroyed, null))
 					{
-						final Map<String, String> details = new HashMap<String, String>();
-						details.put("Player", player.getName());
-						if (event.getBlock() != null)
+						// Deny
+						event.setCancelled(true);
+						if (config.debugEvents)
 						{
-							details.put("Block", event.getBlock().toString());
+							final Map<String, String> details = new HashMap<String, String>();
+							details.put("Player", player.getName());
+							if (event.getBlock() != null)
+							{
+								details.put("Block", event.getBlock()
+										.toString());
+							}
+							details.put("Cancelled", "true");
+							EventLogic.debugEvent(event, details);
 						}
-						details.put("Cancelled", "true");
-						EventLogic.debugEvent(event, details);
 					}
 				}
 			}
@@ -286,12 +311,18 @@ public class KarmiconomyListener implements Listener
 		{
 			// Pay on block break
 			final Player player = event.getPlayer();
-			final Item destroyed = new Item(event.getBlock().getTypeId(), event
-					.getBlock().getData(), (short) 0);
-			EventLogic.hitPayIncrement(Field.BLOCK_DESTROY, player,
-					config.getLimitValue(Field.BLOCK_DESTROY, destroyed, null),
-					config.getPayValue(Field.BLOCK_DESTROY, destroyed, null),
-					destroyed, null);
+			if (config.checkWorld(Field.BLOCK_DESTROY, player.getWorld()
+					.getName()))
+			{
+				final Item destroyed = new Item(event.getBlock().getTypeId(),
+						event.getBlock().getData(), (short) 0);
+				EventLogic
+						.hitPayIncrement(Field.BLOCK_DESTROY, player, config
+								.getLimitValue(Field.BLOCK_DESTROY, destroyed,
+										null), config.getPayValue(
+								Field.BLOCK_DESTROY, destroyed, null),
+								destroyed, null);
+			}
 			if (config.debugEvents)
 			{
 				final Map<String, String> details = new HashMap<String, String>();
@@ -320,27 +351,29 @@ public class KarmiconomyListener implements Listener
 				if (event.getWhoClicked() instanceof Player)
 				{
 					final Player player = (Player) event.getWhoClicked();
-
-					if (EventLogic
-							.deny(Field.ITEM_CRAFT, player, denyPay,
-									config.getPayValue(Field.ITEM_CRAFT, craft,
-											null), denyLimit, config
-											.getLimitValue(Field.ITEM_CRAFT,
-													craft, null), craft, null))
+					if (config.checkWorld(Field.ITEM_CRAFT, player.getWorld()
+							.getName()))
 					{
-						// Deny
-						event.setCancelled(true);
-						if (config.debugEvents)
+						if (EventLogic.deny(Field.ITEM_CRAFT, player, denyPay,
+								config.getPayValue(Field.ITEM_CRAFT, craft,
+										null), denyLimit, config.getLimitValue(
+										Field.ITEM_CRAFT, craft, null), craft,
+								null))
 						{
-							final Map<String, String> details = new HashMap<String, String>();
-							details.put("Player", player.getName());
-							if (event.getRecipe().getResult() != null)
+							// Deny
+							event.setCancelled(true);
+							if (config.debugEvents)
 							{
-								details.put("Result", event.getRecipe()
-										.getResult().toString());
+								final Map<String, String> details = new HashMap<String, String>();
+								details.put("Player", player.getName());
+								if (event.getRecipe().getResult() != null)
+								{
+									details.put("Result", event.getRecipe()
+											.getResult().toString());
+								}
+								details.put("Cancelled", "true");
+								EventLogic.debugEvent(event, details);
 							}
-							details.put("Cancelled", "true");
-							EventLogic.debugEvent(event, details);
 						}
 					}
 				}
@@ -357,12 +390,17 @@ public class KarmiconomyListener implements Listener
 			if (event.getWhoClicked() instanceof Player)
 			{
 				final Player player = (Player) event.getWhoClicked();
-				final Item craft = new Item(event.getRecipe().getResult());
-				// Pay on craft
-				EventLogic.hitPayIncrement(Field.ITEM_CRAFT, player,
-						config.getLimitValue(Field.ITEM_CRAFT, craft, null),
-						config.getPayValue(Field.ITEM_CRAFT, craft, null),
-						craft, null);
+				if (config.checkWorld(Field.ITEM_CRAFT, player.getWorld()
+						.getName()))
+				{
+					final Item craft = new Item(event.getRecipe().getResult());
+					// Pay on craft
+					EventLogic
+							.hitPayIncrement(Field.ITEM_CRAFT, player, config
+									.getLimitValue(Field.ITEM_CRAFT, craft,
+											null), config.getPayValue(
+									Field.ITEM_CRAFT, craft, null), craft, null);
+				}
 				if (config.debugEvents)
 				{
 					final Map<String, String> details = new HashMap<String, String>();
@@ -374,6 +412,7 @@ public class KarmiconomyListener implements Listener
 					}
 					EventLogic.debugEvent(event, details);
 				}
+
 			}
 		}
 	}
@@ -391,33 +430,35 @@ public class KarmiconomyListener implements Listener
 			if ((denyPay || denyLimit) && event.getEnchanter() != null)
 			{
 				final Player player = (Player) event.getEnchanter();
-
-				if (EventLogic
-						.deny(Field.ITEM_ENCHANT, player, denyPay,
-								config.getPayValue(Field.ITEM_ENCHANT, enchant,
-										null), denyLimit, config.getLimitValue(
-										Field.ITEM_ENCHANT, enchant, null),
-								enchant, null))
+				if (config.checkWorld(Field.ITEM_ENCHANT, player.getWorld()
+						.getName()))
 				{
-					// Deny
-					event.setCancelled(true);
-					if (config.debugEvents)
+					if (EventLogic.deny(Field.ITEM_ENCHANT, player, denyPay,
+							config.getPayValue(Field.ITEM_ENCHANT, enchant,
+									null), denyLimit, config.getLimitValue(
+									Field.ITEM_ENCHANT, enchant, null),
+							enchant, null))
 					{
-						final Map<String, String> details = new HashMap<String, String>();
-						details.put("Player", player.getName());
-						if (event.getEnchantsToAdd() != null)
+						// Deny
+						event.setCancelled(true);
+						if (config.debugEvents)
 						{
-							for (Map.Entry<Enchantment, Integer> entry : event
-									.getEnchantsToAdd().entrySet())
+							final Map<String, String> details = new HashMap<String, String>();
+							details.put("Player", player.getName());
+							if (event.getEnchantsToAdd() != null)
 							{
-								details.put("Enchantment/Level", entry.getKey()
-										.getName()
-										+ "/"
-										+ entry.getValue().toString());
+								for (Map.Entry<Enchantment, Integer> entry : event
+										.getEnchantsToAdd().entrySet())
+								{
+									details.put("Enchantment/Level", entry
+											.getKey().getName()
+											+ "/"
+											+ entry.getValue().toString());
+								}
 							}
+							details.put("Cancelled", "true");
+							EventLogic.debugEvent(event, details);
 						}
-						details.put("Cancelled", "true");
-						EventLogic.debugEvent(event, details);
 					}
 				}
 			}
@@ -431,12 +472,18 @@ public class KarmiconomyListener implements Listener
 				&& event.getEnchanter() != null)
 		{
 			final Player player = event.getEnchanter();
-			// Pay on enchant
-			final Item enchant = new Item(event.getItem());
-			EventLogic.hitPayIncrement(Field.ITEM_ENCHANT, player,
-					config.getLimitValue(Field.ITEM_ENCHANT, enchant, null),
-					config.getPayValue(Field.ITEM_ENCHANT, enchant, null),
-					enchant, null);
+			if (config.checkWorld(Field.ITEM_ENCHANT, player.getWorld()
+					.getName()))
+			{
+				// Pay on enchant
+				final Item enchant = new Item(event.getItem());
+				EventLogic
+						.hitPayIncrement(Field.ITEM_ENCHANT, player, config
+								.getLimitValue(Field.ITEM_ENCHANT, enchant,
+										null), config.getPayValue(
+								Field.ITEM_ENCHANT, enchant, null), enchant,
+								null);
+			}
 			if (config.debugEvents)
 			{
 				final Map<String, String> details = new HashMap<String, String>();
@@ -452,6 +499,7 @@ public class KarmiconomyListener implements Listener
 				}
 				EventLogic.debugEvent(event, details);
 			}
+
 		}
 	}
 
@@ -471,50 +519,63 @@ public class KarmiconomyListener implements Listener
 				{
 					case NETHER:
 					{
-						if (EventLogic.deny(Field.PORTAL_CREATE_NETHER, player,
-								config.portalCreateNetherDenyPay, config
-										.getPayValue(
-												Field.PORTAL_CREATE_NETHER,
-												null, null),
-								config.portalCreateNetherDenyLimit, config
-										.getLimitValue(
-												Field.PORTAL_CREATE_NETHER,
-												null, null), null, null))
+						if (config.checkWorld(Field.PORTAL_CREATE_NETHER,
+								player.getWorld().getName()))
 						{
-							// Deny
-							cancel = true;
+							if (EventLogic.deny(Field.PORTAL_CREATE_NETHER,
+									player, config.portalCreateNetherDenyPay,
+									config.getPayValue(
+											Field.PORTAL_CREATE_NETHER, null,
+											null),
+									config.portalCreateNetherDenyLimit, config
+											.getLimitValue(
+													Field.PORTAL_CREATE_NETHER,
+													null, null), null, null))
+							{
+								// Deny
+								cancel = true;
+							}
 						}
 						break;
 					}
 					case ENDER:
 					{
-						if (EventLogic.deny(Field.PORTAL_CREATE_END, player,
-								config.portalCreateEndDenyPay, config
-										.getPayValue(Field.PORTAL_CREATE_END,
-												null, null),
-								config.portalCreateEndDenyLimit, config
-										.getLimitValue(Field.PORTAL_CREATE_END,
-												null, null), null, null))
+						if (config.checkWorld(Field.PORTAL_CREATE_END, player
+								.getWorld().getName()))
 						{
-							// Deny
-							cancel = true;
+							if (EventLogic.deny(Field.PORTAL_CREATE_END,
+									player, config.portalCreateEndDenyPay,
+									config.getPayValue(Field.PORTAL_CREATE_END,
+											null, null),
+									config.portalCreateEndDenyLimit, config
+											.getLimitValue(
+													Field.PORTAL_CREATE_END,
+													null, null), null, null))
+							{
+								// Deny
+								cancel = true;
+							}
 						}
 						break;
 					}
 					case CUSTOM:
 					{
-						if (EventLogic.deny(Field.PORTAL_CREATE_CUSTOM, player,
-								config.portalCreateCustomDenyPay, config
-										.getPayValue(
-												Field.PORTAL_CREATE_CUSTOM,
-												null, null),
-								config.portalCreateCustomDenyLimit, config
-										.getLimitValue(
-												Field.PORTAL_CREATE_CUSTOM,
-												null, null), null, null))
+						if (config.checkWorld(Field.PORTAL_CREATE_CUSTOM,
+								player.getWorld().getName()))
 						{
-							// Deny
-							cancel = true;
+							if (EventLogic.deny(Field.PORTAL_CREATE_CUSTOM,
+									player, config.portalCreateCustomDenyPay,
+									config.getPayValue(
+											Field.PORTAL_CREATE_CUSTOM, null,
+											null),
+									config.portalCreateCustomDenyLimit, config
+											.getLimitValue(
+													Field.PORTAL_CREATE_CUSTOM,
+													null, null), null, null))
+							{
+								// Deny
+								cancel = true;
+							}
 						}
 						break;
 					}
@@ -569,14 +630,18 @@ public class KarmiconomyListener implements Listener
 					{
 						if (config.portalCreateNether)
 						{
-							EventLogic.hitPayIncrement(
-									Field.PORTAL_CREATE_NETHER, player, config
-											.getLimitValue(
-													Field.PORTAL_CREATE_NETHER,
-													null, null), config
-											.getPayValue(
-													Field.PORTAL_CREATE_NETHER,
-													null, null), null, null);
+							if (config.checkWorld(Field.PORTAL_CREATE_NETHER,
+									player.getWorld().getName()))
+							{
+								EventLogic.hitPayIncrement(
+										Field.PORTAL_CREATE_NETHER, player,
+										config.getLimitValue(
+												Field.PORTAL_CREATE_NETHER,
+												null, null),
+										config.getPayValue(
+												Field.PORTAL_CREATE_NETHER,
+												null, null), null, null);
+							}
 						}
 						break;
 					}
@@ -584,14 +649,17 @@ public class KarmiconomyListener implements Listener
 					{
 						if (config.portalCreateEnd)
 						{
-							EventLogic.hitPayIncrement(Field.PORTAL_CREATE_END,
-									player, config
-											.getLimitValue(
-													Field.PORTAL_CREATE_END,
-													null, null), config
-											.getPayValue(
-													Field.PORTAL_CREATE_END,
-													null, null), null, null);
+							if (config.checkWorld(Field.PORTAL_CREATE_END,
+									player.getWorld().getName()))
+							{
+								EventLogic.hitPayIncrement(
+										Field.PORTAL_CREATE_END, player,
+										config.getLimitValue(
+												Field.PORTAL_CREATE_END, null,
+												null), config.getPayValue(
+												Field.PORTAL_CREATE_END, null,
+												null), null, null);
+							}
 						}
 						break;
 					}
@@ -599,14 +667,18 @@ public class KarmiconomyListener implements Listener
 					{
 						if (config.portalCreateCustom)
 						{
-							EventLogic.hitPayIncrement(
-									Field.PORTAL_CREATE_CUSTOM, player, config
-											.getLimitValue(
-													Field.PORTAL_CREATE_CUSTOM,
-													null, null), config
-											.getPayValue(
-													Field.PORTAL_CREATE_CUSTOM,
-													null, null), null, null);
+							if (config.checkWorld(Field.PORTAL_CREATE_CUSTOM,
+									player.getWorld().getName()))
+							{
+								EventLogic.hitPayIncrement(
+										Field.PORTAL_CREATE_CUSTOM, player,
+										config.getLimitValue(
+												Field.PORTAL_CREATE_CUSTOM,
+												null, null),
+										config.getPayValue(
+												Field.PORTAL_CREATE_CUSTOM,
+												null, null), null, null);
+							}
 						}
 						break;
 					}
@@ -646,10 +718,15 @@ public class KarmiconomyListener implements Listener
 			{
 				final Player player = (Player) event.getEntity();
 				// Pay on portal enter
-				EventLogic.hitPayIncrement(Field.PORTAL_ENTER, player,
-						config.getLimitValue(Field.PORTAL_ENTER, null, null),
-						config.getPayValue(Field.PORTAL_ENTER, null, null),
-						null, null);
+				if (config.checkWorld(Field.PORTAL_ENTER, player.getWorld()
+						.getName()))
+				{
+					EventLogic
+							.hitPayIncrement(Field.PORTAL_ENTER, player, config
+									.getLimitValue(Field.PORTAL_ENTER, null,
+											null), config.getPayValue(
+									Field.PORTAL_ENTER, null, null), null, null);
+				}
 				if (config.debugEvents)
 				{
 					final Map<String, String> details = new HashMap<String, String>();
@@ -670,23 +747,27 @@ public class KarmiconomyListener implements Listener
 			{
 				final Player player = (Player) event.getEntity();
 				boolean cancel = false;
-				if (config.shootBowDenyForce
-						&& (event.getForce() < config.shootBowForce))
+				if (config.checkWorld(Field.BOW_SHOOT, player.getWorld()
+						.getName()))
 				{
-					cancel = true;
-					EventLogic.sendLackMessage(player, DenyType.FORCE,
-							Field.BOW_SHOOT.name(), "" + event.getForce());
-				}
+					if (config.shootBowDenyForce
+							&& (event.getForce() < config.shootBowForce))
+					{
+						cancel = true;
+						EventLogic.sendLackMessage(player, DenyType.FORCE,
+								Field.BOW_SHOOT.name(), "" + event.getForce());
+					}
 
-				else if (EventLogic.deny(Field.BOW_SHOOT, player,
+					else if (EventLogic.deny(Field.BOW_SHOOT, player,
 
-				config.shootBowDenyPay,
-						config.getPayValue(Field.BOW_SHOOT, null, null),
-						config.shootBowDenyLimit,
-						config.getLimitValue(Field.BOW_SHOOT, null, null),
-						null, null))
-				{
-					cancel = true;
+					config.shootBowDenyPay,
+							config.getPayValue(Field.BOW_SHOOT, null, null),
+							config.shootBowDenyLimit,
+							config.getLimitValue(Field.BOW_SHOOT, null, null),
+							null, null))
+					{
+						cancel = true;
+					}
 				}
 				if (cancel)
 				{
@@ -715,10 +796,14 @@ public class KarmiconomyListener implements Listener
 			if (event.getEntity() instanceof Player)
 			{
 				final Player player = (Player) event.getEntity();
-				EventLogic.hitPayIncrement(Field.BOW_SHOOT, player,
-						config.getLimitValue(Field.BOW_SHOOT, null, null),
-						config.getPayValue(Field.BOW_SHOOT, null, null), null,
-						null);
+				if (config.checkWorld(Field.BOW_SHOOT, player.getWorld()
+						.getName()))
+				{
+					EventLogic.hitPayIncrement(Field.BOW_SHOOT, player,
+							config.getLimitValue(Field.BOW_SHOOT, null, null),
+							config.getPayValue(Field.BOW_SHOOT, null, null),
+							null, null);
+				}
 				// TODO can pay based on force
 				// TODO can pay based on entity?
 				if (config.debugEvents)
@@ -749,32 +834,39 @@ public class KarmiconomyListener implements Listener
 					case OCELOT:
 					{
 						// Ocelot
-						if (EventLogic.deny(Field.TAME_OCELOT, player,
-								config.tameOcelotDenyPay, config.getPayValue(
-										Field.TAME_OCELOT, null, null),
-								config.tameOcelotDenyLimit, config
-										.getLimitValue(Field.TAME_OCELOT, null,
-												null), null, null))
+						if (config.checkWorld(Field.TAME_OCELOT, player
+								.getWorld().getName()))
 						{
-							// Deny
-							cancel = true;
+							if (EventLogic.deny(Field.TAME_OCELOT, player,
+									config.tameOcelotDenyPay, config
+											.getPayValue(Field.TAME_OCELOT,
+													null, null),
+									config.tameOcelotDenyLimit, config
+											.getLimitValue(Field.TAME_OCELOT,
+													null, null), null, null))
+							{
+								// Deny
+								cancel = true;
+							}
 						}
 						break;
 					}
 					case WOLF:
 					{
 						// Wolf
-						if (EventLogic
-								.deny(Field.TAME_WOLF, player,
-										config.tameWolfDenyPay, config
-												.getPayValue(Field.TAME_WOLF,
-														null, null),
-										config.tameWolfDenyLimit, config
-												.getLimitValue(Field.TAME_WOLF,
-														null, null), null, null))
+						if (config.checkWorld(Field.TAME_WOLF, player
+								.getWorld().getName()))
 						{
-							// Deny
-							cancel = true;
+							if (EventLogic.deny(Field.TAME_WOLF, player,
+									config.tameWolfDenyPay, config.getPayValue(
+											Field.TAME_WOLF, null, null),
+									config.tameWolfDenyLimit, config
+											.getLimitValue(Field.TAME_WOLF,
+													null, null), null, null))
+							{
+								// Deny
+								cancel = true;
+							}
 						}
 						break;
 					}
@@ -829,11 +921,15 @@ public class KarmiconomyListener implements Listener
 						// Ocelot
 						if (config.tameOcelot)
 						{
-							EventLogic.hitPayIncrement(Field.TAME_OCELOT,
-									player, config.getLimitValue(
-											Field.TAME_OCELOT, null, null),
-									config.getPayValue(Field.TAME_OCELOT, null,
-											null), null, null);
+							if (config.checkWorld(Field.TAME_OCELOT, player
+									.getWorld().getName()))
+							{
+								EventLogic.hitPayIncrement(Field.TAME_OCELOT,
+										player, config.getLimitValue(
+												Field.TAME_OCELOT, null, null),
+										config.getPayValue(Field.TAME_OCELOT,
+												null, null), null, null);
+							}
 						}
 						break;
 					}
@@ -842,11 +938,15 @@ public class KarmiconomyListener implements Listener
 						// Wolf
 						if (config.tameWolf)
 						{
-							EventLogic.hitPayIncrement(Field.TAME_WOLF, player,
-									config.getLimitValue(Field.TAME_WOLF, null,
-											null), config.getPayValue(
-											Field.TAME_WOLF, null, null), null,
-									null);
+							if (config.checkWorld(Field.TAME_WOLF, player
+									.getWorld().getName()))
+							{
+								EventLogic.hitPayIncrement(Field.TAME_WOLF,
+										player, config.getLimitValue(
+												Field.TAME_WOLF, null, null),
+										config.getPayValue(Field.TAME_WOLF,
+												null, null), null, null);
+							}
 						}
 						break;
 					}
@@ -884,26 +984,31 @@ public class KarmiconomyListener implements Listener
 				&& event.getPlayer() != null)
 		{
 			final Player player = event.getPlayer();
-			if (EventLogic.deny(Field.PAINTING_PLACE, player,
-					config.paintingPlaceDenyPay,
-					config.getPayValue(Field.PAINTING_PLACE, null, null),
-					config.paintingPlaceDenyLimit,
-					config.getLimitValue(Field.PAINTING_PLACE, null, null),
-					null, null))
+			if (config.checkWorld(Field.PAINTING_PLACE, player.getWorld()
+					.getName()))
 			{
-				// Deny
-				event.setCancelled(true);
-				// TODO also need to get painting break
-				if (config.debugEvents)
+				if (EventLogic.deny(Field.PAINTING_PLACE, player,
+						config.paintingPlaceDenyPay,
+						config.getPayValue(Field.PAINTING_PLACE, null, null),
+						config.paintingPlaceDenyLimit,
+						config.getLimitValue(Field.PAINTING_PLACE, null, null),
+						null, null))
 				{
-					final Map<String, String> details = new HashMap<String, String>();
-					details.put("Player", player.getName());
-					if (event.getPainting() != null)
+					// Deny
+					event.setCancelled(true);
+					// TODO also need to get painting break
+					if (config.debugEvents)
 					{
-						details.put("Painting", event.getPainting().toString());
+						final Map<String, String> details = new HashMap<String, String>();
+						details.put("Player", player.getName());
+						if (event.getPainting() != null)
+						{
+							details.put("Painting", event.getPainting()
+									.toString());
+						}
+						details.put("Cancelled", "true");
+						EventLogic.debugEvent(event, details);
 					}
-					details.put("Cancelled", "true");
-					EventLogic.debugEvent(event, details);
 				}
 			}
 		}
@@ -917,10 +1022,14 @@ public class KarmiconomyListener implements Listener
 		{
 			final Player player = event.getPlayer();
 			// Pay on place
-			EventLogic.hitPayIncrement(Field.PAINTING_PLACE, player,
-					config.getLimitValue(Field.PAINTING_PLACE, null, null),
-					config.getPayValue(Field.PAINTING_PLACE, null, null), null,
-					null);
+			if (config.checkWorld(Field.PAINTING_PLACE, player.getWorld()
+					.getName()))
+			{
+				EventLogic.hitPayIncrement(Field.PAINTING_PLACE, player,
+						config.getLimitValue(Field.PAINTING_PLACE, null, null),
+						config.getPayValue(Field.PAINTING_PLACE, null, null),
+						null, null);
+			}
 			if (config.debugEvents)
 			{
 				final Map<String, String> details = new HashMap<String, String>();
@@ -941,25 +1050,28 @@ public class KarmiconomyListener implements Listener
 				&& event.getPlayer() != null)
 		{
 			final Player player = event.getPlayer();
-			if (EventLogic.deny(Field.BED_ENTER, player,
-					config.bedEnterDenyPay,
-					config.getPayValue(Field.BED_ENTER, null, null),
-					config.bedEnterDenyLimit,
-					config.getLimitValue(Field.BED_ENTER, null, null), null,
-					null))
+			if (config.checkWorld(Field.BED_ENTER, player.getWorld().getName()))
 			{
-				// Deny
-				event.setCancelled(true);
-				if (config.debugEvents)
+				if (EventLogic.deny(Field.BED_ENTER, player,
+						config.bedEnterDenyPay,
+						config.getPayValue(Field.BED_ENTER, null, null),
+						config.bedEnterDenyLimit,
+						config.getLimitValue(Field.BED_ENTER, null, null),
+						null, null))
 				{
-					final Map<String, String> details = new HashMap<String, String>();
-					details.put("Player", player.getName());
-					if (event.getBed() != null)
+					// Deny
+					event.setCancelled(true);
+					if (config.debugEvents)
 					{
-						details.put("Bed", event.getBed().toString());
+						final Map<String, String> details = new HashMap<String, String>();
+						details.put("Player", player.getName());
+						if (event.getBed() != null)
+						{
+							details.put("Bed", event.getBed().toString());
+						}
+						details.put("Cancelled", "true");
+						EventLogic.debugEvent(event, details);
 					}
-					details.put("Cancelled", "true");
-					EventLogic.debugEvent(event, details);
 				}
 			}
 		}
@@ -973,11 +1085,13 @@ public class KarmiconomyListener implements Listener
 		{
 			final Player player = event.getPlayer();
 			// Pay on enter
-			EventLogic
-					.hitPayIncrement(Field.BED_ENTER, player,
-							config.getLimitValue(Field.BED_ENTER, null, null),
-							config.getPayValue(Field.BED_ENTER, null, null),
-							null, null);
+			if (config.checkWorld(Field.BED_ENTER, player.getWorld().getName()))
+			{
+				EventLogic.hitPayIncrement(Field.BED_ENTER, player,
+						config.getLimitValue(Field.BED_ENTER, null, null),
+						config.getPayValue(Field.BED_ENTER, null, null), null,
+						null);
+			}
 			if (config.debugEvents)
 			{
 				final Map<String, String> details = new HashMap<String, String>();
@@ -998,11 +1112,13 @@ public class KarmiconomyListener implements Listener
 		{
 			final Player player = event.getPlayer();
 			// Pay on leave
-			EventLogic
-					.hitPayIncrement(Field.BED_LEAVE, player,
-							config.getLimitValue(Field.BED_LEAVE, null, null),
-							config.getPayValue(Field.BED_LEAVE, null, null),
-							null, null);
+			if (config.checkWorld(Field.BED_LEAVE, player.getWorld().getName()))
+			{
+				EventLogic.hitPayIncrement(Field.BED_LEAVE, player,
+						config.getLimitValue(Field.BED_LEAVE, null, null),
+						config.getPayValue(Field.BED_LEAVE, null, null), null,
+						null);
+			}
 			if (config.debugEvents)
 			{
 				final Map<String, String> details = new HashMap<String, String>();
@@ -1030,29 +1146,40 @@ public class KarmiconomyListener implements Listener
 			{
 				case LAVA_BUCKET:
 				{
-					if (EventLogic.deny(Field.BUCKET_EMPTY_LAVA, player,
-							config.bucketEmptyLavaDenyPay, config.getPayValue(
-									Field.BUCKET_EMPTY_LAVA, null, null),
-							config.bucketEmptyLavaDenyLimit, config
-									.getLimitValue(Field.BUCKET_EMPTY_LAVA,
-											null, null), null, null))
+					if (config.checkWorld(Field.BUCKET_EMPTY_LAVA, player
+							.getWorld().getName()))
 					{
-						// deny
-						cancel = true;
+						if (EventLogic.deny(Field.BUCKET_EMPTY_LAVA, player,
+								config.bucketEmptyLavaDenyPay, config
+										.getPayValue(Field.BUCKET_EMPTY_LAVA,
+												null, null),
+								config.bucketEmptyLavaDenyLimit, config
+										.getLimitValue(Field.BUCKET_EMPTY_LAVA,
+												null, null), null, null))
+						{
+							// deny
+							cancel = true;
+						}
 					}
 					break;
 				}
 				case WATER_BUCKET:
 				{
-					if (EventLogic.deny(Field.BUCKET_EMPTY_WATER, player,
-							config.bucketEmptyWaterDenyPay, config.getPayValue(
-									Field.BUCKET_EMPTY_WATER, null, null),
-							config.bucketEmptyWaterDenyLimit, config
-									.getLimitValue(Field.BUCKET_EMPTY_WATER,
-											null, null), null, null))
+					if (config.checkWorld(Field.BUCKET_EMPTY_WATER, player
+							.getWorld().getName()))
 					{
-						// Deny
-						cancel = true;
+						if (EventLogic.deny(Field.BUCKET_EMPTY_WATER, player,
+								config.bucketEmptyWaterDenyPay, config
+										.getPayValue(Field.BUCKET_EMPTY_WATER,
+												null, null),
+								config.bucketEmptyWaterDenyLimit, config
+										.getLimitValue(
+												Field.BUCKET_EMPTY_WATER, null,
+												null), null, null))
+						{
+							// Deny
+							cancel = true;
+						}
 					}
 					break;
 				}
@@ -1100,11 +1227,18 @@ public class KarmiconomyListener implements Listener
 					// Pay on empty
 					if (config.bucketEmptyLava)
 					{
-						EventLogic.hitPayIncrement(Field.BUCKET_EMPTY_LAVA,
-								player, config.getLimitValue(
-										Field.BUCKET_EMPTY_LAVA, null, null),
-								config.getPayValue(Field.BUCKET_EMPTY_LAVA,
-										null, null), null, null);
+						if (config.checkWorld(Field.BUCKET_EMPTY_LAVA, player
+								.getWorld().getName()))
+						{
+							EventLogic.hitPayIncrement(Field.BUCKET_EMPTY_LAVA,
+									player, config
+											.getLimitValue(
+													Field.BUCKET_EMPTY_LAVA,
+													null, null), config
+											.getPayValue(
+													Field.BUCKET_EMPTY_LAVA,
+													null, null), null, null);
+						}
 					}
 					break;
 				}
@@ -1113,11 +1247,18 @@ public class KarmiconomyListener implements Listener
 					// Pay on empty
 					if (config.bucketEmptyWater)
 					{
-						EventLogic.hitPayIncrement(Field.BUCKET_EMPTY_WATER,
-								player, config.getLimitValue(
-										Field.BUCKET_EMPTY_WATER, null, null),
-								config.getPayValue(Field.BUCKET_EMPTY_WATER,
-										null, null), null, null);
+						if (config.checkWorld(Field.BUCKET_EMPTY_LAVA, player
+								.getWorld().getName()))
+						{
+							EventLogic.hitPayIncrement(
+									Field.BUCKET_EMPTY_WATER, player, config
+											.getLimitValue(
+													Field.BUCKET_EMPTY_WATER,
+													null, null), config
+											.getPayValue(
+													Field.BUCKET_EMPTY_WATER,
+													null, null), null, null);
+						}
 					}
 					break;
 				}
@@ -1160,29 +1301,39 @@ public class KarmiconomyListener implements Listener
 			{
 				case STATIONARY_LAVA:
 				{
-					if (EventLogic.deny(Field.BUCKET_FILL_LAVA, player,
-							config.bucketFillLavaDenyPay, config.getPayValue(
-									Field.BUCKET_FILL_LAVA, null, null),
-							config.bucketFillLavaDenyLimit, config
-									.getLimitValue(Field.BUCKET_FILL_LAVA,
-											null, null), null, null))
+					if (config.checkWorld(Field.BUCKET_FILL_LAVA, player
+							.getWorld().getName()))
 					{
-						// Deny
-						cancel = true;
+						if (EventLogic.deny(Field.BUCKET_FILL_LAVA, player,
+								config.bucketFillLavaDenyPay, config
+										.getPayValue(Field.BUCKET_FILL_LAVA,
+												null, null),
+								config.bucketFillLavaDenyLimit, config
+										.getLimitValue(Field.BUCKET_FILL_LAVA,
+												null, null), null, null))
+						{
+							// Deny
+							cancel = true;
+						}
 					}
 					break;
 				}
 				case STATIONARY_WATER:
 				{
-					if (EventLogic.deny(Field.BUCKET_FILL_WATER, player,
-							config.bucketFillWaterDenyPay, config.getPayValue(
-									Field.BUCKET_FILL_WATER, null, null),
-							config.bucketFillWaterDenyLimit, config
-									.getLimitValue(Field.BUCKET_FILL_WATER,
-											null, null), null, null))
+					if (config.checkWorld(Field.BUCKET_FILL_WATER, player
+							.getWorld().getName()))
 					{
-						// Deny
-						cancel = true;
+						if (EventLogic.deny(Field.BUCKET_FILL_WATER, player,
+								config.bucketFillWaterDenyPay, config
+										.getPayValue(Field.BUCKET_FILL_WATER,
+												null, null),
+								config.bucketFillWaterDenyLimit, config
+										.getLimitValue(Field.BUCKET_FILL_WATER,
+												null, null), null, null))
+						{
+							// Deny
+							cancel = true;
+						}
 					}
 					break;
 				}
@@ -1235,11 +1386,18 @@ public class KarmiconomyListener implements Listener
 					// Pay on fill
 					if (config.bucketFillLava)
 					{
-						EventLogic.hitPayIncrement(Field.BUCKET_FILL_LAVA,
-								player, config.getLimitValue(
-										Field.BUCKET_FILL_LAVA, null, null),
-								config.getPayValue(Field.BUCKET_FILL_LAVA,
-										null, null), null, null);
+						if (config.checkWorld(Field.BUCKET_FILL_LAVA, player
+								.getWorld().getName()))
+						{
+							EventLogic
+									.hitPayIncrement(Field.BUCKET_FILL_LAVA,
+											player, config.getLimitValue(
+													Field.BUCKET_FILL_LAVA,
+													null, null),
+											config.getPayValue(
+													Field.BUCKET_FILL_LAVA,
+													null, null), null, null);
+						}
 					}
 					break;
 				}
@@ -1248,11 +1406,18 @@ public class KarmiconomyListener implements Listener
 					// Pay on fill
 					if (config.bucketFillWater)
 					{
-						EventLogic.hitPayIncrement(Field.BUCKET_FILL_WATER,
-								player, config.getLimitValue(
-										Field.BUCKET_FILL_WATER, null, null),
-								config.getPayValue(Field.BUCKET_FILL_WATER,
-										null, null), null, null);
+						if (config.checkWorld(Field.BUCKET_FILL_WATER, player
+								.getWorld().getName()))
+						{
+							EventLogic.hitPayIncrement(Field.BUCKET_FILL_WATER,
+									player, config
+											.getLimitValue(
+													Field.BUCKET_FILL_WATER,
+													null, null), config
+											.getPayValue(
+													Field.BUCKET_FILL_WATER,
+													null, null), null, null);
+						}
 					}
 					break;
 				}
@@ -1293,10 +1458,14 @@ public class KarmiconomyListener implements Listener
 		{
 			final Player player = event.getPlayer();
 			// Pay on change
-			EventLogic.hitPayIncrement(Field.WORLD_CHANGE, player,
-					config.getLimitValue(Field.WORLD_CHANGE, null, null),
-					config.getPayValue(Field.WORLD_CHANGE, null, null), null,
-					null);
+			if (config.checkWorld(Field.WORLD_CHANGE, player.getWorld()
+					.getName()))
+			{
+				EventLogic.hitPayIncrement(Field.WORLD_CHANGE, player,
+						config.getLimitValue(Field.WORLD_CHANGE, null, null),
+						config.getPayValue(Field.WORLD_CHANGE, null, null),
+						null, null);
+			}
 			if (config.debugEvents)
 			{
 				final Map<String, String> details = new HashMap<String, String>();
@@ -1317,9 +1486,14 @@ public class KarmiconomyListener implements Listener
 		{
 			final Player player = event.getEntity();
 			// Pay on death
-			EventLogic.hitPayIncrement(Field.DEATH, player,
-					config.getLimitValue(Field.DEATH, null, null),
-					config.getPayValue(Field.DEATH, null, null), null, null);
+			if (config.checkWorld(Field.DEATH, player.getWorld().getName()))
+			{
+				EventLogic
+						.hitPayIncrement(Field.DEATH, player,
+								config.getLimitValue(Field.DEATH, null, null),
+								config.getPayValue(Field.DEATH, null, null),
+								null, null);
+			}
 			if (config.debugEvents)
 			{
 				final Map<String, String> details = new HashMap<String, String>();
@@ -1345,9 +1519,13 @@ public class KarmiconomyListener implements Listener
 		{
 			final Player player = event.getPlayer();
 			// Pay on respawn
-			EventLogic.hitPayIncrement(Field.RESPAWN, player,
-					config.getLimitValue(Field.RESPAWN, null, null),
-					config.getPayValue(Field.RESPAWN, null, null), null, null);
+			if (config.checkWorld(Field.RESPAWN, player.getWorld().getName()))
+			{
+				EventLogic.hitPayIncrement(Field.RESPAWN, player,
+						config.getLimitValue(Field.RESPAWN, null, null),
+						config.getPayValue(Field.RESPAWN, null, null), null,
+						null);
+			}
 			if (config.debugEvents)
 			{
 				final Map<String, String> details = new HashMap<String, String>();
@@ -1375,26 +1553,30 @@ public class KarmiconomyListener implements Listener
 			if ((denyPay || denyLimit) && event.getPlayer() != null)
 			{
 				final Player player = event.getPlayer();
-
-				if (EventLogic.deny(Field.ITEM_PICKUP, player, denyPay,
-						config.getPayValue(Field.ITEM_PICKUP, pickup, null),
-						denyLimit,
-						config.getLimitValue(Field.ITEM_PICKUP, pickup, null),
-						pickup, null))
+				if (config.checkWorld(Field.ITEM_PICKUP, player.getWorld()
+						.getName()))
 				{
-					// Deny
-					event.setCancelled(true);
-					if (config.debugEvents)
+					if (EventLogic
+							.deny(Field.ITEM_PICKUP, player, denyPay, config
+									.getPayValue(Field.ITEM_PICKUP, pickup,
+											null), denyLimit, config
+									.getLimitValue(Field.ITEM_PICKUP, pickup,
+											null), pickup, null))
 					{
-						final Map<String, String> details = new HashMap<String, String>();
-						details.put("Player", player.getName());
-						if (event.getItem() != null)
+						// Deny
+						event.setCancelled(true);
+						if (config.debugEvents)
 						{
-							details.put("Item", event.getItem().getItemStack()
-									.toString());
+							final Map<String, String> details = new HashMap<String, String>();
+							details.put("Player", player.getName());
+							if (event.getItem() != null)
+							{
+								details.put("Item", event.getItem()
+										.getItemStack().toString());
+							}
+							details.put("Cancelled", "true");
+							EventLogic.debugEvent(event, details);
 						}
-						details.put("Cancelled", "true");
-						EventLogic.debugEvent(event, details);
 					}
 				}
 			}
@@ -1409,11 +1591,15 @@ public class KarmiconomyListener implements Listener
 		{
 			final Player player = event.getPlayer();
 			// Pay on drop
-			final Item pickup = new Item(event.getItem().getItemStack());
-			EventLogic.hitPayIncrement(Field.ITEM_PICKUP, player,
-					config.getLimitValue(Field.ITEM_PICKUP, pickup, null),
-					config.getPayValue(Field.ITEM_PICKUP, pickup, null),
-					pickup, null);
+			if (config.checkWorld(Field.ITEM_PICKUP, player.getWorld()
+					.getName()))
+			{
+				final Item pickup = new Item(event.getItem().getItemStack());
+				EventLogic.hitPayIncrement(Field.ITEM_PICKUP, player,
+						config.getLimitValue(Field.ITEM_PICKUP, pickup, null),
+						config.getPayValue(Field.ITEM_PICKUP, pickup, null),
+						pickup, null);
+			}
 			if (config.debugEvents)
 			{
 				final Map<String, String> details = new HashMap<String, String>();
@@ -1441,26 +1627,28 @@ public class KarmiconomyListener implements Listener
 			if ((denyPay || denyLimit) && event.getPlayer() != null)
 			{
 				final Player player = event.getPlayer();
-
-				if (EventLogic.deny(Field.ITEM_DROP, player, denyPay,
-						config.getPayValue(Field.ITEM_DROP, dropped, null),
-						denyLimit,
-						config.getLimitValue(Field.ITEM_DROP, dropped, null),
-						dropped, null))
+				if (config.checkWorld(Field.ITEM_DROP, player.getWorld()
+						.getName()))
 				{
-					// Deny
-					event.setCancelled(true);
-					if (config.debugEvents)
+					if (EventLogic.deny(Field.ITEM_DROP, player, denyPay,
+							config.getPayValue(Field.ITEM_DROP, dropped, null),
+							denyLimit, config.getLimitValue(Field.ITEM_DROP,
+									dropped, null), dropped, null))
 					{
-						final Map<String, String> details = new HashMap<String, String>();
-						details.put("Player", player.getName());
-						if (event.getItemDrop() != null)
+						// Deny
+						event.setCancelled(true);
+						if (config.debugEvents)
 						{
-							details.put("Item", event.getItemDrop()
-									.getItemStack().toString());
+							final Map<String, String> details = new HashMap<String, String>();
+							details.put("Player", player.getName());
+							if (event.getItemDrop() != null)
+							{
+								details.put("Item", event.getItemDrop()
+										.getItemStack().toString());
+							}
+							details.put("Cancelled", "true");
+							EventLogic.debugEvent(event, details);
 						}
-						details.put("Cancelled", "true");
-						EventLogic.debugEvent(event, details);
 					}
 				}
 			}
@@ -1476,10 +1664,13 @@ public class KarmiconomyListener implements Listener
 			final Player player = event.getPlayer();
 			// Pay on drop
 			final Item dropped = new Item(event.getItemDrop().getItemStack());
-			EventLogic.hitPayIncrement(Field.ITEM_DROP, player,
-					config.getLimitValue(Field.ITEM_DROP, dropped, null),
-					config.getPayValue(Field.ITEM_DROP, dropped, null),
-					dropped, null);
+			if (config.checkWorld(Field.ITEM_DROP, player.getWorld().getName()))
+			{
+				EventLogic.hitPayIncrement(Field.ITEM_DROP, player,
+						config.getLimitValue(Field.ITEM_DROP, dropped, null),
+						config.getPayValue(Field.ITEM_DROP, dropped, null),
+						dropped, null);
+			}
 			if (config.debugEvents)
 			{
 				final Map<String, String> details = new HashMap<String, String>();
@@ -1501,11 +1692,13 @@ public class KarmiconomyListener implements Listener
 		{
 			final Player player = event.getPlayer();
 			// Pay on throw
-			EventLogic
-					.hitPayIncrement(Field.EGG_THROW, player,
-							config.getLimitValue(Field.EGG_THROW, null, null),
-							config.getPayValue(Field.EGG_THROW, null, null),
-							null, null);
+			if (config.checkWorld(Field.EGG_THROW, player.getWorld().getName()))
+			{
+				EventLogic.hitPayIncrement(Field.EGG_THROW, player,
+						config.getLimitValue(Field.EGG_THROW, null, null),
+						config.getPayValue(Field.EGG_THROW, null, null), null,
+						null);
+			}
 			if (config.debugEvents)
 			{
 				final Map<String, String> details = new HashMap<String, String>();
@@ -1532,16 +1725,19 @@ public class KarmiconomyListener implements Listener
 				case CREATIVE:
 				{
 					if (config.gameModeCreative
-							&& EventLogic.deny(Field.CREATIVE, player,
-									config.gameModeCreativeDenyPay, config
-											.getPayValue(Field.CREATIVE, null,
-													null),
-									config.gameModeCreativeDenyLimit, config
-											.getLimitValue(Field.CREATIVE,
-													null, null), null, null))
+							&& config.checkWorld(Field.CREATIVE, player
+									.getWorld().getName()))
 					{
-						// Deny
-						cancel = true;
+						if (EventLogic.deny(Field.CREATIVE, player,
+								config.gameModeCreativeDenyPay,
+								config.getPayValue(Field.CREATIVE, null, null),
+								config.gameModeCreativeDenyLimit, config
+										.getLimitValue(Field.CREATIVE, null,
+												null), null, null))
+						{
+							// Deny
+							cancel = true;
+						}
 					}
 					break;
 
@@ -1549,16 +1745,19 @@ public class KarmiconomyListener implements Listener
 				case SURVIVAL:
 				{
 					if (config.gameModeSurvival
-							&& EventLogic.deny(Field.SURVIVAL, player,
-									config.gameModeSurvivalDenyPay, config
-											.getPayValue(Field.SURVIVAL, null,
-													null),
-									config.gameModeSurvivalDenyLimit, config
-											.getLimitValue(Field.SURVIVAL,
-													null, null), null, null))
+							&& config.checkWorld(Field.SURVIVAL, player
+									.getWorld().getName()))
 					{
-						// Deny
-						cancel = true;
+						if (EventLogic.deny(Field.SURVIVAL, player,
+								config.gameModeSurvivalDenyPay,
+								config.getPayValue(Field.SURVIVAL, null, null),
+								config.gameModeSurvivalDenyLimit, config
+										.getLimitValue(Field.SURVIVAL, null,
+												null), null, null))
+						{
+							// Deny
+							cancel = true;
+						}
 					}
 					break;
 				}
@@ -1605,7 +1804,9 @@ public class KarmiconomyListener implements Listener
 			{
 				case CREATIVE:
 				{
-					if (config.gameModeCreative)
+					if (config.gameModeCreative
+							&& config.checkWorld(Field.CREATIVE, player
+									.getWorld().getName()))
 					{
 						EventLogic
 								.hitPayIncrement(Field.CREATIVE, player, config
@@ -1617,7 +1818,9 @@ public class KarmiconomyListener implements Listener
 				}
 				case SURVIVAL:
 				{
-					if (config.gameModeSurvival)
+					if (config.gameModeSurvival
+							&& config.checkWorld(Field.SURVIVAL, player
+									.getWorld().getName()))
 					{
 						EventLogic
 								.hitPayIncrement(Field.SURVIVAL, player, config
@@ -1708,9 +1911,12 @@ public class KarmiconomyListener implements Listener
 		{
 			final Player player = event.getPlayer();
 			// Pay on kick
-			EventLogic.hitPayIncrement(Field.KICK, player,
-					config.getLimitValue(Field.KICK, null, null),
-					config.getPayValue(Field.KICK, null, null), null, null);
+			if (config.checkWorld(Field.KICK, player.getWorld().getName()))
+			{
+				EventLogic.hitPayIncrement(Field.KICK, player,
+						config.getLimitValue(Field.KICK, null, null),
+						config.getPayValue(Field.KICK, null, null), null, null);
+			}
 			if (config.debugEvents)
 			{
 				final Map<String, String> details = new HashMap<String, String>();
@@ -1737,11 +1943,14 @@ public class KarmiconomyListener implements Listener
 			}
 			if (config.quit)
 			{
-
 				// Pay on quit
-				EventLogic.hitPayIncrement(Field.QUIT, player,
-						config.getLimitValue(Field.QUIT, null, null),
-						config.getPayValue(Field.QUIT, null, null), null, null);
+				if (config.checkWorld(Field.QUIT, player.getWorld().getName()))
+				{
+					EventLogic.hitPayIncrement(Field.QUIT, player,
+							config.getLimitValue(Field.QUIT, null, null),
+							config.getPayValue(Field.QUIT, null, null), null,
+							null);
+				}
 				if (config.debugEvents)
 				{
 					final Map<String, String> details = new HashMap<String, String>();
@@ -1763,19 +1972,23 @@ public class KarmiconomyListener implements Listener
 				&& event.getPlayer() != null)
 		{
 			final Player player = event.getPlayer();
-			if (EventLogic.deny(Field.SNEAK, player, config.sneakDenyPay,
-					config.getPayValue(Field.SNEAK, null, null),
-					config.sneakDenyLimit,
-					config.getLimitValue(Field.SNEAK, null, null), null, null))
+			if (config.checkWorld(Field.SNEAK, player.getWorld().getName()))
 			{
-				// Deny
-				event.setCancelled(true);
-				if (config.debugEvents)
+				if (EventLogic.deny(Field.SNEAK, player, config.sneakDenyPay,
+						config.getPayValue(Field.SNEAK, null, null),
+						config.sneakDenyLimit,
+						config.getLimitValue(Field.SNEAK, null, null), null,
+						null))
 				{
-					final Map<String, String> details = new HashMap<String, String>();
-					details.put("Player", player.getName());
-					details.put("Cancelled", "true");
-					EventLogic.debugEvent(event, details);
+					// Deny
+					event.setCancelled(true);
+					if (config.debugEvents)
+					{
+						final Map<String, String> details = new HashMap<String, String>();
+						details.put("Player", player.getName());
+						details.put("Cancelled", "true");
+						EventLogic.debugEvent(event, details);
+					}
 				}
 			}
 		}
@@ -1789,9 +2002,14 @@ public class KarmiconomyListener implements Listener
 		{
 			final Player player = event.getPlayer();
 			// Pay on sneak
-			EventLogic.hitPayIncrement(Field.SNEAK, player,
-					config.getLimitValue(Field.SNEAK, null, null),
-					config.getPayValue(Field.SNEAK, null, null), null, null);
+			if (config.checkWorld(Field.SNEAK, player.getWorld().getName()))
+			{
+				EventLogic
+						.hitPayIncrement(Field.SNEAK, player,
+								config.getLimitValue(Field.SNEAK, null, null),
+								config.getPayValue(Field.SNEAK, null, null),
+								null, null);
+			}
 			if (config.debugEvents)
 			{
 				final Map<String, String> details = new HashMap<String, String>();
@@ -1808,19 +2026,23 @@ public class KarmiconomyListener implements Listener
 				&& event.getPlayer() != null)
 		{
 			final Player player = event.getPlayer();
-			if (EventLogic.deny(Field.SPRINT, player, config.sprintDenyPay,
-					config.getPayValue(Field.SPRINT, null, null),
-					config.sprintDenyLimit,
-					config.getLimitValue(Field.SPRINT, null, null), null, null))
+			if (config.checkWorld(Field.SPRINT, player.getWorld().getName()))
 			{
-				// Deny
-				event.setCancelled(true);
-				if (config.debugEvents)
+				if (EventLogic.deny(Field.SPRINT, player, config.sprintDenyPay,
+						config.getPayValue(Field.SPRINT, null, null),
+						config.sprintDenyLimit,
+						config.getLimitValue(Field.SPRINT, null, null), null,
+						null))
 				{
-					final Map<String, String> details = new HashMap<String, String>();
-					details.put("Player", player.getName());
-					details.put("Cancelled", "true");
-					EventLogic.debugEvent(event, details);
+					// Deny
+					event.setCancelled(true);
+					if (config.debugEvents)
+					{
+						final Map<String, String> details = new HashMap<String, String>();
+						details.put("Player", player.getName());
+						details.put("Cancelled", "true");
+						EventLogic.debugEvent(event, details);
+					}
 				}
 			}
 		}
@@ -1834,9 +2056,13 @@ public class KarmiconomyListener implements Listener
 		{
 			final Player player = event.getPlayer();
 			// Pay on sprint
-			EventLogic.hitPayIncrement(Field.SPRINT, player,
-					config.getLimitValue(Field.SPRINT, null, null),
-					config.getPayValue(Field.SPRINT, null, null), null, null);
+			if (config.checkWorld(Field.SPRINT, player.getWorld().getName()))
+			{
+				EventLogic.hitPayIncrement(Field.SPRINT, player,
+						config.getLimitValue(Field.SPRINT, null, null),
+						config.getPayValue(Field.SPRINT, null, null), null,
+						null);
+			}
 			if (config.debugEvents)
 			{
 				final Map<String, String> details = new HashMap<String, String>();
@@ -1944,7 +2170,7 @@ public class KarmiconomyListener implements Listener
 		}
 	}
 
-	@EventHandler(priority = EventPriority.HIGHEST)
+	@EventHandler(priority = EventPriority.MONITOR)
 	public void inventoryClick(final InventoryClickEvent event)
 	{
 		if (config.debugEvents)

@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -364,5 +365,28 @@ public class HeroesConfig
 			}
 		}
 		return pay;
+	}
+	
+	public boolean checkWorld(Field field, String worldName)
+	{
+		boolean valid = false;
+		final List<String> list = config.getStringList(field.getConfigPath() + ".worlds");
+		if(list == null)
+		{
+			//No worlds specified, so allow all
+			valid = true;
+		}
+		else
+		{
+			for(String world : list)
+			{
+				if(world.equalsIgnoreCase(worldName))
+				{
+					valid = true;
+					break;
+				}
+			}
+		}
+		return valid;
 	}
 }
