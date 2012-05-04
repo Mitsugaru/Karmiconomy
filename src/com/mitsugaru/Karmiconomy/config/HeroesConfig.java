@@ -376,6 +376,10 @@ public class HeroesConfig
 			//No worlds specified, so allow all
 			valid = true;
 		}
+		else if(list.isEmpty())
+		{
+			valid = true;
+		}
 		else
 		{
 			for(String world : list)

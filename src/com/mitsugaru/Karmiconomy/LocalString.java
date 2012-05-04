@@ -26,15 +26,15 @@ public enum LocalString
 
 	public String parseString(EnumMap<Field, String> replace)
 	{
-		String out = string;
+		String out = colorizeText(string);
 		if (replace != null)
 		{
 			for (Entry<Field, String> entry : replace.entrySet())
 			{
-				out.replaceAll(entry.getKey().getField(), entry.getValue());
+				out = out.replaceAll(entry.getKey().getField(), entry.getValue());
 			}
 		}
-		return colorizeText(out);
+		return out;
 	}
 
 	/**
