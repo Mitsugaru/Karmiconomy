@@ -187,25 +187,25 @@ public class EventLogic
 	public static void sendLackMessage(Player player, DenyType type,
 			String action, String extra)
 	{
-		final EnumMap<LocalString.Field, String> info = new EnumMap<LocalString.Field, String>(
-				LocalString.Field.class);
-		info.put(LocalString.Field.TAG, Karmiconomy.TAG);
+		final EnumMap<LocalString.Flag, String> info = new EnumMap<LocalString.Flag, String>(
+				LocalString.Flag.class);
+		info.put(LocalString.Flag.TAG, Karmiconomy.TAG);
 		switch (type)
 		{
 			case MONEY:
-				info.put(LocalString.Field.REASON, LocalizeConfig.reasonMoney);
+				info.put(LocalString.Flag.REASON, LocalizeConfig.reasonMoney);
 				break;
 			case LIMIT:
-				info.put(LocalString.Field.REASON, LocalizeConfig.reasonLimit);
+				info.put(LocalString.Flag.REASON, LocalizeConfig.reasonLimit);
 				break;
 			default:
-				info.put(LocalString.Field.REASON, LocalizeConfig.reasonUnknown);
+				info.put(LocalString.Flag.REASON, LocalizeConfig.reasonUnknown);
 				break;
 		}
-		info.put(LocalString.Field.EVENT, action);
+		info.put(LocalString.Flag.EVENT, action);
 		if (extra != null)
 		{
-			info.put(LocalString.Field.EXTRA, " of " + ChatColor.GOLD + extra);
+			info.put(LocalString.Flag.EXTRA, " of " + ChatColor.GOLD + extra);
 		}
 		final String out = LocalString.LACK_MESSAGE.parseString(info);
 		boolean send = true;

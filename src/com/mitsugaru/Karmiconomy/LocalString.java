@@ -24,14 +24,14 @@ public enum LocalString
 		this.string = s;
 	}
 
-	public String parseString(EnumMap<Field, String> replace)
+	public String parseString(EnumMap<Flag, String> replace)
 	{
 		String out = colorizeText(string);
 		if (replace != null)
 		{
-			for (Entry<Field, String> entry : replace.entrySet())
+			for (Entry<Flag, String> entry : replace.entrySet())
 			{
-				out = out.replaceAll(entry.getKey().getField(), entry.getValue());
+				out = out.replaceAll(entry.getKey().getFlag(), entry.getValue());
 			}
 		}
 		return out;
@@ -67,21 +67,21 @@ public enum LocalString
 		return string;
 	}
 
-	public enum Field
+	public enum Flag
 	{
 		NAME("%name"), EVENT("%event"), REASON("%reason"), EXTRA("%extra"), TAG(
 				"%tag"), AMOUNT("%amount");
 
-		private String field;
+		private String flag;
 
-		private Field(String field)
+		private Flag(String flag)
 		{
-			this.field = field;
+			this.flag = flag;
 		}
 
-		public String getField()
+		public String getFlag()
 		{
-			return field;
+			return flag;
 		}
 	}
 }

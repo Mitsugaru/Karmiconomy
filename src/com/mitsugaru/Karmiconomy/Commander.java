@@ -70,9 +70,9 @@ public class Commander implements CommandExecutor
 		else
 		{
 			final String com = args[0].toLowerCase();
-			final EnumMap<LocalString.Field, String> info = new EnumMap<LocalString.Field, String>(
-					LocalString.Field.class);
-			info.put(LocalString.Field.TAG, Karmiconomy.TAG);
+			final EnumMap<LocalString.Flag, String> info = new EnumMap<LocalString.Flag, String>(
+					LocalString.Flag.class);
+			info.put(LocalString.Flag.TAG, Karmiconomy.TAG);
 			if (com.equals("version") || com.equals("ver"))
 			{
 				// Version and author
@@ -141,13 +141,13 @@ public class Commander implements CommandExecutor
 				}
 				else
 				{
-					info.put(LocalString.Field.EXTRA, Permission.ADMIN.getNode());
+					info.put(LocalString.Flag.EXTRA, Permission.ADMIN.getNode());
 					sender.sendMessage(LocalString.PERMISSION_DENY.parseString(info));
 				}
 			}
 			else
 			{
-				info.put(LocalString.Field.EXTRA, com);
+				info.put(LocalString.Flag.EXTRA, com);
 				sender.sendMessage(LocalString.UNKNOWN_COMMAND.parseString(info));
 			}
 		}

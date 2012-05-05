@@ -111,11 +111,11 @@ public class KarmicEcon
 			if (response != null)
 			{
 				String message = "";
-				final EnumMap<LocalString.Field, String> info = new EnumMap<LocalString.Field, String>(
-						LocalString.Field.class);
-				info.put(LocalString.Field.TAG, Karmiconomy.TAG);
-				info.put(LocalString.Field.AMOUNT, "" + amount);
-				info.put(LocalString.Field.EVENT, field.name());
+				final EnumMap<LocalString.Flag, String> info = new EnumMap<LocalString.Flag, String>(
+						LocalString.Flag.class);
+				info.put(LocalString.Flag.TAG, Karmiconomy.TAG);
+				info.put(LocalString.Flag.AMOUNT, "" + amount);
+				info.put(LocalString.Flag.EVENT, field.name());
 				switch (response.type)
 				{
 					case FAILURE:
