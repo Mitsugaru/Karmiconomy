@@ -1,7 +1,7 @@
 name: Karmiconomy
 main: com.mitsugaru.Karmiconomy.Karmiconomy
 description: Economy suppliment plugin, to provide payments based on actions.
-version: 0.15
+version: 0.16
 author: Mitsugaru
 depend: [Vault]
 softdepend: [PlayerPoints, mcMMO, Heroes]

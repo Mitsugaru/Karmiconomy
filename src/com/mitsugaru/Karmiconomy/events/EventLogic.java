@@ -12,6 +12,7 @@ import com.mitsugaru.Karmiconomy.KarmicEcon;
 import com.mitsugaru.Karmiconomy.Karmiconomy;
 import com.mitsugaru.Karmiconomy.LocalString;
 import com.mitsugaru.Karmiconomy.config.Config;
+import com.mitsugaru.Karmiconomy.config.KConfig;
 import com.mitsugaru.Karmiconomy.config.LocalizeConfig;
 import com.mitsugaru.Karmiconomy.database.DatabaseHandler;
 import com.mitsugaru.Karmiconomy.database.Field;
@@ -19,13 +20,13 @@ import com.mitsugaru.Karmiconomy.database.Field;
 public class EventLogic
 {
 	private static Karmiconomy plugin;
-	private static Config config;
+	private static Config rootConfig;
 	private static DatabaseHandler db;
 
 	public static void init(Karmiconomy kcon)
 	{
 		plugin = kcon;
-		config = kcon.getPluginConfig();
+		rootConfig = kcon.getPluginConfig();
 		db = kcon.getDatabaseHandler();
 	}
 
@@ -38,13 +39,13 @@ public class EventLogic
 		}
 	}
 
-	public static boolean deny(Field field, Player player, boolean denyPay,
-			double pay, boolean denyLimit, int configLimit, Item item,
-			String command)
+	public static boolean deny(Field field, Player player, KConfig config,
+			Item item, String command)
 	{
-		if (denyPay)
+		if (config.getDenyPay(field, item, command))
 		{
-			if (KarmicEcon.denyPay(field, player, pay, item, command))
+			if (KarmicEcon.denyPay(field, player,
+					config.getPayValue(field, item, command), item, command))
 			{
 				switch (field.getTable())
 				{
@@ -68,7 +69,7 @@ public class EventLogic
 					}
 				}
 
-				if (config.debugEvents)
+				if (rootConfig.debugEvents)
 				{
 					plugin.getLogger().info(
 							"Denied " + field + " for player "
@@ -78,8 +79,9 @@ public class EventLogic
 				return true;
 			}
 		}
-		if (denyLimit)
+		if (config.getDenyLimit(field, item, command))
 		{
+			final int configLimit = config.getLimitValue(field, item, command);
 			if (configLimit == 0)
 			{
 				switch (field.getTable())
@@ -103,7 +105,7 @@ public class EventLogic
 						break;
 					}
 				}
-				if (config.debugEvents)
+				if (rootConfig.debugEvents)
 				{
 					plugin.getLogger().info(
 							"Denied " + field + " for player "
@@ -140,7 +142,7 @@ public class EventLogic
 							break;
 						}
 					}
-					if (config.debugEvents)
+					if (rootConfig.debugEvents)
 					{
 						plugin.getLogger().info(
 								"Denied " + field + " for player "
@@ -170,13 +172,14 @@ public class EventLogic
 	}
 
 	public static void hitPayIncrement(Field field, Player player,
-			int configLimit, double amount, Item item, String command)
+			KConfig config, Item item, String command)
 	{
+		final int configLimit = config.getLimitValue(field, item, command);
 		// Check if hit limit
 		if (!EventLogic.hitLimit(field, player, configLimit, item, command))
 		{
 			// Attempt to pay
-			if (KarmicEcon.pay(field, player, amount, item, command))
+			if (KarmicEcon.pay(field, player, config, item, command))
 			{
 				// Increment
 				db.incrementData(field, player.getName(), item, command);

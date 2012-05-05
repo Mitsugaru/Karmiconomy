@@ -11,6 +11,8 @@ import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import com.mitsugaru.Karmiconomy.Karmiconomy;
+import com.mitsugaru.Karmiconomy.LocalString;
+import com.mitsugaru.Karmiconomy.database.Field;
 
 public class LocalizeConfig
 {
@@ -19,8 +21,8 @@ public class LocalizeConfig
 	private static File file;
 	private static YamlConfiguration config;
 	public static String permissionDeny, lackMessage, reasonMoney, reasonLimit,
-			reasonUnknown, econFailure, unknownCommand, noPermission, helpHelp, helpAdminReload, helpVersion,
-			reloadConfig;
+			reasonUnknown, econFailure, unknownCommand, noPermission, helpHelp,
+			helpAdminReload, helpVersion, reloadConfig;
 
 	public static void init(Karmiconomy kcon)
 	{
@@ -84,8 +86,10 @@ public class LocalizeConfig
 		defaults.put("message.unknownCommand",
 				"&c%tag Unknown command '&6%extra&c'. Bad syntax.");
 		defaults.put("help.help", "&a/kcon help&e : Show help menu");
-		defaults.put("help.admin.reload", "&a/kcon reload&e : Reload all config files");
-		defaults.put("help.version", "&a/kcon version&e : Show version and config");
+		defaults.put("help.admin.reload",
+				"&a/kcon reload&e : Reload all config files");
+		defaults.put("help.version",
+				"&a/kcon version&e : Show version and config");
 		defaults.put("reason.limit", "Hit limit");
 		defaults.put("reason.money", "Lack money");
 		defaults.put("reason.unknown", " Unknown DenyType");
@@ -118,14 +122,31 @@ public class LocalizeConfig
 		/**
 		 * help
 		 */
-		helpHelp = config.getString("help.help", "&a/kcon help&e : Show help menu");
-		helpAdminReload = config.getString("help.admin.reload", "&a/kcon reload&e : Reload all config files");
-		helpVersion = config.getString("help.version", "&a/kcon version&e : Show version and config");
+		helpHelp = config.getString("help.help",
+				"&a/kcon help&e : Show help menu");
+		helpAdminReload = config.getString("help.admin.reload",
+				"&a/kcon reload&e : Reload all config files");
+		helpVersion = config.getString("help.version",
+				"&a/kcon version&e : Show version and config");
 		/**
 		 * Reasons
 		 */
 		reasonLimit = config.getString("reason.money", "Hit limit");
 		reasonMoney = config.getString("reason.money", "Lack money");
 		reasonUnknown = config.getString("reason.unknown", " Unknown DenyType");
+	}
+
+	public static String getEventMessage(Field field, String name, double amount)
+	{
+		String out = config.getString("event." + field.getConfigPath(), "");
+		if (!out.equals(""))
+		{
+			out = Karmiconomy.colorizeText(out);
+			out = out.replaceAll(LocalString.Flag.TAG.getFlag(), Karmiconomy.TAG);
+			out = out.replaceAll(LocalString.Flag.NAME.getFlag(), name);
+			out = out.replaceAll(LocalString.Flag.AMOUNT.getFlag(),
+					String.format("%.2f", amount));
+		}
+		return out;
 	}
 }

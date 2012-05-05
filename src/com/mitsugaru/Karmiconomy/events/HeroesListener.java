@@ -41,19 +41,15 @@ public class HeroesListener implements Listener
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void classChangeValid(ClassChangeEvent event)
 	{
-		if (!event.isCancelled() && HeroesConfig.classChange
+		if (!event.isCancelled() && config.isEnabled(Field.HEROES_CLASS_CHANGE)
 				&& event.getHero() != null)
 		{
 			final Player player = event.getHero().getPlayer();
 			if (config.checkWorld(Field.HEROES_CLASS_CHANGE, player.getWorld()
 					.getName()))
 			{
-				if (EventLogic.deny(Field.HEROES_CLASS_CHANGE, player,
-						HeroesConfig.classChangeDenyPay, config.getPayValue(
-								Field.HEROES_CLASS_CHANGE, null, null),
-						HeroesConfig.classChangeDenyLimit, config
-								.getLimitValue(Field.HEROES_CLASS_CHANGE, null,
-										null), null, null))
+				if (EventLogic.deny(Field.HEROES_CLASS_CHANGE, player, config,
+						null, null))
 				{
 					// Deny
 					event.setCancelled(true);
@@ -80,7 +76,7 @@ public class HeroesListener implements Listener
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void classChange(ClassChangeEvent event)
 	{
-		if (!event.isCancelled() && HeroesConfig.classChange
+		if (!event.isCancelled() && config.isEnabled(Field.HEROES_CLASS_CHANGE)
 				&& event.getHero() != null)
 		{
 			final Player player = event.getHero().getPlayer();
@@ -90,10 +86,7 @@ public class HeroesListener implements Listener
 						.getWorld().getName()))
 				{
 					EventLogic.hitPayIncrement(Field.HEROES_CLASS_CHANGE,
-							player, config.getLimitValue(
-									Field.HEROES_CLASS_CHANGE, null, null),
-							config.getPayValue(Field.HEROES_CLASS_CHANGE, null,
-									null), null, null);
+							player, config, null, null);
 				}
 			}
 		}
@@ -102,7 +95,7 @@ public class HeroesListener implements Listener
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void expChangeValid(ExperienceChangeEvent event)
 	{
-		if (!event.isCancelled() && HeroesConfig.expChange
+		if (!event.isCancelled() && config.isEnabled(Field.HEROES_EXP_CHANGE)
 				&& event.getHero() != null)
 		{
 			final Player player = event.getHero().getPlayer();
@@ -112,11 +105,7 @@ public class HeroesListener implements Listener
 						.getWorld().getName()))
 				{
 					if (EventLogic.deny(Field.HEROES_EXP_CHANGE, player,
-							HeroesConfig.expChangeDenyPay, config.getPayValue(
-									Field.HEROES_EXP_CHANGE, null, null),
-							HeroesConfig.expChangeDenyLimit, config
-									.getLimitValue(Field.HEROES_EXP_CHANGE,
-											null, null), null, null))
+							config, null, null))
 					{
 						// Deny
 						event.setCancelled(true);
@@ -137,7 +126,7 @@ public class HeroesListener implements Listener
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void expChange(ExperienceChangeEvent event)
 	{
-		if (!event.isCancelled() && HeroesConfig.expChange
+		if (!event.isCancelled() && config.isEnabled(Field.HEROES_EXP_CHANGE)
 				&& event.getHero() != null)
 		{
 			final Player player = event.getHero().getPlayer();
@@ -147,10 +136,7 @@ public class HeroesListener implements Listener
 						.getWorld().getName()))
 				{
 					EventLogic.hitPayIncrement(Field.HEROES_EXP_CHANGE, player,
-							config.getLimitValue(Field.HEROES_EXP_CHANGE, null,
-									null), config.getPayValue(
-									Field.HEROES_EXP_CHANGE, null, null), null,
-							null);
+							config, null, null);
 				}
 			}
 		}
@@ -159,7 +145,8 @@ public class HeroesListener implements Listener
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void changeLevelEvent(HeroChangeLevelEvent event)
 	{
-		if (HeroesConfig.changeLevel && event.getHero() != null)
+		if (config.isEnabled(Field.HEROES_CHANGE_LEVEL)
+				&& event.getHero() != null)
 		{
 			final Player player = event.getHero().getPlayer();
 			if (player != null)
@@ -168,10 +155,7 @@ public class HeroesListener implements Listener
 						.getWorld().getName()))
 				{
 					EventLogic.hitPayIncrement(Field.HEROES_CHANGE_LEVEL,
-							player, config.getLimitValue(
-									Field.HEROES_CHANGE_LEVEL, null, null),
-							config.getPayValue(Field.HEROES_CHANGE_LEVEL, null,
-									null), null, null);
+							player, config, null, null);
 				}
 			}
 		}
@@ -180,7 +164,8 @@ public class HeroesListener implements Listener
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void combatEnter(HeroEnterCombatEvent event)
 	{
-		if (HeroesConfig.combatEnter && event.getHero() != null)
+		if (config.isEnabled(Field.HEROES_COMBAT_ENTER)
+				&& event.getHero() != null)
 		{
 			final Player player = event.getHero().getPlayer();
 			if (player != null)
@@ -189,10 +174,7 @@ public class HeroesListener implements Listener
 						.getWorld().getName()))
 				{
 					EventLogic.hitPayIncrement(Field.HEROES_COMBAT_ENTER,
-							player, config.getLimitValue(
-									Field.HEROES_COMBAT_ENTER, null, null),
-							config.getPayValue(Field.HEROES_COMBAT_ENTER, null,
-									null), null, null);
+							player, config, null, null);
 				}
 			}
 		}
@@ -201,7 +183,8 @@ public class HeroesListener implements Listener
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void combatLeave(HeroLeaveCombatEvent event)
 	{
-		if (HeroesConfig.combatLeave && event.getHero() != null)
+		if (config.isEnabled(Field.HEROES_COMBAT_LEAVE)
+				&& event.getHero() != null)
 		{
 			final Player player = event.getHero().getPlayer();
 			if (player != null)
@@ -210,10 +193,7 @@ public class HeroesListener implements Listener
 						.getWorld().getName()))
 				{
 					EventLogic.hitPayIncrement(Field.HEROES_COMBAT_LEAVE,
-							player, config.getLimitValue(
-									Field.HEROES_COMBAT_LEAVE, null, null),
-							config.getPayValue(Field.HEROES_COMBAT_LEAVE, null,
-									null), null, null);
+							player, config, null, null);
 				}
 			}
 		}
@@ -222,7 +202,7 @@ public class HeroesListener implements Listener
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void joinPartyValid(HeroJoinPartyEvent event)
 	{
-		if (!event.isCancelled() && HeroesConfig.partyJoin
+		if (!event.isCancelled() && config.isEnabled(Field.HEROES_PARTY_JOIN)
 				&& event.getHero() != null)
 		{
 			final Player player = event.getHero().getPlayer();
@@ -232,12 +212,7 @@ public class HeroesListener implements Listener
 						.getWorld().getName()))
 				{
 					if (EventLogic.deny(Field.HEROES_PARTY_JOIN, player,
-							HeroesConfig.regainHealthDenyPay, config
-									.getPayValue(Field.HEROES_PARTY_JOIN, null,
-											null),
-							HeroesConfig.regainHealthDenyLimit, config
-									.getLimitValue(Field.HEROES_PARTY_JOIN,
-											null, null), null, null))
+							config, null, null))
 					{
 						// Deny
 						event.setCancelled(true);
@@ -257,7 +232,7 @@ public class HeroesListener implements Listener
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void joinParty(HeroJoinPartyEvent event)
 	{
-		if (!event.isCancelled() && HeroesConfig.partyJoin
+		if (!event.isCancelled() && config.isEnabled(Field.HEROES_PARTY_JOIN)
 				&& event.getHero() != null)
 		{
 			final Player player = event.getHero().getPlayer();
@@ -267,10 +242,7 @@ public class HeroesListener implements Listener
 						.getWorld().getName()))
 				{
 					EventLogic.hitPayIncrement(Field.HEROES_PARTY_JOIN, player,
-							config.getLimitValue(Field.HEROES_PARTY_JOIN, null,
-									null), config.getPayValue(
-									Field.HEROES_PARTY_JOIN, null, null), null,
-							null);
+							config, null, null);
 				}
 			}
 		}
@@ -279,7 +251,7 @@ public class HeroesListener implements Listener
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void leavePartyValid(HeroLeavePartyEvent event)
 	{
-		if (!event.isCancelled() && HeroesConfig.partyLeave
+		if (!event.isCancelled() && config.isEnabled(Field.HEROES_PARTY_LEAVE)
 				&& event.getHero() != null)
 		{
 			final Player player = event.getHero().getPlayer();
@@ -289,11 +261,7 @@ public class HeroesListener implements Listener
 						.getWorld().getName()))
 				{
 					if (EventLogic.deny(Field.HEROES_PARTY_LEAVE, player,
-							HeroesConfig.partyLeaveDenyPay, config.getPayValue(
-									Field.HEROES_PARTY_LEAVE, null, null),
-							HeroesConfig.partyLeaveDenyLimit, config
-									.getLimitValue(Field.HEROES_PARTY_LEAVE,
-											null, null), null, null))
+							config, null, null))
 					{
 						// Deny
 						event.setCancelled(true);
@@ -313,7 +281,7 @@ public class HeroesListener implements Listener
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void leaveParty(HeroLeavePartyEvent event)
 	{
-		if (!event.isCancelled() && HeroesConfig.partyLeave
+		if (!event.isCancelled() && config.isEnabled(Field.HEROES_PARTY_LEAVE)
 				&& event.getHero() != null)
 		{
 			final Player player = event.getHero().getPlayer();
@@ -323,10 +291,7 @@ public class HeroesListener implements Listener
 						.getWorld().getName()))
 				{
 					EventLogic.hitPayIncrement(Field.HEROES_PARTY_LEAVE,
-							player, config.getLimitValue(
-									Field.HEROES_PARTY_LEAVE, null, null),
-							config.getPayValue(Field.HEROES_PARTY_LEAVE, null,
-									null), null, null);
+							player, config, null, null);
 				}
 			}
 		}
@@ -344,41 +309,29 @@ public class HeroesListener implements Listener
 				{
 					case ATTACKED_PLAYER:
 					{
-						if (HeroesConfig.killAttackPlayer)
+						if (config.isEnabled(Field.HEROES_KILL_ATTACK_PLAYER))
 						{
 							if (config.checkWorld(
 									Field.HEROES_KILL_ATTACK_PLAYER, player
 											.getWorld().getName()))
 							{
-								EventLogic
-										.hitPayIncrement(
-												Field.HEROES_KILL_ATTACK_PLAYER,
-												player,
-												config.getLimitValue(
-														Field.HEROES_KILL_ATTACK_PLAYER,
-														null, null),
-												config.getPayValue(
-														Field.HEROES_KILL_ATTACK_PLAYER,
-														null, null), null, null);
+								EventLogic.hitPayIncrement(
+										Field.HEROES_KILL_ATTACK_PLAYER,
+										player, config, null, null);
 							}
 						}
 						break;
 					}
 					case ATTACKED_MOB:
 					{
-						if (HeroesConfig.killAttackMob)
+						if (config.isEnabled(Field.HEROES_KILL_ATTACK_MOB))
 						{
 							if (config.checkWorld(Field.HEROES_KILL_ATTACK_MOB,
 									player.getWorld().getName()))
 							{
 								EventLogic.hitPayIncrement(
 										Field.HEROES_KILL_ATTACK_MOB, player,
-										config.getLimitValue(
-												Field.HEROES_KILL_ATTACK_MOB,
-												null, null),
-										config.getPayValue(
-												Field.HEROES_KILL_ATTACK_MOB,
-												null, null), null, null);
+										config, null, null);
 							}
 						}
 						break;
@@ -407,41 +360,29 @@ public class HeroesListener implements Listener
 				{
 					case DAMAGED_BY_PLAYER:
 					{
-						if (HeroesConfig.killDefendPlayer)
+						if (config.isEnabled(Field.HEROES_KILL_DEFEND_PLAYER))
 						{
 							if (config.checkWorld(
 									Field.HEROES_KILL_DEFEND_PLAYER, player
 											.getWorld().getName()))
 							{
-								EventLogic
-										.hitPayIncrement(
-												Field.HEROES_KILL_DEFEND_PLAYER,
-												player,
-												config.getLimitValue(
-														Field.HEROES_KILL_DEFEND_PLAYER,
-														null, null),
-												config.getPayValue(
-														Field.HEROES_KILL_DEFEND_PLAYER,
-														null, null), null, null);
+								EventLogic.hitPayIncrement(
+										Field.HEROES_KILL_DEFEND_PLAYER,
+										player, config, null, null);
 							}
 						}
 						break;
 					}
 					case DAMAGED_BY_MOB:
 					{
-						if (HeroesConfig.killDefendMob)
+						if (config.isEnabled(Field.HEROES_KILL_DEFEND_MOB))
 						{
 							if (config.checkWorld(Field.HEROES_KILL_DEFEND_MOB,
 									player.getWorld().getName()))
 							{
 								EventLogic.hitPayIncrement(
 										Field.HEROES_KILL_DEFEND_MOB, player,
-										config.getLimitValue(
-												Field.HEROES_KILL_DEFEND_MOB,
-												null, null),
-										config.getPayValue(
-												Field.HEROES_KILL_DEFEND_MOB,
-												null, null), null, null);
+										config, null, null);
 							}
 						}
 						break;
@@ -465,7 +406,8 @@ public class HeroesListener implements Listener
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void regainHealthValid(HeroRegainHealthEvent event)
 	{
-		if (!event.isCancelled() && HeroesConfig.regainHealth
+		if (!event.isCancelled()
+				&& config.isEnabled(Field.HEROES_REGAIN_HEALTH)
 				&& event.getHero() != null)
 		{
 			final Player player = event.getHero().getPlayer();
@@ -475,12 +417,7 @@ public class HeroesListener implements Listener
 						.getWorld().getName()))
 				{
 					if (EventLogic.deny(Field.HEROES_REGAIN_HEALTH, player,
-							HeroesConfig.regainHealthDenyPay, config
-									.getPayValue(Field.HEROES_REGAIN_HEALTH,
-											null, null),
-							HeroesConfig.regainHealthDenyLimit, config
-									.getLimitValue(Field.HEROES_REGAIN_HEALTH,
-											null, null), null, null))
+							config, null, null))
 					{
 						// Deny
 						event.setCancelled(true);
@@ -501,7 +438,8 @@ public class HeroesListener implements Listener
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void regainHealth(HeroRegainHealthEvent event)
 	{
-		if (!event.isCancelled() && HeroesConfig.regainHealth
+		if (!event.isCancelled()
+				&& config.isEnabled(Field.HEROES_REGAIN_HEALTH)
 				&& event.getHero() != null)
 		{
 			final Player player = event.getHero().getPlayer();
@@ -511,10 +449,7 @@ public class HeroesListener implements Listener
 						.getWorld().getName()))
 				{
 					EventLogic.hitPayIncrement(Field.HEROES_REGAIN_HEALTH,
-							player, config.getLimitValue(
-									Field.HEROES_REGAIN_HEALTH, null, null),
-							config.getPayValue(Field.HEROES_REGAIN_HEALTH,
-									null, null), null, null);
+							player, config, null, null);
 				}
 			}
 		}
@@ -523,7 +458,7 @@ public class HeroesListener implements Listener
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void regainManaValid(HeroRegainManaEvent event)
 	{
-		if (!event.isCancelled() && HeroesConfig.regainMana
+		if (!event.isCancelled() && config.isEnabled(Field.HEROES_REGAIN_MANA)
 				&& event.getHero() != null)
 		{
 			final Player player = event.getHero().getPlayer();
@@ -533,11 +468,7 @@ public class HeroesListener implements Listener
 						.getWorld().getName()))
 				{
 					if (EventLogic.deny(Field.HEROES_REGAIN_MANA, player,
-							HeroesConfig.regainManaDenyPay, config.getPayValue(
-									Field.HEROES_REGAIN_MANA, null, null),
-							HeroesConfig.regainManaDenyLimit, config
-									.getLimitValue(Field.HEROES_REGAIN_MANA,
-											null, null), null, null))
+							config, null, null))
 					{
 						// Deny
 						event.setCancelled(true);
@@ -558,7 +489,7 @@ public class HeroesListener implements Listener
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void regainMana(HeroRegainManaEvent event)
 	{
-		if (!event.isCancelled() && HeroesConfig.regainMana
+		if (!event.isCancelled() && config.isEnabled(Field.HEROES_REGAIN_MANA)
 				&& event.getHero() != null)
 		{
 			final Player player = event.getHero().getPlayer();
@@ -568,10 +499,7 @@ public class HeroesListener implements Listener
 						.getWorld().getName()))
 				{
 					EventLogic.hitPayIncrement(Field.HEROES_REGAIN_MANA,
-							player, config.getLimitValue(
-									Field.HEROES_REGAIN_MANA, null, null),
-							config.getPayValue(Field.HEROES_REGAIN_MANA, null,
-									null), null, null);
+							player, config, null, null);
 				}
 			}
 		}
@@ -581,7 +509,8 @@ public class HeroesListener implements Listener
 	public void skillComplete(SkillCompleteEvent event)
 	{
 		// TODO check if successful?
-		if (HeroesConfig.skillComplete && event.getHero() != null)
+		if (config.isEnabled(Field.HEROES_SKILL_COMPLETE)
+				&& event.getHero() != null)
 		{
 			final Player player = event.getHero().getPlayer();
 			if (player != null)
@@ -590,10 +519,7 @@ public class HeroesListener implements Listener
 						.getWorld().getName()))
 				{
 					EventLogic.hitPayIncrement(Field.HEROES_SKILL_COMPLETE,
-							player, config.getLimitValue(
-									Field.HEROES_SKILL_COMPLETE, null, null),
-							config.getPayValue(Field.HEROES_SKILL_COMPLETE,
-									null, null), null, null);
+							player, config, null, null);
 				}
 			}
 		}
@@ -602,7 +528,7 @@ public class HeroesListener implements Listener
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void skillUseValid(SkillUseEvent event)
 	{
-		if (!event.isCancelled() && HeroesConfig.skillUse
+		if (!event.isCancelled() && config.isEnabled(Field.HEROES_SKILL_USE)
 				&& event.getHero() != null)
 		{
 			final Player player = event.getHero().getPlayer();
@@ -611,12 +537,8 @@ public class HeroesListener implements Listener
 				if (config.checkWorld(Field.HEROES_SKILL_USE, player.getWorld()
 						.getName()))
 				{
-					if (EventLogic.deny(Field.HEROES_SKILL_USE, player,
-							HeroesConfig.skillUseDenyPay, config.getPayValue(
-									Field.HEROES_SKILL_USE, null, null),
-							HeroesConfig.skillUseDenyLimit, config
-									.getLimitValue(Field.HEROES_SKILL_USE,
-											null, null), null, null))
+					if (EventLogic.deny(Field.HEROES_SKILL_USE, player, config,
+							null, null))
 					{
 						// Deny
 						event.setCancelled(true);
@@ -638,7 +560,7 @@ public class HeroesListener implements Listener
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void skillUse(SkillUseEvent event)
 	{
-		if (!event.isCancelled() && HeroesConfig.skillUse
+		if (!event.isCancelled() && config.isEnabled(Field.HEROES_SKILL_USE)
 				&& event.getHero() != null)
 		{
 			final Player player = event.getHero().getPlayer();
@@ -648,10 +570,7 @@ public class HeroesListener implements Listener
 						.getName()))
 				{
 					EventLogic.hitPayIncrement(Field.HEROES_SKILL_USE, player,
-							config.getLimitValue(Field.HEROES_SKILL_USE, null,
-									null), config.getPayValue(
-									Field.HEROES_SKILL_USE, null, null), null,
-							null);
+							config, null, null);
 				}
 			}
 		}

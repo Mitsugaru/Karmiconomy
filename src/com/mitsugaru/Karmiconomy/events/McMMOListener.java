@@ -37,222 +37,163 @@ public class McMMOListener implements Listener
 			{
 				case ACROBATICS:
 				{
-					if (McMMOConfig.acrobaticsXp)
+					if (config.isEnabled(Field.MCMMO_GAIN_ACROBATICS))
 					{
 						if (config.checkWorld(Field.MCMMO_GAIN_ACROBATICS,
 								player.getWorld().getName()))
 						{
 							EventLogic.hitPayIncrement(
 									Field.MCMMO_GAIN_ACROBATICS, player,
-									config.getLimitValue(
-											Field.MCMMO_GAIN_ACROBATICS, null,
-											null), config.getPayValue(
-											Field.MCMMO_GAIN_ACROBATICS, null,
-											null), null, null);
+									config, null, null);
 						}
 					}
 					break;
 				}
 				case ARCHERY:
 				{
-					if (McMMOConfig.archeryXp)
+					if (config.isEnabled(Field.MCMMO_GAIN_ARCHERY))
 					{
 						if (config.checkWorld(Field.MCMMO_GAIN_ARCHERY, player
 								.getWorld().getName()))
 						{
 							EventLogic.hitPayIncrement(
-									Field.MCMMO_GAIN_ARCHERY, player, config
-											.getLimitValue(
-													Field.MCMMO_GAIN_ARCHERY,
-													null, null), config
-											.getPayValue(
-													Field.MCMMO_GAIN_ARCHERY,
-													null, null), null, null);
+									Field.MCMMO_GAIN_ARCHERY, player, config,
+									null, null);
 						}
 					}
 					break;
 				}
 				case AXES:
 				{
-					if (McMMOConfig.axesXp)
+					if (config.isEnabled(Field.MCMMO_GAIN_AXES))
 					{
 						if (config.checkWorld(Field.MCMMO_GAIN_AXES, player
 								.getWorld().getName()))
 						{
 							EventLogic.hitPayIncrement(Field.MCMMO_GAIN_AXES,
-									player, config.getLimitValue(
-											Field.MCMMO_GAIN_AXES, null, null),
-									config.getPayValue(Field.MCMMO_GAIN_AXES,
-											null, null), null, null);
+									player, config, null, null);
 						}
 					}
 					break;
 				}
 				case EXCAVATION:
 				{
-					if (McMMOConfig.excavationXp)
+					if (config.isEnabled(Field.MCMMO_GAIN_EXCAVATION))
 					{
 						if (config.checkWorld(Field.MCMMO_GAIN_EXCAVATION,
 								player.getWorld().getName()))
 						{
 							EventLogic.hitPayIncrement(
 									Field.MCMMO_GAIN_EXCAVATION, player,
-									config.getLimitValue(
-											Field.MCMMO_GAIN_EXCAVATION, null,
-											null), config.getPayValue(
-											Field.MCMMO_GAIN_EXCAVATION, null,
-											null), null, null);
+									config, null, null);
 						}
 					}
 					break;
 				}
 				case FISHING:
 				{
-					if (McMMOConfig.fishingXp)
+					if (config.isEnabled(Field.MCMMO_GAIN_FISHING))
 					{
 						if (config.checkWorld(Field.MCMMO_GAIN_FISHING, player
 								.getWorld().getName()))
 						{
 							EventLogic.hitPayIncrement(
-									Field.MCMMO_GAIN_FISHING, player, config
-											.getLimitValue(
-													Field.MCMMO_GAIN_FISHING,
-													null, null), config
-											.getPayValue(
-													Field.MCMMO_GAIN_FISHING,
-													null, null), null, null);
+									Field.MCMMO_GAIN_FISHING, player, config,
+									null, null);
 						}
 					}
 					break;
 				}
 				case HERBALISM:
 				{
-					if (McMMOConfig.herbalismXp)
+					if (config.isEnabled(Field.MCMMO_GAIN_HERBALISM))
 					{
 						if (config.checkWorld(Field.MCMMO_GAIN_HERBALISM,
 								player.getWorld().getName()))
 						{
 							EventLogic.hitPayIncrement(
-									Field.MCMMO_GAIN_HERBALISM, player, config
-											.getLimitValue(
-													Field.MCMMO_GAIN_HERBALISM,
-													null, null), config
-											.getPayValue(
-													Field.MCMMO_GAIN_HERBALISM,
-													null, null), null, null);
+									Field.MCMMO_GAIN_HERBALISM, player, config,
+									null, null);
 						}
 					}
 					break;
 				}
 				case MINING:
 				{
-					if (McMMOConfig.miningXp)
+					if (config.isEnabled(Field.MCMMO_GAIN_MINING))
 					{
 						if (config.checkWorld(Field.MCMMO_GAIN_MINING, player
 								.getWorld().getName()))
 						{
 							EventLogic.hitPayIncrement(Field.MCMMO_GAIN_MINING,
-									player, config
-											.getLimitValue(
-													Field.MCMMO_GAIN_MINING,
-													null, null), config
-											.getPayValue(
-													Field.MCMMO_GAIN_MINING,
-													null, null), null, null);
+									player, config, null, null);
 						}
 					}
 					break;
 				}
 				case REPAIR:
 				{
-					if (McMMOConfig.repairXp)
+					if (config.isEnabled(Field.MCMMO_GAIN_REPAIR))
 					{
 						if (config.checkWorld(Field.MCMMO_GAIN_REPAIR, player
 								.getWorld().getName()))
 						{
 							EventLogic.hitPayIncrement(Field.MCMMO_GAIN_REPAIR,
-									player, config
-											.getLimitValue(
-													Field.MCMMO_GAIN_REPAIR,
-													null, null), config
-											.getPayValue(
-													Field.MCMMO_GAIN_REPAIR,
-													null, null), null, null);
+									player, config, null, null);
 						}
 					}
 					break;
 				}
 				case SWORDS:
 				{
-					if (McMMOConfig.swordsXp)
+					if (config.isEnabled(Field.MCMMO_GAIN_SWORDS))
 					{
 						if (config.checkWorld(Field.MCMMO_GAIN_SWORDS, player
 								.getWorld().getName()))
 						{
 							EventLogic.hitPayIncrement(Field.MCMMO_GAIN_SWORDS,
-									player, config
-											.getLimitValue(
-													Field.MCMMO_GAIN_SWORDS,
-													null, null), config
-											.getPayValue(
-													Field.MCMMO_GAIN_SWORDS,
-													null, null), null, null);
+									player, config, null, null);
 						}
 					}
 					break;
 				}
 				case TAMING:
 				{
-					if (McMMOConfig.tamingXp)
+					if (config.isEnabled(Field.MCMMO_GAIN_SWORDS))
 					{
 						if (config.checkWorld(Field.MCMMO_GAIN_TAMING, player
 								.getWorld().getName()))
 						{
 							EventLogic.hitPayIncrement(Field.MCMMO_GAIN_TAMING,
-									player, config
-											.getLimitValue(
-													Field.MCMMO_GAIN_TAMING,
-													null, null), config
-											.getPayValue(
-													Field.MCMMO_GAIN_TAMING,
-													null, null), null, null);
+									player, config, null, null);
 						}
 					}
 					break;
 				}
 				case UNARMED:
 				{
-					if (McMMOConfig.unarmedXp)
+					if (config.isEnabled(Field.MCMMO_GAIN_UNARMED))
 					{
 						if (config.checkWorld(Field.MCMMO_GAIN_UNARMED, player
 								.getWorld().getName()))
 						{
 							EventLogic.hitPayIncrement(
-									Field.MCMMO_GAIN_UNARMED, player, config
-											.getLimitValue(
-													Field.MCMMO_GAIN_UNARMED,
-													null, null), config
-											.getPayValue(
-													Field.MCMMO_GAIN_UNARMED,
-													null, null), null, null);
+									Field.MCMMO_GAIN_UNARMED, player, config,
+									null, null);
 						}
 					}
 					break;
 				}
 				case WOODCUTTING:
 				{
-					if (McMMOConfig.woodcuttingXp)
+					if (config.isEnabled(Field.MCMMO_GAIN_WOODCUTTING))
 					{
 						if (config.checkWorld(Field.MCMMO_GAIN_WOODCUTTING,
 								player.getWorld().getName()))
 						{
 							EventLogic.hitPayIncrement(
 									Field.MCMMO_GAIN_WOODCUTTING, player,
-									config.getLimitValue(
-											Field.MCMMO_GAIN_WOODCUTTING, null,
-											null), config.getPayValue(
-											Field.MCMMO_GAIN_WOODCUTTING, null,
-											null), null, null);
+									config, null, null);
 						}
 					}
 					break;
@@ -290,224 +231,167 @@ public class McMMOListener implements Listener
 			{
 				case ACROBATICS:
 				{
-					if (McMMOConfig.acrobaticsLevel)
+					if (config.isEnabled(Field.MCMMO_LEVEL_ACROBATICS))
 					{
 						if (config.checkWorld(Field.MCMMO_LEVEL_ACROBATICS,
 								player.getWorld().getName()))
 						{
 							EventLogic.hitPayIncrement(
 									Field.MCMMO_LEVEL_ACROBATICS, player,
-									config.getLimitValue(
-											Field.MCMMO_LEVEL_ACROBATICS, null,
-											null), config.getPayValue(
-											Field.MCMMO_LEVEL_ACROBATICS, null,
-											null), null, null);
+									config, null, null);
 						}
 					}
 					break;
 				}
 				case ARCHERY:
 				{
-					if (McMMOConfig.archeryLevel)
+					if (config.isEnabled(Field.MCMMO_LEVEL_ARCHERY))
 					{
 						if (config.checkWorld(Field.MCMMO_LEVEL_ARCHERY, player
 								.getWorld().getName()))
 						{
 							EventLogic.hitPayIncrement(
-									Field.MCMMO_LEVEL_ARCHERY, player, config
-											.getLimitValue(
-													Field.MCMMO_LEVEL_ARCHERY,
-													null, null), config
-											.getPayValue(
-													Field.MCMMO_LEVEL_ARCHERY,
-													null, null), null, null);
+									Field.MCMMO_LEVEL_ARCHERY, player, config,
+									null, null);
 						}
 					}
 					break;
 				}
 				case AXES:
 				{
-					if (McMMOConfig.axesLevel)
+					if (config.isEnabled(Field.MCMMO_LEVEL_AXES))
 					{
 						if (config.checkWorld(Field.MCMMO_LEVEL_AXES, player
 								.getWorld().getName()))
 						{
-							EventLogic
-									.hitPayIncrement(Field.MCMMO_LEVEL_AXES,
-											player, config.getLimitValue(
-													Field.MCMMO_LEVEL_AXES,
-													null, null),
-											config.getPayValue(
-													Field.MCMMO_LEVEL_AXES,
-													null, null), null, null);
+							EventLogic.hitPayIncrement(Field.MCMMO_LEVEL_AXES,
+									player, config, null, null);
 						}
 					}
 					break;
 				}
 				case EXCAVATION:
 				{
-					if (McMMOConfig.excavationLevel)
+					if (config.isEnabled(Field.MCMMO_LEVEL_EXCAVATION))
 					{
 						if (config.checkWorld(Field.MCMMO_LEVEL_EXCAVATION,
 								player.getWorld().getName()))
 						{
 							EventLogic.hitPayIncrement(
 									Field.MCMMO_LEVEL_EXCAVATION, player,
-									config.getLimitValue(
-											Field.MCMMO_LEVEL_EXCAVATION, null,
-											null), config.getPayValue(
-											Field.MCMMO_LEVEL_EXCAVATION, null,
-											null), null, null);
+									config, null, null);
 						}
 					}
 					break;
 				}
 				case FISHING:
 				{
-					if (McMMOConfig.fishingLevel)
+					if (config.isEnabled(Field.MCMMO_LEVEL_FISHING))
 					{
 						if (config.checkWorld(Field.MCMMO_LEVEL_FISHING, player
 								.getWorld().getName()))
 						{
 							EventLogic.hitPayIncrement(
-									Field.MCMMO_LEVEL_FISHING, player, config
-											.getLimitValue(
-													Field.MCMMO_LEVEL_FISHING,
-													null, null), config
-											.getPayValue(
-													Field.MCMMO_LEVEL_FISHING,
-													null, null), null, null);
+									Field.MCMMO_LEVEL_FISHING, player, config,
+									null, null);
 						}
 					}
 					break;
 				}
 				case HERBALISM:
 				{
-					if (McMMOConfig.herbalismLevel)
+					if (config.isEnabled(Field.MCMMO_LEVEL_HERBALISM))
 					{
 						if (config.checkWorld(Field.MCMMO_LEVEL_HERBALISM,
 								player.getWorld().getName()))
 						{
 							EventLogic.hitPayIncrement(
 									Field.MCMMO_LEVEL_HERBALISM, player,
-									config.getLimitValue(
-											Field.MCMMO_LEVEL_HERBALISM, null,
-											null), config.getPayValue(
-											Field.MCMMO_LEVEL_HERBALISM, null,
-											null), null, null);
+									config, null, null);
 						}
 					}
 					break;
 				}
 				case MINING:
 				{
-					if (McMMOConfig.miningLevel)
+					if (config.isEnabled(Field.MCMMO_LEVEL_MINING))
 					{
 						if (config.checkWorld(Field.MCMMO_LEVEL_MINING, player
 								.getWorld().getName()))
 						{
 							EventLogic.hitPayIncrement(
-									Field.MCMMO_LEVEL_MINING, player, config
-											.getLimitValue(
-													Field.MCMMO_LEVEL_MINING,
-													null, null), config
-											.getPayValue(
-													Field.MCMMO_LEVEL_MINING,
-													null, null), null, null);
+									Field.MCMMO_LEVEL_MINING, player, config,
+									null, null);
 						}
 					}
 					break;
 				}
 				case REPAIR:
 				{
-					if (McMMOConfig.repairLevel)
+					if (config.isEnabled(Field.MCMMO_LEVEL_REPAIR))
 					{
 						if (config.checkWorld(Field.MCMMO_LEVEL_REPAIR, player
 								.getWorld().getName()))
 						{
 							EventLogic.hitPayIncrement(
-									Field.MCMMO_LEVEL_REPAIR, player, config
-											.getLimitValue(
-													Field.MCMMO_LEVEL_REPAIR,
-													null, null), config
-											.getPayValue(
-													Field.MCMMO_LEVEL_REPAIR,
-													null, null), null, null);
+									Field.MCMMO_LEVEL_REPAIR, player, config,
+									null, null);
 						}
 					}
 					break;
 				}
 				case SWORDS:
 				{
-					if (McMMOConfig.swordsLevel)
+					if (config.isEnabled(Field.MCMMO_LEVEL_SWORDS))
 					{
 						if (config.checkWorld(Field.MCMMO_LEVEL_SWORDS, player
 								.getWorld().getName()))
 						{
 							EventLogic.hitPayIncrement(
-									Field.MCMMO_LEVEL_SWORDS, player, config
-											.getLimitValue(
-													Field.MCMMO_LEVEL_SWORDS,
-													null, null), config
-											.getPayValue(
-													Field.MCMMO_LEVEL_SWORDS,
-													null, null), null, null);
+									Field.MCMMO_LEVEL_SWORDS, player, config,
+									null, null);
 						}
 					}
 					break;
 				}
 				case TAMING:
 				{
-					if (McMMOConfig.tamingLevel)
+					if (config.isEnabled(Field.MCMMO_LEVEL_TAMING))
 					{
 						if (config.checkWorld(Field.MCMMO_LEVEL_TAMING, player
 								.getWorld().getName()))
 						{
 							EventLogic.hitPayIncrement(
-									Field.MCMMO_LEVEL_TAMING, player, config
-											.getLimitValue(
-													Field.MCMMO_LEVEL_TAMING,
-													null, null), config
-											.getPayValue(
-													Field.MCMMO_LEVEL_TAMING,
-													null, null), null, null);
+									Field.MCMMO_LEVEL_TAMING, player, config,
+									null, null);
 						}
 					}
 					break;
 				}
 				case UNARMED:
 				{
-					if (McMMOConfig.unarmedLevel)
+					if (config.isEnabled(Field.MCMMO_LEVEL_UNARMED))
 					{
 						if (config.checkWorld(Field.MCMMO_LEVEL_UNARMED, player
 								.getWorld().getName()))
 						{
 							EventLogic.hitPayIncrement(
-									Field.MCMMO_LEVEL_UNARMED, player, config
-											.getLimitValue(
-													Field.MCMMO_LEVEL_UNARMED,
-													null, null), config
-											.getPayValue(
-													Field.MCMMO_LEVEL_UNARMED,
-													null, null), null, null);
+									Field.MCMMO_LEVEL_UNARMED, player, config,
+									null, null);
 						}
 					}
 					break;
 				}
 				case WOODCUTTING:
 				{
-					if (McMMOConfig.woodcuttingLevel)
+					if (config.isEnabled(Field.MCMMO_LEVEL_WOODCUTTING))
 					{
 						if (config.checkWorld(Field.MCMMO_LEVEL_WOODCUTTING,
 								player.getWorld().getName()))
 						{
 							EventLogic.hitPayIncrement(
 									Field.MCMMO_LEVEL_WOODCUTTING, player,
-									config.getLimitValue(
-											Field.MCMMO_LEVEL_WOODCUTTING,
-											null, null), config.getPayValue(
-											Field.MCMMO_LEVEL_WOODCUTTING,
-											null, null), null, null);
+									config, null, null);
 						}
 					}
 					break;
@@ -538,19 +422,16 @@ public class McMMOListener implements Listener
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void partyTeleportValid(McMMOPartyTeleportEvent event)
 	{
-		if (!event.isCancelled() && McMMOConfig.partyTeleport
+		if (!event.isCancelled()
+				&& config.isEnabled(Field.MCMMO_PARTY_TELEPORT)
 				&& event.getPlayer() != null)
 		{
 			final Player player = event.getPlayer();
 			if (config.checkWorld(Field.MCMMO_PARTY_TELEPORT, player.getWorld()
 					.getName()))
 			{
-				if (EventLogic.deny(Field.MCMMO_PARTY_TELEPORT, player,
-						McMMOConfig.partyTeleportDenyPay, config.getPayValue(
-								Field.MCMMO_PARTY_TELEPORT, null, null),
-						McMMOConfig.partyTeleportDenyLimit, config
-								.getLimitValue(Field.MCMMO_PARTY_TELEPORT,
-										null, null), null, null))
+				if (EventLogic.deny(Field.MCMMO_PARTY_TELEPORT, player, config,
+						null, null))
 				{
 					// Cancel event
 					event.setCancelled(true);
@@ -571,7 +452,8 @@ public class McMMOListener implements Listener
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void partyTeleport(McMMOPartyTeleportEvent event)
 	{
-		if (!event.isCancelled() && McMMOConfig.partyTeleport
+		if (!event.isCancelled()
+				&& config.isEnabled(Field.MCMMO_PARTY_TELEPORT)
 				&& event.getPlayer() != null)
 		{
 			final Player player = event.getPlayer();
@@ -579,10 +461,7 @@ public class McMMOListener implements Listener
 					.getName()))
 			{
 				EventLogic.hitPayIncrement(Field.MCMMO_PARTY_TELEPORT, player,
-						config.getLimitValue(Field.MCMMO_PARTY_TELEPORT, null,
-								null), config.getPayValue(
-								Field.MCMMO_PARTY_TELEPORT, null, null), null,
-						null);
+						config, null, null);
 			}
 			if (plugin.getPluginConfig().debugEvents)
 			{
@@ -606,20 +485,13 @@ public class McMMOListener implements Listener
 			{
 				case JOINED_PARTY:
 				{
-					if (McMMOConfig.partyJoin)
+					if (config.isEnabled(Field.MCMMO_PARTY_JOIN))
 					{
 						if (config.checkWorld(Field.MCMMO_PARTY_JOIN, player
 								.getWorld().getName()))
 						{
 							if (EventLogic.deny(Field.MCMMO_PARTY_JOIN, player,
-									McMMOConfig.partyJoinDenyPay, config
-											.getPayValue(
-													Field.MCMMO_PARTY_JOIN,
-													null, null),
-									McMMOConfig.partyJoinDenyLimit, config
-											.getLimitValue(
-													Field.MCMMO_PARTY_JOIN,
-													null, null), null, null))
+									config, null, null))
 							{
 								cancelled = true;
 							}
@@ -629,19 +501,13 @@ public class McMMOListener implements Listener
 				}
 				case LEFT_PARTY:
 				{
-					if (McMMOConfig.partyLeave)
+					if (config.isEnabled(Field.MCMMO_PARTY_LEAVE))
 					{
 						if (config.checkWorld(Field.MCMMO_PARTY_LEAVE, player
 								.getWorld().getName()))
 						{
 							if (EventLogic.deny(Field.MCMMO_PARTY_LEAVE,
-									player, McMMOConfig.partyLeaveDenyPay,
-									config.getPayValue(Field.MCMMO_PARTY_LEAVE,
-											null, null),
-									McMMOConfig.partyLeaveDenyLimit, config
-											.getLimitValue(
-													Field.MCMMO_PARTY_LEAVE,
-													null, null), null, null))
+									player, config, null, null))
 							{
 								cancelled = true;
 							}
@@ -651,20 +517,13 @@ public class McMMOListener implements Listener
 				}
 				case KICKED_FROM_PARTY:
 				{
-					if (McMMOConfig.partyKick)
+					if (config.isEnabled(Field.MCMMO_PARTY_KICK))
 					{
 						if (config.checkWorld(Field.MCMMO_PARTY_KICK, player
 								.getWorld().getName()))
 						{
 							if (EventLogic.deny(Field.MCMMO_PARTY_KICK, player,
-									McMMOConfig.partyKickDenyPay, config
-											.getPayValue(
-													Field.MCMMO_PARTY_KICK,
-													null, null),
-									McMMOConfig.partyKickDenyLimit, config
-											.getLimitValue(
-													Field.MCMMO_PARTY_KICK,
-													null, null), null, null))
+									config, null, null))
 							{
 								cancelled = true;
 							}
@@ -674,20 +533,13 @@ public class McMMOListener implements Listener
 				}
 				case CHANGED_PARTIES:
 				{
-					if (McMMOConfig.partyChange)
+					if (config.isEnabled(Field.MCMMO_PARTY_CHANGE))
 					{
 						if (config.checkWorld(Field.MCMMO_PARTY_CHANGE, player
 								.getWorld().getName()))
 						{
 							if (EventLogic.deny(Field.MCMMO_PARTY_CHANGE,
-									player, McMMOConfig.partyChangeDenyPay,
-									config.getPayValue(
-											Field.MCMMO_PARTY_CHANGE, null,
-											null),
-									McMMOConfig.partyChangeDenyLimit, config
-											.getLimitValue(
-													Field.MCMMO_PARTY_CHANGE,
-													null, null), null, null))
+									player, config, null, null))
 							{
 								cancelled = true;
 							}
@@ -729,84 +581,60 @@ public class McMMOListener implements Listener
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void partyChange(McMMOPartyChangeEvent event)
 	{
-		if (!event.isCancelled() && McMMOConfig.partyChange
-				&& event.getPlayer() != null)
+		if (!event.isCancelled() && event.getPlayer() != null)
 		{
 			final Player player = event.getPlayer();
 			switch (event.getReason())
 			{
 				case JOINED_PARTY:
 				{
-					if (McMMOConfig.partyJoin)
+					if (config.isEnabled(Field.MCMMO_PARTY_JOIN))
 					{
 						if (config.checkWorld(Field.MCMMO_PARTY_JOIN, player
 								.getWorld().getName()))
 						{
-							EventLogic
-									.hitPayIncrement(Field.MCMMO_PARTY_JOIN,
-											player, config.getLimitValue(
-													Field.MCMMO_PARTY_JOIN,
-													null, null),
-											config.getPayValue(
-													Field.MCMMO_PARTY_JOIN,
-													null, null), null, null);
+							EventLogic.hitPayIncrement(Field.MCMMO_PARTY_JOIN,
+									player, config, null, null);
 						}
 					}
 					break;
 				}
 				case LEFT_PARTY:
 				{
-					if (McMMOConfig.partyLeave)
+					if (config.isEnabled(Field.MCMMO_PARTY_LEAVE))
 					{
 						if (config.checkWorld(Field.MCMMO_PARTY_LEAVE, player
 								.getWorld().getName()))
 						{
 							EventLogic.hitPayIncrement(Field.MCMMO_PARTY_LEAVE,
-									player, config
-											.getLimitValue(
-													Field.MCMMO_PARTY_LEAVE,
-													null, null), config
-											.getPayValue(
-													Field.MCMMO_PARTY_LEAVE,
-													null, null), null, null);
+									player, config, null, null);
 						}
 					}
 					break;
 				}
 				case KICKED_FROM_PARTY:
 				{
-					if (McMMOConfig.partyKick)
+					if (config.isEnabled(Field.MCMMO_PARTY_KICK))
 					{
 						if (config.checkWorld(Field.MCMMO_PARTY_KICK, player
 								.getWorld().getName()))
 						{
-							EventLogic
-									.hitPayIncrement(Field.MCMMO_PARTY_KICK,
-											player, config.getLimitValue(
-													Field.MCMMO_PARTY_KICK,
-													null, null),
-											config.getPayValue(
-													Field.MCMMO_PARTY_KICK,
-													null, null), null, null);
+							EventLogic.hitPayIncrement(Field.MCMMO_PARTY_KICK,
+									player, config, null, null);
 						}
 					}
 					break;
 				}
 				case CHANGED_PARTIES:
 				{
-					if (McMMOConfig.partyChange)
+					if (config.isEnabled(Field.MCMMO_PARTY_CHANGE))
 					{
 						if (config.checkWorld(Field.MCMMO_PARTY_CHANGE, player
 								.getWorld().getName()))
 						{
 							EventLogic.hitPayIncrement(
-									Field.MCMMO_PARTY_CHANGE, player, config
-											.getLimitValue(
-													Field.MCMMO_PARTY_CHANGE,
-													null, null), config
-											.getPayValue(
-													Field.MCMMO_PARTY_CHANGE,
-													null, null), null, null);
+									Field.MCMMO_PARTY_CHANGE, player, config,
+									null, null);
 						}
 					}
 					break;

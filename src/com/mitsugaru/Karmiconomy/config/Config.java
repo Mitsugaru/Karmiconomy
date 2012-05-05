@@ -21,69 +21,26 @@ import com.mitsugaru.Karmiconomy.Item;
 import com.mitsugaru.Karmiconomy.Karmiconomy;
 import com.mitsugaru.Karmiconomy.database.Field;
 
-public class Config
+public class Config implements KConfig
 {
 	// Class variables
 	private Karmiconomy plugin;
 	public String host, port, database, user, password;
 	public static String tablePrefix;
 	public boolean debugTime, debugEvents, debugEconomy, debugUnhandled,
-			useMySQL, importSQL, chat, chatDenyPay, chatDenyLimit, command,
-			commandDenyPay, commandDenyLimit, blockPlace, blockPlaceDenyPay,
-			blockPlaceDenyLimit, blockDestroy, blockDestroyDenyPay,
-			blockDestroyDenyLimit, craftItem, craftItemDenyPay,
-			craftItemDenyLimit, enchantItem, enchantItemDenyPay,
-			enchantItemDenyLimit, portalCreateNether, portalCreateEnd,
-			portalCreateCustom, portalCreateNetherDenyPay,
-			portalCreateNetherDenyLimit, portalCreateEndDenyPay,
-			portalCreateEndDenyLimit, portalCreateCustomDenyPay,
-			portalCreateCustomDenyLimit, portalEnter, shootBow,
-			shootBowDenyPay, shootBowDenyLimit, tameOcelot, tameOcelotDenyPay,
-			tameOcelotDenyLimit, tameWolf, tameWolfDenyPay, tameWolfDenyLimit,
-			paintingPlace, paintingPlaceDenyPay, paintingPlaceDenyLimit,
-			bedEnter, bedEnterDenyPay, bedEnterDenyLimit, bedLeave,
-			bucketEmptyLava, bucketEmptyLavaDenyPay, bucketEmptyLavaDenyLimit,
-			bucketFillLava, bucketFillLavaDenyPay, bucketFillLavaDenyLimit,
-			bucketEmptyWater, bucketEmptyWaterDenyPay,
-			bucketEmptyWaterDenyLimit, bucketFillWater, bucketFillWaterDenyPay,
-			bucketFillWaterDenyLimit, worldChange, death, respawn, itemDrop,
-			itemDropDenyPay, itemDropDenyLimit, eggThrow, gameModeCreative,
-			gameModeCreativeDenyPay, gameModeCreativeDenyLimit,
-			gameModeSurvival, gameModeSurvivalDenyPay,
-			gameModeSurvivalDenyLimit, kick, join, quit, sneak, sneakDenyPay,
-			sneakDenyLimit, sprint, sprintDenyPay, sprintDenyLimit,
-			vehicleEnter, vehicleEnterDenyPay, vehicleEnterDenyLimit,
-			vehicleExit, vehicleExitDenyPay, vehicleExitDenyLimit,
-			blockPlaceStatic, blockDestroyStatic, craftItemStatic,
-			enchantItemStatic, itemDropStatic, commandStatic, pickup,
-			pickupStatic, pickupDenyPay, pickupDenyLimit, shootBowDenyForce;
-	public int listlimit, bedEnterLimit, bedLeaveLimit, blockDestroyLimit,
-			blockPlaceLimit, shootBowLimit, bucketEmptyLavaLimit,
-			bucketEmptyWaterLimit, bucketFillLavaLimit, bucketFillWaterLimit,
-			craftLimit, enchantLimit, itemDropLimit, chatLimit, deathLimit,
-			gameModeCreativeLimit, gameModeSurvivalLimit, kickLimit, joinLimit,
-			quitLimit, respawnLimit, sneakLimit, sprintLimit,
-			vehicleEnterLimit, vehicleExitLimit, paintingPlaceLimit,
-			commandLimit, worldChangeLimit, tameOcelotLimit, tameWolfLimit,
-			portalCreateNetherLimit, portalCreateEndLimit,
-			portalCreateCustomLimit, portalEnterLimit, eggThrowLimit,
-			pickupLimit;
-	public double bedEnterPay, bedLeavePay, blockDestroyPay, blockPlacePay,
-			shootBowPay, bucketEmptyLavaPay, bucketEmptyWaterPay,
-			bucketFillLavaPay, bucketFillWaterPay, craftPay, enchantPay,
-			itemDropPay, eggThrowPay, chatPay, deathPay, gameModePay, kickPay,
-			joinPay, quitPay, respawnPay, sneakPay, sprintPay, vehicleEnterPay,
-			vehicleExitPay, paintingPlacePay, tameOcelotPay, tameWolfPay,
-			gameModeCreativePay, gameModeSurvivalPay, commandPay,
-			worldChangePay, portalCreateNetherPay, portalCreateEndPay,
-			portalCreateCustomPay, portalEnterPay, shootBowForce, pickupPay;
+			useMySQL, importSQL, portalCreateNether, portalCreateEnd,
+			portalCreateCustom, blockPlaceStatic, blockDestroyStatic,
+			craftItemStatic, enchantItemStatic, itemDropStatic, commandStatic,
+			pickupStatic, shootBowDenyForce;
+	public int listlimit;
+	public double shootBowForce;
 	private final Map<Item, KCItemInfo> values = new HashMap<Item, KCItemInfo>();
 
 	// TODO ability to change config in-game
 	/**
 	 * Constructor and initializer
 	 * 
-	 * @param Karmiconomy   
+	 * @param Karmiconomy
 	 *            plugin
 	 */
 	public Config(Karmiconomy plugin)
@@ -99,21 +56,25 @@ public class Config
 		defaults.put("bed.enter.denyOnLimit", false);
 		defaults.put("bed.enter.limit", 10);
 		defaults.put("bed.enter.pay", 0.1);
+		defaults.put("bed.enter.localMessage", false);
 		defaults.put("bed.leave.enabled", false);
 		defaults.put("bed.leave.limit", 10);
 		defaults.put("bed.leave.pay", 0.1);
+		defaults.put("bed.leave.localMessage", false);
 		defaults.put("block.destroy.enabled", false);
 		defaults.put("block.destroy.denyOnLackPay", false);
 		defaults.put("block.destroy.denyOnLimit", false);
 		defaults.put("block.destroy.static", true);
 		defaults.put("block.destroy.limit", 100);
 		defaults.put("block.destroy.pay", 0.1);
+		defaults.put("block.destroy.localMessage", false);
 		defaults.put("block.place.enabled", false);
 		defaults.put("block.place.denyOnLackPay", false);
 		defaults.put("block.place.denyOnLimit", false);
 		defaults.put("block.place.static", true);
 		defaults.put("block.place.limit", 100);
 		defaults.put("block.place.pay", 0.1);
+		defaults.put("block.place.localMessage", false);
 		defaults.put("bow.shoot.enabled", false);
 		defaults.put("bow.shoot.denyOnLackPay", false);
 		defaults.put("bow.shoot.denyOnLimit", false);
@@ -121,128 +82,157 @@ public class Config
 		defaults.put("bow.shoot.minimumforce", 0.0);
 		defaults.put("bow.shoot.limit", 100);
 		defaults.put("bow.shoot.pay", 0.1);
+		defaults.put("bow.shoot.localMessage", false);
 		defaults.put("bucket.empty.lava.enabled", false);
 		defaults.put("bucket.empty.lava.denyOnLackPay", false);
 		defaults.put("bucket.empty.lava.denyOnLimit", false);
 		defaults.put("bucket.empty.lava.limit", 100);
 		defaults.put("bucket.empty.lava.pay", -10.0);
+		defaults.put("bucket.empty.lava.localMessage", false);
 		defaults.put("bucket.empty.water.enabled", false);
 		defaults.put("bucket.empty.water.denyOnLackPay", false);
 		defaults.put("bucket.empty.water.denyOnLimit", false);
 		defaults.put("bucket.empty.water.limit", 100);
 		defaults.put("bucket.empty.water.pay", 0.1);
+		defaults.put("bucket.empty.water.localMessage", false);
 		defaults.put("bucket.fill.lava.enabled", false);
 		defaults.put("bucket.fill.lava.denyOnLackPay", false);
 		defaults.put("bucket.fill.lava.denyOnLimit", false);
 		defaults.put("bucket.fill.lava.limit", 100);
 		defaults.put("bucket.fill.lava.pay", 0.1);
+		defaults.put("bucket.fill.lava.localMessage", false);
 		defaults.put("bucket.fill.water.enabled", false);
 		defaults.put("bucket.fill.water.denyOnLackPay", false);
 		defaults.put("bucket.fill.water.denyOnLimit", false);
 		defaults.put("bucket.fill.water.limit", 100);
 		defaults.put("bucket.fill.water.pay", 0.1);
+		defaults.put("bucket.fill.water.localMessage", false);
 		defaults.put("item.craft.enabled", false);
 		defaults.put("item.craft.static", true);
 		defaults.put("item.craft.denyOnLackPay", false);
 		defaults.put("item.craft.denyOnLimit", false);
 		defaults.put("item.craft.limit", 100);
 		defaults.put("item.craft.pay", 0.1);
+		defaults.put("item.craft.localMessage", false);
 		defaults.put("item.enchant.enabled", false);
 		defaults.put("item.enchant.denyOnLackPay", false);
 		defaults.put("item.enchant.denyOnLimit", false);
 		defaults.put("item.enchant.static", true);
 		defaults.put("item.enchant.limit", 100);
 		defaults.put("item.enchant.pay", 0.1);
+		defaults.put("item.enchant.localMessage", false);
 		defaults.put("item.drop.enabled", false);
 		defaults.put("item.drop.denyOnLackPay", false);
 		defaults.put("item.drop.denyOnLimit", false);
 		defaults.put("item.drop.static", true);
 		defaults.put("item.drop.limit", 100);
 		defaults.put("item.drop.pay", 0.1);
+		defaults.put("item.drop.localMessage", false);
 		defaults.put("item.pickup.enabled", false);
 		defaults.put("item.pickup.denyOnLackPay", false);
 		defaults.put("item.pickup.denyOnLimit", false);
 		defaults.put("item.pickup.static", true);
 		defaults.put("item.pickup.limit", 100);
 		defaults.put("item.pickup.pay", 0.1);
+		defaults.put("item.pickup.localMessage", false);
 		defaults.put("item.egg.enabled", false);
 		defaults.put("item.egg.limit", 100);
 		defaults.put("item.egg.pay", 0.1);
+		defaults.put("item.egg.localMessage", false);
 		defaults.put("painting.enabled", false);
 		defaults.put("painting.denyOnLackPay", true);
 		defaults.put("painting.denyOnLimit", true);
 		defaults.put("painting.limit", 100);
 		defaults.put("painting.pay", 0.1);
+		defaults.put("painting.localMessage", false);
 		defaults.put("player.chat.enabled", false);
 		defaults.put("player.chat.denyOnLackPay", false);
 		defaults.put("player.chat.denyOnLimit", false);
 		defaults.put("player.chat.limit", 10);
 		defaults.put("player.chat.pay", 0.1);
+		defaults.put("player.chat.localMessage", false);
 		defaults.put("player.command.enabled", false);
 		defaults.put("player.command.denyOnLackPay", false);
 		defaults.put("player.command.denyOnLimit", false);
 		defaults.put("player.command.static", true);
 		defaults.put("player.command.limit", 10);
 		defaults.put("player.command.pay", 0.1);
+		defaults.put("player.command.localMessage", false);
 		defaults.put("player.death.enabled", false);
 		defaults.put("player.death.limit", 100);
 		defaults.put("player.death.pay", -1);
+		defaults.put("player.death.localMessage", false);
 		defaults.put("player.gamemode.creative.enabled", false);
 		defaults.put("player.gamemode.creative.denyOnLackPay", false);
 		defaults.put("player.gamemode.creative.denyOnLimit", false);
 		defaults.put("player.gamemode.creative.limit", 10);
 		defaults.put("player.gamemode.creative.pay", -10);
+		defaults.put("player.gamemode.creative.localMessage", false);
 		defaults.put("player.gamemode.survival.enabled", false);
 		defaults.put("player.gamemode.survival.denyOnLackPay", false);
 		defaults.put("player.gamemode.survival.denyOnLimit", false);
 		defaults.put("player.gamemode.survival.limit", 1);
 		defaults.put("player.gamemode.survival.pay", 0.1);
+		defaults.put("player.gamemode.survival.localMessage", false);
 		defaults.put("player.join.enabled", false);
 		defaults.put("player.join.limit", 1);
 		defaults.put("player.join.pay", 10);
+		defaults.put("player.join.localMessage", false);
 		defaults.put("player.kick.enabled", false);
 		defaults.put("player.kick.limit", 10);
 		defaults.put("player.kick.pay", -10);
+		defaults.put("player.kick.localMessage", false);
 		defaults.put("player.quit.enabled", false);
 		defaults.put("player.quit.limit", 1);
 		defaults.put("player.quit.pay", 0.1);
+		defaults.put("player.quit.localMessage", false);
 		defaults.put("player.respawn.enabled", false);
 		defaults.put("player.respawn.limit", 100);
 		defaults.put("player.respawn.pay", -0.1);
+		defaults.put("player.respawn.localMessage", false);
 		defaults.put("player.sneak.enabled", false);
 		defaults.put("player.sneak.denyOnLackPay", false);
 		defaults.put("player.sneak.denyOnLimit", false);
 		defaults.put("player.sneak.limit", 10);
 		defaults.put("player.sneak.pay", 0.1);
+		defaults.put("player.sneak.localMessage", false);
 		defaults.put("player.sprint.enabled", false);
 		defaults.put("player.sprint.denyOnLackPay", false);
 		defaults.put("player.sprint.denyOnLimit", false);
 		defaults.put("player.sprint.limit", 10);
 		defaults.put("player.sprint.pay", 0.1);
+		defaults.put("player.sprint.localMessage", false);
 		defaults.put("portal.createNether.enabled", false);
 		defaults.put("portal.createNether.denyOnLackPay", false);
 		defaults.put("portal.createNether.denyOnLimit", false);
 		defaults.put("portal.createNether.limit", 10);
+		// TODO fix so that it is no longer redundant
 		defaults.put("portal.createNether.pay.nether", 0.1);
+		defaults.put("portal.createNether.localMessage", false);
 		defaults.put("portal.createEnd.enabled", false);
 		defaults.put("portal.createEnd.denyOnLackPay", false);
 		defaults.put("portal.createEnd.denyOnLimit", false);
 		defaults.put("portal.createEnd.limit", 10);
 		defaults.put("portal.createEnd.pay.ender", 0.1);
+		defaults.put("portal.createEnd.localMessage", false);
 		defaults.put("portal.createCustom.enabled", false);
 		defaults.put("portal.createCustom.denyOnLackPay", false);
 		defaults.put("portal.createCustom.denyOnLimit", false);
 		defaults.put("portal.createCustom.limit", 10);
 		defaults.put("portal.createCustom.pay.custom", 0.1);
+		defaults.put("portal.createCustom.localMessage", false);
 		defaults.put("portal.enter.enabled", false);
 		defaults.put("portal.enter.limit", 10);
 		defaults.put("portal.enter.pay", 0.1);
+		defaults.put("portal.enter.localMessage", false);
 		defaults.put("tame.ocelot.enabled", false);
 		defaults.put("tame.ocelot.limit", 10);
 		defaults.put("tame.ocelot.pay", 10);
+		defaults.put("tame.ocelot.localMessage", false);
 		defaults.put("tame.wolf.enabled", false);
 		defaults.put("tame.wolf.limit", 10);
 		defaults.put("tame.wolf.pay", 10);
+		defaults.put("tame.wolf.localMessage", false);
 		// TODO implement
 		/*
 		 * defaults.put("vehicle.enter.enabled", false);
@@ -259,6 +249,7 @@ public class Config
 		defaults.put("world.change.enabled", false);
 		defaults.put("world.change.limit", 15);
 		defaults.put("world.change.pay", 1.0);
+		defaults.put("world.change.localMessage", false);
 		defaults.put("mysql.use", false);
 		defaults.put("mysql.host", "localhost");
 		defaults.put("mysql.port", 3306);
@@ -378,259 +369,44 @@ public class Config
 		/**
 		 * Event Settings
 		 */
-		/**
-		 * Bed
-		 */
-		// Enter
-		bedEnter = config.getBoolean("bed.enter.enabled", false);
-		bedEnterDenyLimit = config.getBoolean("bed.enter.denyOnLimit", false);
-		bedEnterDenyPay = config.getBoolean("bed.enter.denyOnLackPay", false);
-		bedEnterLimit = config.getInt("bed.enter.limit", 10);
-		bedEnterPay = config.getDouble("bed.enter.pay", 0.1);
-		// Leave
-		bedLeave = config.getBoolean("bed.leave.enabled", false);
-		bedLeaveLimit = config.getInt("bed.leave.limit", 10);
-		bedLeavePay = config.getDouble("bed.leave.pay", 0.1);
-		/**
-		 * Blocks
-		 */
-		// Destroy
-		blockDestroy = config.getBoolean("block.destroy.enabled", false);
-		blockDestroyDenyLimit = config.getBoolean("block.destroy.denyOnLimit",
-				false);
-		blockDestroyDenyPay = config.getBoolean("block.destroy.denyOnLackPay",
-				false);
+		// destroy
 		blockDestroyStatic = config.getBoolean("block.destroy.static", true);
-		blockDestroyLimit = config.getInt("block.destroy.limit", 100);
-		blockDestroyPay = config.getDouble("block.destroy.pay", 0.1);
 		// place
-		blockPlace = config.getBoolean("block.place.enabled", false);
 		blockPlaceStatic = config.getBoolean("block.place.static", true);
-		blockPlaceDenyLimit = config.getBoolean("block.place.denyOnLimit",
-				false);
-		blockPlaceDenyPay = config.getBoolean("block.place.denyOnLackPay",
-				false);
-		blockPlaceLimit = config.getInt("block.place.limit", 100);
-		blockPlacePay = config.getDouble("block.place.pay", 0.1);
 		/**
 		 * Item
 		 */
 		// craft
-		craftItem = config.getBoolean("item.craft.enabled", false);
-		craftItemDenyPay = config.getBoolean("item.craft.denyOnLackPay", false);
-		craftItemDenyLimit = config.getBoolean("item.craft.denyOnLimit", false);
 		craftItemStatic = config.getBoolean("item.craft.static", true);
-		craftLimit = config.getInt("item.craft.limit", 100);
-		craftPay = config.getDouble("item.craft.pay", 0.1);
 		// enchant
-		enchantItem = config.getBoolean("item.enchant.enabled", false);
-		enchantItemDenyPay = config.getBoolean("item.enchant.denyOnLackPay",
-				false);
-		enchantItemDenyLimit = config.getBoolean("item.enchant.denyOnLimit",
-				false);
 		enchantItemStatic = config.getBoolean("item.enchant.static", true);
-		enchantLimit = config.getInt("item.enchant.limit", 100);
-		enchantPay = config.getDouble("item.enchant.pay", 0.1);
 		// drop
-		itemDrop = config.getBoolean("item.drop.enabled", false);
-		itemDropDenyPay = config.getBoolean("item.drop.denyOnLackPay", false);
-		itemDropDenyLimit = config.getBoolean("item.drop.denyOnLimit", false);
 		itemDropStatic = config.getBoolean("item.drop.static", true);
-		itemDropLimit = config.getInt("item.drop.limit", 100);
-		itemDropPay = config.getDouble("item.drop.pay", 0.1);
 		// pickup
-		pickup = config.getBoolean("item.drop.enabled", false);
-		pickupDenyPay = config.getBoolean("item.drop.denyOnLackPay", false);
-		pickupDenyLimit = config.getBoolean("item.drop.denyOnLimit", false);
 		pickupStatic = config.getBoolean("item.drop.static", true);
-		pickupLimit = config.getInt("item.drop.limit", 100);
-		pickupPay = config.getDouble("item.drop.pay", 0.1);
-		// egg
-		eggThrow = config.getBoolean("item.egg.enabled", false);
-		eggThrowLimit = config.getInt("item.egg.limit", 100);
-		eggThrowPay = config.getDouble("item.egg.pay", 0.1);
 		/**
 		 * Bow
 		 */
 		// shoot
-		shootBow = config.getBoolean("bow.shoot.enabled", false);
-		shootBowDenyLimit = config.getBoolean("bow.shoot.denyOnLimit", false);
-		shootBowDenyPay = config.getBoolean("bow.shoot.denyOnLackPay", false);
 		shootBowDenyForce = config
 				.getBoolean("bow.shoot.denyOnLowForce", false);
 		shootBowForce = config.getDouble("bow.shoot.minimumforce", 0.0);
-		shootBowLimit = config.getInt("bow.shoot.limit", 100);
-		shootBowPay = config.getDouble("bow.shoot.pay", 0.1);
-		/**
-		 * Bucket
-		 */
-		// Empty lava
-		bucketEmptyLava = config.getBoolean("bucket.empty.lava.enabled", false);
-		bucketEmptyLavaDenyPay = config.getBoolean(
-				"bucket.empty.lava.denyOnLackPay", false);
-		bucketEmptyLavaDenyLimit = config.getBoolean(
-				"bucket.empty.lava.denyOnLimit", false);
-		bucketEmptyLavaLimit = config.getInt("bucket.empty.lava.limit", 100);
-		bucketEmptyLavaPay = config.getDouble("bucket.empty.lava.pay", 0.1);
-		// Fill lava
-		bucketFillLava = config.getBoolean("bucket.fill.lava.enabled", false);
-		bucketFillLavaDenyPay = config.getBoolean(
-				"bucket.fill.lava.denyOnLackPay", false);
-		bucketFillLavaDenyLimit = config.getBoolean(
-				"bucket.fill.lava.denyOnLimit", false);
-		bucketFillLavaLimit = config.getInt("bucket.fill.lava.limit", 100);
-		bucketFillLavaPay = config.getDouble("bucket.fill.lava.pay", 0.1);
-		// Empty water
-		bucketEmptyWater = config.getBoolean("bucket.empty.water.enabled",
-				false);
-		bucketEmptyWaterDenyPay = config.getBoolean(
-				"bucket.empty.water.denyOnLackPay", false);
-		bucketEmptyWaterDenyLimit = config.getBoolean(
-				"bucket.empty.water.denyOnLimit", false);
-		bucketEmptyWaterLimit = config.getInt("bucket.empty.water.limit", 100);
-		bucketEmptyWaterPay = config.getDouble("bucket.empty.water.pay", 0.1);
-		// Fill water
-		bucketFillWater = config.getBoolean("bucket.fill.water.enabled", false);
-		bucketFillWaterDenyPay = config.getBoolean(
-				"bucket.fill.water.denyOnLackPay", false);
-		bucketFillWaterDenyLimit = config.getBoolean(
-				"bucket.fill.water.denyOnLimit", false);
-		bucketFillWaterLimit = config.getInt("bucket.fill.water.limit", 100);
-		bucketFillWaterPay = config.getDouble("bucket.fill.water.pay", 0.1);
-		/**
-		 * Painting
-		 */
-		// place
-		paintingPlace = config.getBoolean("painting.enabled", false);
-		paintingPlaceLimit = config.getInt("painting.limit", 100);
-		paintingPlacePay = config.getDouble("painting.pay", 0.1);
 		/**
 		 * Player section
 		 */
-		// Chat
-		chat = config.getBoolean("player.chat.enabled", false);
-		chatDenyPay = config.getBoolean("player.chat.denyOnLackPay", false);
-		chatDenyLimit = config.getBoolean("player.chat.denyOnLimit", false);
-		chatLimit = config.getInt("player.chat.limit", 10);
-		chatPay = config.getDouble("player.chat.pay", 0.1);
 		// command
-		command = config.getBoolean("player.command.enabled", false);
 		commandStatic = config.getBoolean("player.command.static", true);
-		commandDenyPay = config.getBoolean("player.command.denyOnLackPay",
-				false);
-		commandDenyLimit = config.getBoolean("player.command.denyOnLimit",
-				false);
-		commandLimit = config.getInt("player.command.limit", 10);
-		commandPay = config.getDouble("player.command.pay", 0.1);
-		// death
-		death = config.getBoolean("player.death.enabled", false);
-		deathLimit = config.getInt("player.death.limit", 100);
-		deathPay = config.getDouble("player.death.pay", -1);
-		// survival
-		gameModeSurvival = config.getBoolean(
-				"player.gamemode.survival.enabled", false);
-		gameModeSurvivalDenyPay = config.getBoolean(
-				"player.gamemode.survival.denyOnLackPay", false);
-		gameModeSurvivalDenyLimit = config.getBoolean(
-				"player.gamemode.survival.denyOnLimit", false);
-		gameModeSurvivalLimit = config.getInt("player.gamemode.survival.limit",
-				1);
-		gameModeSurvivalPay = config.getDouble("player.gamemode.survival.pay",
-				0.1);
-		// creative
-		gameModeCreative = config.getBoolean(
-				"player.gamemode.creative.enabled", false);
-		gameModeCreativeDenyPay = config.getBoolean(
-				"player.gamemode.creative.denyOnLackPay", false);
-		gameModeCreativeDenyLimit = config.getBoolean(
-				"player.gamemode.creative.denyOnLimit", false);
-		gameModeCreativeLimit = config.getInt("player.gamemode.creative.limit",
-				10);
-		gameModeCreativePay = config.getDouble("player.gamemode.creative.pay",
-				-10);
-		// join
-		join = config.getBoolean("player.join.enabled", false);
-		joinLimit = config.getInt("player.join.limit", 1);
-		joinPay = config.getDouble("player.join.pay", 10);
-		// kick
-		kick = config.getBoolean("player.kick.enabled", false);
-		kickLimit = config.getInt("player.kick.limit", 10);
-		kickPay = config.getDouble("player.kick.pay", -10);
-		// quit
-		quit = config.getBoolean("player.quit.enabled", false);
-		quitLimit = config.getInt("player.quit.limit", 1);
-		quitPay = config.getDouble("player.quit.pay", 0.1);
-		// respawn
-		respawn = config.getBoolean("player.respawn.enabled", false);
-		respawnLimit = config.getInt("player.respawn.limit", 100);
-		respawnPay = config.getDouble("player.respawn.pay", -0.1);
-		// sneak
-		sneak = config.getBoolean("player.sneak.enabled", false);
-		sneakDenyPay = config.getBoolean("player.sneak.denyOnLackPay", false);
-		sneakDenyLimit = config.getBoolean("player.sneak.denyOnLimit", false);
-		sneakLimit = config.getInt("player.sneak.limit", 10);
-		sneakPay = config.getDouble("player.sneak.pay", 0.1);
-		// sprint
-		sprint = config.getBoolean("player.sprint.enabled", false);
-		sprintDenyPay = config.getBoolean("player.sprint.denyOnLackPay", false);
-		sprintDenyLimit = config.getBoolean("player.sprint.denyOnLimit", false);
-		sprintLimit = config.getInt("player.sprint.limit", 10);
-		sprintPay = config.getDouble("player.sprint.pay", 0.1);
 		/**
 		 * Portal
 		 */
 		// create nether
 		portalCreateNether = config.getBoolean("portal.createNether.enabled",
 				false);
-		portalCreateNetherDenyPay = config.getBoolean(
-				"portal.createNether.denyOnLackPay", false);
-		portalCreateNetherDenyLimit = config.getBoolean(
-				"portal.createNether.denyOnLimit", false);
-		portalCreateNetherLimit = config
-				.getInt("portal.createNether.limit", 10);
-		portalCreateNetherPay = config.getDouble(
-				"portal.createNether.pay.nether", 0.1);
 		// create end
 		portalCreateEnd = config.getBoolean("portal.createEnd.enabled", false);
-		portalCreateEndDenyPay = config.getBoolean(
-				"portal.createEnd.denyOnLackPay", false);
-		portalCreateEndDenyLimit = config.getBoolean(
-				"portal.createEnd.denyOnLimit", false);
-		portalCreateEndLimit = config.getInt("portal.createEnd.limit", 10);
-		portalCreateEndPay = config
-				.getDouble("portal.createEnd.pay.ender", 0.1);
 		// create custom
 		portalCreateCustom = config.getBoolean("portal.createCustom.enabled",
 				false);
-		portalCreateCustomDenyPay = config.getBoolean(
-				"portal.createCustom.denyOnLackPay", false);
-		portalCreateCustomDenyLimit = config.getBoolean(
-				"portal.createCustom.denyOnLimit", false);
-		portalCreateCustomLimit = config
-				.getInt("portal.createCustom.limit", 10);
-		portalCreateCustomPay = config.getDouble(
-				"portal.createCustom.pay.custom", 0.1);
-		// enter
-		portalEnter = config.getBoolean("portal.enter.enabled", false);
-		portalEnterLimit = config.getInt("portal.enter.limit", 10);
-		portalEnterPay = config.getDouble("portal.enter.pay", 0.1);
-		/**
-		 * Tame
-		 */
-		// ocelot
-		tameOcelot = config.getBoolean("tame.ocelot.enabled", false);
-		tameOcelotDenyPay = config.getBoolean("tame.ocelot.denyOnLackPay",
-				false);
-		tameOcelotDenyLimit = config.getBoolean("tame.ocelot.denyOnLimit",
-				false);
-		tameOcelotLimit = config.getInt("tame.ocelot.limit", 10);
-		tameOcelotPay = config.getDouble("tame.ocelot.pay", 10);
-		// wolf
-		tameWolf = config.getBoolean("tame.wolf.enabled", false);
-		tameWolfDenyPay = config.getBoolean("tame.wolf.denyOnLackPay", false);
-		tameWolfDenyLimit = config.getBoolean("tame.wolf.denyOnLimit", false);
-		tameWolfLimit = config.getInt("tame.wolf.limit", 10);
-		tameWolfPay = config.getDouble("tame.wolf.pay", 10);
 		/**
 		 * Vehicle
 		 * 
@@ -652,13 +428,6 @@ public class Config
 		 * vehicleExitLimit = config.getInt("vehicle.exit.limit", 100);
 		 * vehicleExitPay = config.getDouble("vehicle.exit.pay", 0.1);
 		 */
-		/**
-		 * World
-		 */
-		// change
-		worldChange = config.getBoolean("world.change.enabled", false);
-		worldChangeLimit = config.getInt("world.change.limit", 15);
-		worldChangePay = config.getDouble("world.change.pay", 1.0);
 	}
 
 	/**
@@ -670,552 +439,248 @@ public class Config
 		// TODO format all doubles to 2 decimal places
 	}
 
+	@Override
 	public double getPayValue(Field type, Item item, String command)
 	{
 		double pay = 0.0;
-		switch (type.getTable())
-		{
-			case DATA:
-			{
-				switch (type)
-				{
-					case CHAT:
-						return chatPay;
-					case BED_ENTER:
-						return bedEnterPay;
-					case BED_LEAVE:
-						return bedLeavePay;
-					case BOW_SHOOT:
-						return shootBowPay;
-					case BUCKET_EMPTY_LAVA:
-						return bucketEmptyLavaPay;
-					case BUCKET_EMPTY_WATER:
-						return bucketEmptyWaterPay;
-					case BUCKET_FILL_LAVA:
-						return bucketFillLavaPay;
-					case BUCKET_FILL_WATER:
-						return bucketFillWaterPay;
-					case DEATH:
-						return deathPay;
-					case EGG_THROW:
-						return eggThrowPay;
-					case CREATIVE:
-						return gameModeCreativePay;
-					case SURVIVAL:
-						return gameModeSurvivalPay;
-					case JOIN:
-						return joinPay;
-					case KICK:
-						return kickPay;
-					case QUIT:
-						return quitPay;
-					case RESPAWN:
-						return respawnPay;
-					case PAINTING_PLACE:
-						return paintingPlacePay;
-					case PORTAL_CREATE_NETHER:
-						return portalCreateNetherPay;
-					case PORTAL_CREATE_END:
-						return portalCreateEndPay;
-					case PORTAL_CREATE_CUSTOM:
-						return portalCreateCustomPay;
-					case PORTAL_ENTER:
-						return portalEnterPay;
-					case SNEAK:
-						return sneakPay;
-					case SPRINT:
-						return sprintPay;
-					case TAME_OCELOT:
-						return tameOcelotPay;
-					case TAME_WOLF:
-						return tameWolfPay;
-					case WORLD_CHANGE:
-						return worldChangePay;
-					default:
-					{
-						if (debugUnhandled)
-						{
-							plugin.getLogger().warning(
-									"Unhandled pay for field " + type.name());
-						}
-						break;
-					}
-				}
-				break;
-			}
-			case ITEMS:
-			{
-				// handle custom item limit
-				switch (type)
-				{
-					case BLOCK_PLACE:
-					{
-						if (!blockPlaceStatic)
-						{
-							if (values.containsKey(item))
-							{
-								return values.get(item).placePay;
-							}
-						}
-						return blockPlacePay;
-					}
-					case BLOCK_DESTROY:
-					{
-						if (!blockDestroyStatic)
-						{
-							if (values.containsKey(item))
-							{
-								return values.get(item).destroyPay;
-							}
-						}
-						return blockDestroyPay;
-					}
-					case ITEM_CRAFT:
-					{
-						if (!craftItemStatic)
-						{
-							if (values.containsKey(item))
-							{
-								return values.get(item).craftPay;
-							}
-						}
-						return craftPay;
-					}
-					case ITEM_DROP:
-					{
-						if (!itemDropStatic)
-						{
-							if (values.containsKey(item))
-							{
-								return values.get(item).dropPay;
-							}
-						}
-						return itemDropPay;
-					}
-					case ITEM_ENCHANT:
-					{
-						if (!enchantItemStatic)
-						{
-							if (values.containsKey(item))
-							{
-								return values.get(item).enchantPay;
-							}
-						}
-						return enchantPay;
-					}
-					case ITEM_PICKUP:
-					{
-						if (!pickupStatic)
-						{
-							if (values.containsKey(item))
-							{
-								return values.get(item).pickupPay;
-							}
-						}
-					}
-					default:
-					{
-						if (debugUnhandled)
-						{
-							plugin.getLogger().warning(
-									"Unhandled pay for field " + type.name());
-						}
-						break;
-					}
-				}
-				break;
-			}
-			case COMMAND:
-			{
-				// TODO handle custom command limit
-				break;
-			}
-			case PORTAL:
-			{
-				switch (type)
-				{
-					case PORTAL_CREATE_NETHER:
-						return portalCreateNetherPay;
-					case PORTAL_CREATE_END:
-						return portalCreateEndPay;
-					case PORTAL_CREATE_CUSTOM:
-						return portalCreateCustomPay;
-					case PORTAL_ENTER:
-						return portalEnterPay;
-					default:
-					{
-						if (debugUnhandled)
-						{
-							plugin.getLogger().warning(
-									"Unhandled pay for field " + type.name());
-						}
-						break;
-					}
-				}
-			}
-			case BUCKET:
-			{
-				switch (type)
-				{
-					case BUCKET_EMPTY_LAVA:
-						return bucketEmptyLavaPay;
-					case BUCKET_EMPTY_WATER:
-						return bucketEmptyWaterPay;
-					case BUCKET_FILL_LAVA:
-						return bucketFillLavaPay;
-					case BUCKET_FILL_WATER:
-						return bucketFillWaterPay;
-					default:
-					{
-						if (debugUnhandled)
-						{
-							plugin.getLogger().warning(
-									"Unhandled pay for field " + type.name());
-						}
-						break;
-					}
-				}
-			}
-			default:
-				break;
-		}
-		return pay;
-	}
-
-	public int getLimitValue(Field type, Item item, String command)
-	{
-		int limit = -1;
-		switch (type.getTable())
-		{
-			case DATA:
-			{
-				switch (type)
-				{
-					case CHAT:
-						return chatLimit;
-					case BED_ENTER:
-						return bedEnterLimit;
-					case BED_LEAVE:
-						return bedLeaveLimit;
-					case BOW_SHOOT:
-						return shootBowLimit;
-					case BUCKET_EMPTY_LAVA:
-						return bucketEmptyLavaLimit;
-					case BUCKET_EMPTY_WATER:
-						return bucketEmptyWaterLimit;
-					case BUCKET_FILL_LAVA:
-						return bucketFillLavaLimit;
-					case BUCKET_FILL_WATER:
-						return bucketFillWaterLimit;
-					case DEATH:
-						return deathLimit;
-					case EGG_THROW:
-						return eggThrowLimit;
-					case CREATIVE:
-						return gameModeCreativeLimit;
-					case SURVIVAL:
-						return gameModeSurvivalLimit;
-					case JOIN:
-						return joinLimit;
-					case KICK:
-						return kickLimit;
-					case QUIT:
-						return quitLimit;
-					case RESPAWN:
-						return respawnLimit;
-					case PAINTING_PLACE:
-						return paintingPlaceLimit;
-					case PORTAL_CREATE_NETHER:
-						return portalCreateNetherLimit;
-					case PORTAL_CREATE_END:
-						return portalCreateEndLimit;
-					case PORTAL_CREATE_CUSTOM:
-						return portalCreateCustomLimit;
-					case PORTAL_ENTER:
-						return portalEnterLimit;
-					case SNEAK:
-						return sneakLimit;
-					case SPRINT:
-						return sprintLimit;
-					case TAME_OCELOT:
-						return tameOcelotLimit;
-					case TAME_WOLF:
-						return tameWolfLimit;
-					case WORLD_CHANGE:
-						return worldChangeLimit;
-					default:
-					{
-						if (debugUnhandled)
-						{
-							plugin.getLogger().warning(
-									"Unhandled limit for field " + type.name());
-						}
-						break;
-					}
-				}
-				break;
-			}
-			case ITEMS:
-			{
-				// handle custom item limit
-				switch (type)
-				{
-					case BLOCK_PLACE:
-					{
-						if (!blockPlaceStatic)
-						{
-							if (values.containsKey(item))
-							{
-								return values.get(item).placeLimit;
-							}
-						}
-						return blockPlaceLimit;
-					}
-					case BLOCK_DESTROY:
-					{
-						if (!blockDestroyStatic)
-						{
-							if (values.containsKey(item))
-							{
-								return values.get(item).destroyLimit;
-							}
-						}
-						return blockDestroyLimit;
-					}
-					case ITEM_CRAFT:
-					{
-						if (!craftItemStatic)
-						{
-							if (values.containsKey(item))
-							{
-								return values.get(item).craftLimit;
-							}
-						}
-						return craftLimit;
-					}
-					case ITEM_DROP:
-					{
-						if (!itemDropStatic)
-						{
-							if (values.containsKey(item))
-							{
-								return values.get(item).dropLimit;
-							}
-						}
-						return itemDropLimit;
-					}
-					case ITEM_ENCHANT:
-					{
-						if (!enchantItemStatic)
-						{
-							if (values.containsKey(item))
-							{
-								return values.get(item).enchantLimit;
-							}
-						}
-						return enchantLimit;
-					}
-					case ITEM_PICKUP:
-					{
-						if (!pickupStatic)
-						{
-							if (values.containsKey(item))
-							{
-								return values.get(item).pickupLimit;
-							}
-						}
-						return pickupLimit;
-					}
-					default:
-					{
-						// Typically ignore
-						if (debugUnhandled)
-						{
-							plugin.getLogger().warning(
-									"Unhandled limi for " + type.name());
-						}
-						break;
-					}
-				}
-				break;
-			}
-			case COMMAND:
-			{
-				// TODO handle custom command limit
-				break;
-			}
-			case PORTAL:
-			{
-				switch (type)
-				{
-					case PORTAL_CREATE_NETHER:
-						return portalCreateNetherLimit;
-					case PORTAL_CREATE_END:
-						return portalCreateEndLimit;
-					case PORTAL_CREATE_CUSTOM:
-						return portalCreateCustomLimit;
-					case PORTAL_ENTER:
-						return portalEnterLimit;
-					default:
-					{
-						if (debugUnhandled)
-						{
-							plugin.getLogger().warning(
-									"Unhandled limit for field " + type);
-						}
-						break;
-					}
-				}
-				break;
-			}
-			case BUCKET:
-			{
-				switch (type)
-				{
-					case BUCKET_EMPTY_LAVA:
-						return bucketEmptyLavaLimit;
-					case BUCKET_EMPTY_WATER:
-						return bucketEmptyWaterLimit;
-					case BUCKET_FILL_LAVA:
-						return bucketFillLavaLimit;
-					case BUCKET_FILL_WATER:
-						return bucketFillWaterLimit;
-					default:
-					{
-						if (debugUnhandled)
-						{
-							plugin.getLogger().warning(
-									"Unhandled limit for field " + type);
-						}
-						break;
-					}
-				}
-			}
-			default:
-				break;
-		}
-		return limit;
-	}
-
-	public boolean getDenyPay(Field field, Item item)
-	{
+		boolean found = false;
 		if (item != null)
 		{
-			return getItemDenyPay(field, item);
-		}
-		else
-		{
-			switch (field.getTable())
+			switch (type)
 			{
-				case DATA:
+				case BLOCK_PLACE:
 				{
-					switch (field)
+					if (!blockPlaceStatic)
 					{
-						case CHAT:
-							return chatDenyPay;
-						case BED_ENTER:
-							return bedEnterDenyPay;
-						case BOW_SHOOT:
-							return shootBowDenyPay;
-						case BUCKET_EMPTY_LAVA:
-							return bucketEmptyLavaDenyPay;
-						case BUCKET_EMPTY_WATER:
-							return bucketEmptyWaterDenyPay;
-						case BUCKET_FILL_LAVA:
-							return bucketFillLavaDenyPay;
-						case BUCKET_FILL_WATER:
-							return bucketFillWaterDenyPay;
-						case CREATIVE:
-							return gameModeCreativeDenyPay;
-						case SURVIVAL:
-							return gameModeSurvivalDenyPay;
-						case PAINTING_PLACE:
-							return paintingPlaceDenyPay;
-						case PORTAL_CREATE_NETHER:
-							return portalCreateNetherDenyPay;
-						case PORTAL_CREATE_END:
-							return portalCreateEndDenyPay;
-						case PORTAL_CREATE_CUSTOM:
-							return portalCreateCustomDenyPay;
-						case SNEAK:
-							return sneakDenyPay;
-						case SPRINT:
-							return sprintDenyPay;
-						case TAME_OCELOT:
-							return tameOcelotDenyPay;
-						case TAME_WOLF:
-							return tameWolfDenyPay;
-						default:
+						if (values.containsKey(item))
 						{
-							if (debugUnhandled)
-							{
-								plugin.getLogger().warning(
-										"Unhandled deny pay for field "
-												+ field.name());
-							}
-							break;
+							pay = values.get(item).placePay;
+							found = true;
 						}
 					}
 					break;
 				}
-				case PORTAL:
+				case BLOCK_DESTROY:
 				{
-					switch (field)
+					if (!blockDestroyStatic)
 					{
-						case PORTAL_CREATE_NETHER:
-							return portalCreateNetherDenyPay;
-						case PORTAL_CREATE_END:
-							return portalCreateEndDenyPay;
-						case PORTAL_CREATE_CUSTOM:
-							return portalCreateCustomDenyPay;
-						default:
+						if (values.containsKey(item))
 						{
-							if (debugUnhandled)
-							{
-								plugin.getLogger().warning(
-										"Unhandled deny pay for field "
-												+ field.name());
-							}
-							break;
+							pay = values.get(item).destroyPay;
+							found = true;
 						}
 					}
+					break;
 				}
-				case BUCKET:
+				case ITEM_CRAFT:
 				{
-					switch (field)
+					if (!craftItemStatic)
 					{
-						case BUCKET_EMPTY_LAVA:
-							return bucketEmptyLavaDenyPay;
-						case BUCKET_EMPTY_WATER:
-							return bucketEmptyWaterDenyPay;
-						case BUCKET_FILL_LAVA:
-							return bucketFillLavaDenyPay;
-						case BUCKET_FILL_WATER:
-							return bucketFillWaterDenyPay;
-						default:
+						if (values.containsKey(item))
 						{
-							if (debugUnhandled)
-							{
-								plugin.getLogger().warning(
-										"Unhandled deny pay for field "
-												+ field.name());
-							}
-							break;
+							pay = values.get(item).craftPay;
+							found = true;
 						}
 					}
+					break;
+				}
+				case ITEM_DROP:
+				{
+					if (!itemDropStatic)
+					{
+						if (values.containsKey(item))
+						{
+							pay = values.get(item).dropPay;
+							found = true;
+						}
+					}
+					break;
+				}
+				case ITEM_ENCHANT:
+				{
+					if (!enchantItemStatic)
+					{
+						if (values.containsKey(item))
+						{
+							pay = values.get(item).enchantPay;
+							found = true;
+						}
+					}
+					break;
+				}
+				case ITEM_PICKUP:
+				{
+					if (!pickupStatic)
+					{
+						if (values.containsKey(item))
+						{
+							pay = values.get(item).pickupPay;
+							found = true;
+						}
+					}
+					break;
 				}
 				default:
 				{
 					if (debugUnhandled)
 					{
 						plugin.getLogger().warning(
-								"Unhandled Deny Pay for " + field.name());
+								"Unhandled pay for field " + type.name());
 					}
 					break;
 				}
 			}
+			if (!found)
+			{
+				pay = plugin.getConfig().getDouble(
+						type.getConfigPath() + ".pay", 0.0);
+			}
 		}
-		return false;
+		else if (command != null)
+		{
+			// TODO implement
+		}
+		else
+		{
+			pay = plugin.getConfig().getDouble(type.getConfigPath() + ".pay",
+					0.0);
+		}
+		return pay;
+	}
+
+	@Override
+	public int getLimitValue(Field type, Item item, String command)
+	{
+		int limit = -1;
+		boolean found = false;
+		if (item != null)
+		{
+			switch (type)
+			{
+				case BLOCK_PLACE:
+				{
+					if (!blockPlaceStatic)
+					{
+						if (values.containsKey(item))
+						{
+							limit = values.get(item).placeLimit;
+							found = true;
+						}
+					}
+					break;
+				}
+				case BLOCK_DESTROY:
+				{
+					if (!blockDestroyStatic)
+					{
+						if (values.containsKey(item))
+						{
+							limit = values.get(item).destroyLimit;
+							found = true;
+						}
+					}
+					break;
+				}
+				case ITEM_CRAFT:
+				{
+					if (!craftItemStatic)
+					{
+						if (values.containsKey(item))
+						{
+							limit = values.get(item).craftLimit;
+							found = true;
+						}
+					}
+					break;
+				}
+				case ITEM_DROP:
+				{
+					if (!itemDropStatic)
+					{
+						if (values.containsKey(item))
+						{
+							limit = values.get(item).dropLimit;
+							found = true;
+						}
+					}
+					break;
+				}
+				case ITEM_ENCHANT:
+				{
+					if (!enchantItemStatic)
+					{
+						if (values.containsKey(item))
+						{
+							limit = values.get(item).enchantLimit;
+							found = true;
+						}
+					}
+					break;
+				}
+				case ITEM_PICKUP:
+				{
+					if (!pickupStatic)
+					{
+						if (values.containsKey(item))
+						{
+							limit = values.get(item).pickupLimit;
+							found = true;
+						}
+					}
+					break;
+				}
+				default:
+				{
+					if (debugUnhandled)
+					{
+						plugin.getLogger().warning(
+								"Unhandled limit for field " + type.name());
+					}
+					break;
+				}
+			}
+			if (!found)
+			{
+				limit = plugin.getConfig().getInt(
+						type.getConfigPath() + ".limit", -1);
+			}
+		}
+		else if (command != null)
+		{
+			// TODO implement
+		}
+		else
+		{
+			limit = plugin.getConfig().getInt(type.getConfigPath() + ".limit",
+					-1);
+		}
+		return limit;
+	}
+
+	@Override
+	public boolean getDenyPay(Field field, Item item, String command)
+	{
+		if (item != null)
+		{
+			return getItemDenyPay(field, item);
+		}
+		else if (command != null)
+		{
+			return plugin.getConfig().getBoolean(
+					field.getConfigPath() + ".denyOnLackPay", false);
+		}
+		else
+		{
+			return plugin.getConfig().getBoolean(
+					field.getConfigPath() + ".denyOnLackPay", false);
+		}
+	}
+
+	public boolean getCommandDenyPay(Field field, String command)
+	{
+		// TODO implement
+		return plugin.getConfig().getBoolean(
+				field.getConfigPath() + ".denyOnLackPay", false);
 	}
 
 	public boolean getItemDenyPay(Field type, Item item)
@@ -1231,7 +696,7 @@ public class Config
 						return values.get(item).placeDenyPay;
 					}
 				}
-				return blockPlaceDenyPay;
+				break;
 			}
 			case BLOCK_DESTROY:
 			{
@@ -1242,7 +707,7 @@ public class Config
 						return values.get(item).destroyDenyPay;
 					}
 				}
-				return blockDestroyDenyPay;
+				break;
 			}
 			case ITEM_CRAFT:
 			{
@@ -1253,7 +718,7 @@ public class Config
 						return values.get(item).craftDenyPay;
 					}
 				}
-				return craftItemDenyPay;
+				break;
 			}
 			case ITEM_DROP:
 			{
@@ -1264,7 +729,7 @@ public class Config
 						return values.get(item).dropDenyPay;
 					}
 				}
-				return itemDropDenyPay;
+				break;
 			}
 			case ITEM_ENCHANT:
 			{
@@ -1275,7 +740,7 @@ public class Config
 						return values.get(item).enchantDenyPay;
 					}
 				}
-				return enchantItemDenyPay;
+				break;
 			}
 			case ITEM_PICKUP:
 			{
@@ -1286,7 +751,7 @@ public class Config
 						return values.get(item).pickupDenyPay;
 					}
 				}
-				return pickupDenyPay;
+				break;
 			}
 			default:
 			{
@@ -1298,7 +763,34 @@ public class Config
 				break;
 			}
 		}
-		return false;
+		// Non-specifc, so return default
+		return plugin.getConfig().getBoolean(
+				type.getConfigPath() + ".denyOnLackPay", false);
+	}
+
+	@Override
+	public boolean getDenyLimit(Field field, Item item, String command)
+	{
+		if (item != null)
+		{
+			return getItemDenyLimit(field, item);
+		}
+		else if (command != null)
+		{
+			return getCommandDenyLimit(field, command);
+		}
+		else
+		{
+			return plugin.getConfig().getBoolean(
+					field.getConfigPath() + ".denyOnLimit", false);
+		}
+	}
+
+	public boolean getCommandDenyLimit(Field field, String command)
+	{
+		// TODO implement
+		return plugin.getConfig().getBoolean(
+				field.getConfigPath() + ".denyOnLimit", false);
 	}
 
 	public boolean getItemDenyLimit(Field type, Item item)
@@ -1314,7 +806,7 @@ public class Config
 						return values.get(item).placeDenyLimit;
 					}
 				}
-				return blockPlaceDenyLimit;
+				break;
 			}
 			case BLOCK_DESTROY:
 			{
@@ -1325,7 +817,7 @@ public class Config
 						return values.get(item).destroyDenyLimit;
 					}
 				}
-				return blockDestroyDenyLimit;
+				break;
 			}
 			case ITEM_CRAFT:
 			{
@@ -1336,7 +828,7 @@ public class Config
 						return values.get(item).craftDenyLimit;
 					}
 				}
-				return craftItemDenyLimit;
+				break;
 			}
 			case ITEM_DROP:
 			{
@@ -1347,7 +839,7 @@ public class Config
 						return values.get(item).dropDenyLimit;
 					}
 				}
-				return itemDropDenyLimit;
+				break;
 			}
 			case ITEM_ENCHANT:
 			{
@@ -1358,7 +850,7 @@ public class Config
 						return values.get(item).enchantDenyLimit;
 					}
 				}
-				return enchantItemDenyLimit;
+				break;
 			}
 			case ITEM_PICKUP:
 			{
@@ -1369,7 +861,7 @@ public class Config
 						return values.get(item).pickupDenyLimit;
 					}
 				}
-				return pickupDenyLimit;
+				break;
 			}
 			default:
 			{
@@ -1381,27 +873,37 @@ public class Config
 				break;
 			}
 		}
-		return false;
+		return plugin.getConfig().getBoolean(
+				type.getConfigPath() + ".denyOnLimit", false);
 	}
-	
+
+	@Override
+	public boolean sendBroadcast(Field field)
+	{
+		return plugin.getConfig().getBoolean(
+				field.getConfigPath() + ".localMessage", false);
+	}
+
+	@Override
 	public boolean checkWorld(Field field, String worldName)
 	{
 		boolean valid = false;
-		final List<String> list = plugin.getConfig().getStringList(field.getConfigPath() + ".worlds");
-		if(list == null)
+		final List<String> list = plugin.getConfig().getStringList(
+				field.getConfigPath() + ".worlds");
+		if (list == null)
 		{
-			//No worlds specified, so allow all
+			// No worlds specified, so allow all
 			valid = true;
 		}
-		else if(list.isEmpty())
+		else if (list.isEmpty())
 		{
 			valid = true;
 		}
 		else
 		{
-			for(String world : list)
+			for (String world : list)
 			{
-				if(world.equalsIgnoreCase(worldName))
+				if (world.equalsIgnoreCase(worldName))
 				{
 					valid = true;
 					break;
@@ -1521,63 +1023,101 @@ public class Config
 
 	private KCItemInfo parseInfo(YamlConfiguration config, String path)
 	{
-		final double iCraftPay = config.getDouble(path + ".craftPay", craftPay);
+		final double iCraftPay = config.getDouble(path + ".craftPay",
+				this.getPayValue(Field.ITEM_CRAFT, null, null));
 		final double iEnchantPay = config.getDouble(path + ".enchantPay",
-				enchantPay);
+				this.getPayValue(Field.ITEM_ENCHANT, null, null));
 		final double iPlacePay = config.getDouble(path + ".placePay",
-				blockPlacePay);
+				this.getPayValue(Field.BLOCK_PLACE, null, null));
 		// final double iIgnitePay = config.getDouble(path + ".ignitePay",
 		// blockIgnitePay);
 		final double iDestroyPay = config.getDouble(path + ".destroyPay",
-				blockDestroyPay);
-		final double iDropPay = config
-				.getDouble(path + ".dropPay", itemDropPay);
-		final int iCraftLimit = config.getInt(path + ".craftLimit", craftLimit);
+				this.getPayValue(Field.BLOCK_DESTROY, null, null));
+		final double iDropPay = config.getDouble(path + ".dropPay",
+				this.getPayValue(Field.ITEM_DROP, null, null));
+		final int iCraftLimit = config.getInt(path + ".craftLimit",
+				this.getLimitValue(Field.ITEM_CRAFT, null, null));
 		final int iEnchantLimit = config.getInt(path + ".enchantLimit",
-				enchantLimit);
+				this.getLimitValue(Field.ITEM_ENCHANT, null, null));
 		final int iPlaceLimit = config.getInt(path + ".placeLimit",
-				blockPlaceLimit);
+				this.getLimitValue(Field.BLOCK_PLACE, null, null));
 		// final int iIgniteLimit = config.getInt(path + ".igniteLimit",
 		// blockIgniteLimit);
 		final int iDestroyLimit = config.getInt(path + ".destroyLimit",
-				blockDestroyLimit);
-		final int iDropLimit = config
-				.getInt(path + ".dropLimit", itemDropLimit);
-		final boolean iCraftDenyPay = config.getBoolean(path
-				+ ".craftDenyOnPay", craftItemDenyPay);
-		final boolean iCraftDenyLimit = config.getBoolean(path
-				+ ".craftDenyOnLimit", craftItemDenyLimit);
-		final boolean iEnchantDenyPay = config.getBoolean(path
-				+ ".enchantDenyOnPay", enchantItemDenyPay);
-		final boolean iEnchantDenyLimit = config.getBoolean(path
-				+ ".enchantDenyOnLimit", enchantItemDenyLimit);
-		final boolean iPlaceDenyPay = config.getBoolean(path
-				+ ".placeDenyOnPay", blockPlaceDenyPay);
-		final boolean iPlaceDenyLimit = config.getBoolean(path
-				+ ".placeDenyOnLimit", blockPlaceDenyLimit);
-		final boolean iDestroyDenyPay = config.getBoolean(path
-				+ ".destroyDenyOnPay", blockDestroyDenyPay);
-		final boolean iDestroyDenyLimit = config.getBoolean(path
-				+ ".destroyDenyOnLimit", blockDestroyDenyLimit);
-		final boolean iDropDenyPay = config.getBoolean(path + ".dropDenyOnPay",
-				itemDropDenyPay);
-		final boolean iDropDenyLimit = config.getBoolean(path
-				+ ".dropDenyOnLimit", itemDropDenyLimit);
+				this.getLimitValue(Field.BLOCK_DESTROY, null, null));
+		final int iDropLimit = config.getInt(path + ".dropLimit",
+				this.getLimitValue(Field.ITEM_DROP, null, null));
+		final boolean iCraftDenyPay = config.getBoolean(
+				path + ".craftDenyOnPay",
+				plugin.getConfig().getBoolean(
+						Field.ITEM_CRAFT.getConfigPath() + ".denyOnLackPay",
+						false));
+		final boolean iCraftDenyLimit = config.getBoolean(
+				path + ".craftDenyOnLimit",
+				plugin.getConfig().getBoolean(
+						Field.ITEM_CRAFT.getConfigPath() + ".denyOnLimit",
+						false));
+		final boolean iEnchantDenyPay = config.getBoolean(
+				path + ".enchantDenyOnPay",
+				plugin.getConfig().getBoolean(
+						Field.ITEM_ENCHANT.getConfigPath() + ".denyOnLackPay",
+						false));
+		final boolean iEnchantDenyLimit = config.getBoolean(
+				path + ".enchantDenyOnLimit",
+				plugin.getConfig().getBoolean(
+						Field.ITEM_ENCHANT.getConfigPath() + ".denyOnLimit",
+						false));
+		final boolean iPlaceDenyPay = config.getBoolean(
+				path + ".placeDenyOnPay",
+				plugin.getConfig().getBoolean(
+						Field.BLOCK_PLACE.getConfigPath() + ".denyOnLackPay",
+						false));
+		final boolean iPlaceDenyLimit = config.getBoolean(
+				path + ".placeDenyOnLimit",
+				plugin.getConfig().getBoolean(
+						Field.BLOCK_PLACE.getConfigPath() + ".denyOnLimit",
+						false));
+		final boolean iDestroyDenyPay = config.getBoolean(
+				path + ".destroyDenyOnPay",
+				plugin.getConfig().getBoolean(
+						Field.BLOCK_DESTROY.getConfigPath() + ".denyOnLackPay",
+						false));
+		final boolean iDestroyDenyLimit = config.getBoolean(
+				path + ".destroyDenyOnLimit",
+				plugin.getConfig().getBoolean(
+						Field.BLOCK_DESTROY.getConfigPath() + ".denyOnLimit",
+						false));
+		final boolean iDropDenyPay = config.getBoolean(
+				path + ".dropDenyOnPay",
+				plugin.getConfig().getBoolean(
+						Field.ITEM_DROP.getConfigPath() + ".denyOnLackPay",
+						false));
+		final boolean iDropDenyLimit = config.getBoolean(
+				path + ".dropDenyOnLimit",
+				plugin.getConfig().getBoolean(
+						Field.ITEM_PICKUP.getConfigPath() + ".denyOnLimit",
+						false));
 		final int iPickupLimit = config.getInt(path + ".pickupLimit",
-				pickupLimit);
+				this.getLimitValue(Field.ITEM_PICKUP, null, null));
 		final double iPickupPay = config.getDouble(path + ".pickupPay",
-				pickupPay);
-		final boolean iPickupDenyPay = config.getBoolean(path
-				+ ".pickupDenyOnPay", pickupDenyPay);
-		final boolean iPickupDenyLimit = config.getBoolean(path
-				+ ".pickupDenyOnLimit", pickupDenyLimit);
+				this.getPayValue(Field.ITEM_PICKUP, null, null));
+		final boolean iPickupDenyPay = config.getBoolean(
+				path + ".pickupDenyOnPay",
+				plugin.getConfig().getBoolean(
+						Field.ITEM_PICKUP.getConfigPath() + ".denyOnLackPay",
+						false));
+		final boolean iPickupDenyLimit = config.getBoolean(
+				path + ".pickupDenyOnLimit",
+				plugin.getConfig().getBoolean(
+						Field.ITEM_PICKUP.getConfigPath() + ".denyOnLimit",
+						false));
 		KCItemInfo info = new KCItemInfo(iCraftLimit, iCraftPay, iCraftDenyPay,
 				iCraftDenyLimit, iEnchantLimit, iEnchantPay, iEnchantDenyPay,
 				iEnchantDenyLimit, iPlaceLimit, iPlacePay, iPlaceDenyPay,
-				iPlaceDenyLimit, /* iIgniteLimit, iIgnitePay, */
-				iDestroyLimit, iDestroyPay, iDestroyDenyPay, iDestroyDenyLimit,
-				iDropLimit, iDropPay, iDropDenyPay, iDropDenyLimit,
-				iPickupLimit, iPickupPay, iPickupDenyPay, iPickupDenyLimit);
+				iPlaceDenyLimit, iDestroyLimit, iDestroyPay, iDestroyDenyPay,
+				iDestroyDenyLimit, iDropLimit, iDropPay, iDropDenyPay,
+				iDropDenyLimit, iPickupLimit, iPickupPay, iPickupDenyPay,
+				iPickupDenyLimit);
 		return info;
 	}
 
@@ -1686,5 +1226,12 @@ public class Config
 			this.pickupDenyLimit = pickupDenyLimit;
 			this.pickupDenyPay = pickupDenyPay;
 		}
+	}
+
+	@Override
+	public boolean isEnabled(Field field)
+	{
+		return plugin.getConfig().getBoolean(
+				field.getConfigPath() + ".enabled", false);
 	}
 }

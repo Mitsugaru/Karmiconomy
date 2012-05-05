@@ -10,12 +10,14 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
 import com.mitsugaru.Karmiconomy.config.Config;
+import com.mitsugaru.Karmiconomy.config.KConfig;
+import com.mitsugaru.Karmiconomy.config.LocalizeConfig;
 import com.mitsugaru.Karmiconomy.database.Field;
 
 public class KarmicEcon
 {
 	private static Karmiconomy plugin;
-	private static Config config;
+	private static Config rootConfig;
 	private static Economy eco;
 	private static boolean playerpoints, vault;
 	private static Plugin pointsPlugin;
@@ -23,7 +25,7 @@ public class KarmicEcon
 	public KarmicEcon(Karmiconomy plugin)
 	{
 		KarmicEcon.plugin = plugin;
-		KarmicEcon.config = plugin.getPluginConfig();
+		KarmicEcon.rootConfig = plugin.getPluginConfig();
 	}
 
 	public boolean setupEconomy()
@@ -88,10 +90,12 @@ public class KarmicEcon
 		return paid;
 	}
 
-	public static boolean pay(Field field, Player player, double amount,
+	public static boolean pay(Field field, Player player, KConfig config,
 			Item item, String command)
 	{
 		boolean paid = false;
+		final double amount = config.getPayValue(field, item, command);
+		final boolean local = config.sendBroadcast(field);
 		if (amount == 0.0)
 		{
 			// Just record that it happened
@@ -120,14 +124,14 @@ public class KarmicEcon
 				{
 					case FAILURE:
 					{
-						if (config.getDenyPay(field, item))
+						if (config.getDenyPay(field, item, command))
 						{
 							message = LocalString.ECONOMY_FAILURE
 									.parseString(info);
 							player.sendMessage(message);
 							Karmiconomy.sentMessages.put(player.getName(),
 									message);
-							if (config.debugEconomy)
+							if (rootConfig.debugEconomy)
 							{
 								plugin.getLogger()
 										.severe("Eco Failure: "
@@ -138,11 +142,10 @@ public class KarmicEcon
 					}
 					case NOT_IMPLEMENTED:
 					{
-						message = LocalString.ECONOMY_FAILURE
-								.parseString(info);
+						message = LocalString.ECONOMY_FAILURE.parseString(info);
 						player.sendMessage(message);
 						Karmiconomy.sentMessages.put(player.getName(), message);
-						if (config.debugEconomy)
+						if (rootConfig.debugEconomy)
 						{
 							plugin.getLogger().severe(
 									"Eco not implemented: "
@@ -152,7 +155,7 @@ public class KarmicEcon
 					}
 					case SUCCESS:
 					{
-						if (config.debugEconomy)
+						if (rootConfig.debugEconomy)
 						{
 							plugin.getLogger().info(
 									"Eco success for player '"
@@ -160,7 +163,10 @@ public class KarmicEcon
 											+ "' of amount: " + amount);
 						}
 						paid = true;
-						;
+						if(local)
+						{
+							player.sendMessage(LocalizeConfig.getEventMessage(field, player.getName(), amount));
+						}
 					}
 					default:
 						break;
@@ -180,9 +186,18 @@ public class KarmicEcon
 						plugin.getServer().getConsoleSender(),
 						"points give " + player.getName() + " " + points);
 				paid = true;
+				if(local)
+				{
+					player.sendMessage(LocalizeConfig.getEventMessage(field, player.getName(), (double) points));
+				}
 			}
 		}
-		// Unsuccessful transaction
 		return paid;
+	}
+
+	public static void payMessage(Field field, Player player, double amount,
+			Item item, String command)
+	{
+		// If message is enabled, notify player
 	}
 }
