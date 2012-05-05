@@ -217,22 +217,26 @@ public class McMMOConfig implements KConfig
 		//loadVariables
 	}
 
+	@Override
 	public int getLimitValue(Field field, Item item, String command)
 	{
 		return config.getInt(field.getConfigPath() + ".limit", -1);
 	}
 
+	@Override
 	public double getPayValue(Field field, Item item, String command)
 	{
 		return config.getDouble(field.getConfigPath() + ".pay", 0.0);
 	}
 	
+	@Override
 	public boolean sendBroadcast(Field field)
 	{
 		return config.getBoolean(
 				field.getConfigPath() + ".localMessage", false);
 	}
 	
+	@Override
 	public boolean checkWorld(Field field, String worldName)
 	{
 		boolean valid = false;

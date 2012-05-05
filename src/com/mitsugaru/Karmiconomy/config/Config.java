@@ -538,7 +538,7 @@ public class Config implements KConfig
 		}
 		else if (command != null)
 		{
-			// TODO implement
+			pay = getCommandPay(type, command);
 		}
 		else
 		{
@@ -546,6 +546,12 @@ public class Config implements KConfig
 					0.0);
 		}
 		return pay;
+	}
+	
+	private double getCommandPay(Field field, String command)
+	{
+		// TODO implement
+		return plugin.getConfig().getDouble(field.getConfigPath() + ".pay", 0.0);
 	}
 
 	@Override
@@ -647,7 +653,7 @@ public class Config implements KConfig
 		}
 		else if (command != null)
 		{
-			// TODO implement
+			limit = getCommandLimit(type, command);
 		}
 		else
 		{
@@ -655,6 +661,13 @@ public class Config implements KConfig
 					-1);
 		}
 		return limit;
+	}
+	
+	private int getCommandLimit(Field field, String command)
+	{
+		//TODO implement
+		return plugin.getConfig().getInt(
+				field.getConfigPath() + ".limit", -1);
 	}
 
 	@Override
@@ -666,8 +679,7 @@ public class Config implements KConfig
 		}
 		else if (command != null)
 		{
-			return plugin.getConfig().getBoolean(
-					field.getConfigPath() + ".denyOnLackPay", false);
+			return getCommandDenyPay(field, command);
 		}
 		else
 		{
@@ -676,14 +688,14 @@ public class Config implements KConfig
 		}
 	}
 
-	public boolean getCommandDenyPay(Field field, String command)
+	private boolean getCommandDenyPay(Field field, String command)
 	{
 		// TODO implement
 		return plugin.getConfig().getBoolean(
 				field.getConfigPath() + ".denyOnLackPay", false);
 	}
 
-	public boolean getItemDenyPay(Field type, Item item)
+	private boolean getItemDenyPay(Field type, Item item)
 	{
 		switch (type)
 		{
@@ -786,14 +798,14 @@ public class Config implements KConfig
 		}
 	}
 
-	public boolean getCommandDenyLimit(Field field, String command)
+	private boolean getCommandDenyLimit(Field field, String command)
 	{
 		// TODO implement
 		return plugin.getConfig().getBoolean(
 				field.getConfigPath() + ".denyOnLimit", false);
 	}
 
-	public boolean getItemDenyLimit(Field type, Item item)
+	private boolean getItemDenyLimit(Field type, Item item)
 	{
 		switch (type)
 		{

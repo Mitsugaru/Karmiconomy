@@ -167,10 +167,10 @@ public class KarmiconomyListener implements Listener
 		{
 			final Item placed = new Item(event.getBlockPlaced().getTypeId(),
 					event.getBlockPlaced().getData(), (short) 0);
-			final boolean denyPay = config.getItemDenyPay(Field.BLOCK_PLACE,
-					placed);
-			final boolean denyLimit = config.getItemDenyLimit(
-					Field.BLOCK_PLACE, placed);
+			final boolean denyPay = config.getDenyPay(Field.BLOCK_PLACE,
+					placed, null);
+			final boolean denyLimit = config.getDenyLimit(
+					Field.BLOCK_PLACE, placed, null);
 			if ((denyPay || denyLimit) && event.getPlayer() != null)
 			{
 				final Player player = event.getPlayer();
@@ -248,10 +248,10 @@ public class KarmiconomyListener implements Listener
 		{
 			final Item destroyed = new Item(event.getBlock().getTypeId(), event
 					.getBlock().getData(), (short) 0);
-			final boolean denyPay = config.getItemDenyPay(Field.BLOCK_DESTROY,
-					destroyed);
-			final boolean denyLimit = config.getItemDenyLimit(
-					Field.BLOCK_DESTROY, destroyed);
+			final boolean denyPay = config.getDenyPay(Field.BLOCK_DESTROY,
+					destroyed, null);
+			final boolean denyLimit = config.getDenyLimit(
+					Field.BLOCK_DESTROY, destroyed, null);
 			if ((denyPay || denyLimit) && event.getPlayer() != null)
 			{
 				final Player player = event.getPlayer();
@@ -316,10 +316,10 @@ public class KarmiconomyListener implements Listener
 		if (!event.isCancelled() && config.isEnabled(Field.ITEM_CRAFT))
 		{
 			final Item craft = new Item(event.getRecipe().getResult());
-			final boolean denyPay = config.getItemDenyPay(Field.ITEM_CRAFT,
-					craft);
-			final boolean denyLimit = config.getItemDenyLimit(Field.ITEM_CRAFT,
-					craft);
+			final boolean denyPay = config.getDenyPay(Field.ITEM_CRAFT,
+					craft, null);
+			final boolean denyLimit = config.getDenyLimit(Field.ITEM_CRAFT,
+					craft, null);
 			if ((denyPay || denyLimit) && event.getWhoClicked() != null)
 			{
 				if (event.getWhoClicked() instanceof Player)
@@ -391,10 +391,10 @@ public class KarmiconomyListener implements Listener
 		if (!event.isCancelled() && config.isEnabled(Field.ITEM_ENCHANT))
 		{
 			final Item enchant = new Item(event.getItem());
-			final boolean denyPay = config.getItemDenyPay(Field.ITEM_ENCHANT,
-					enchant);
-			final boolean denyLimit = config.getItemDenyLimit(
-					Field.ITEM_ENCHANT, enchant);
+			final boolean denyPay = config.getDenyPay(Field.ITEM_ENCHANT,
+					enchant, null);
+			final boolean denyLimit = config.getDenyLimit(
+					Field.ITEM_ENCHANT, enchant, null);
 			if ((denyPay || denyLimit) && event.getEnchanter() != null)
 			{
 				final Player player = (Player) event.getEnchanter();
@@ -1387,10 +1387,10 @@ public class KarmiconomyListener implements Listener
 		if (!event.isCancelled() && config.isEnabled(Field.ITEM_PICKUP))
 		{
 			final Item pickup = new Item(event.getItem().getItemStack());
-			final boolean denyPay = config.getItemDenyPay(Field.ITEM_PICKUP,
-					pickup);
-			final boolean denyLimit = config.getItemDenyLimit(
-					Field.ITEM_PICKUP, pickup);
+			final boolean denyPay = config.getDenyPay(Field.ITEM_PICKUP,
+					pickup, null);
+			final boolean denyLimit = config.getDenyLimit(
+					Field.ITEM_PICKUP, pickup, null);
 			if ((denyPay || denyLimit) && event.getPlayer() != null)
 			{
 				final Player player = event.getPlayer();
@@ -1455,10 +1455,10 @@ public class KarmiconomyListener implements Listener
 		if (!event.isCancelled() && config.isEnabled(Field.ITEM_DROP))
 		{
 			final Item dropped = new Item(event.getItemDrop().getItemStack());
-			final boolean denyPay = config.getItemDenyPay(Field.ITEM_DROP,
-					dropped);
-			final boolean denyLimit = config.getItemDenyLimit(Field.ITEM_DROP,
-					dropped);
+			final boolean denyPay = config.getDenyPay(Field.ITEM_DROP,
+					dropped, null);
+			final boolean denyLimit = config.getDenyLimit(Field.ITEM_DROP,
+					dropped, null);
 			if ((denyPay || denyLimit) && event.getPlayer() != null)
 			{
 				final Player player = event.getPlayer();
