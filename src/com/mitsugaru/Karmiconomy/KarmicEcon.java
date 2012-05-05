@@ -104,7 +104,8 @@ public class KarmicEcon
 		final EnumMap<LocalString.Flag, String> info = new EnumMap<LocalString.Flag, String>(
 				LocalString.Flag.class);
 		info.put(LocalString.Flag.TAG, Karmiconomy.TAG);
-		info.put(LocalString.Flag.AMOUNT, "" + amount);
+		info.put(LocalString.Flag.AMOUNT, "" + String.format("%.2f",amount));
+		info.put(LocalString.Flag.EVENT, field.name());
 		if(item != null)
 		{
 			info.put(LocalString.Flag.EXTRA, ChatColor.WHITE + "- " + item.name);
