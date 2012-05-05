@@ -13,7 +13,7 @@ public enum LocalString
 			LocalizeConfig.unknownCommand), RELOAD_CONFIG(
 			LocalizeConfig.reloadConfig), HELP_HELP(LocalizeConfig.helpHelp), HELP_VERSION(
 			LocalizeConfig.helpVersion), HELP_ADMIN_RELOAD(
-			LocalizeConfig.helpAdminReload);
+			LocalizeConfig.helpAdminReload), LOCAL_MESSAGE(LocalizeConfig.localMessage);
 
 	private String string;
 

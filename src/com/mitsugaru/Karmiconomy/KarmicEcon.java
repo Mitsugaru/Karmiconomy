@@ -5,13 +5,13 @@ import java.util.EnumMap;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
 
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
 import com.mitsugaru.Karmiconomy.config.Config;
 import com.mitsugaru.Karmiconomy.config.KConfig;
-import com.mitsugaru.Karmiconomy.config.LocalizeConfig;
 import com.mitsugaru.Karmiconomy.database.Field;
 
 public class KarmicEcon
@@ -101,6 +101,18 @@ public class KarmicEcon
 			// Just record that it happened
 			return true;
 		}
+		final EnumMap<LocalString.Flag, String> info = new EnumMap<LocalString.Flag, String>(
+				LocalString.Flag.class);
+		info.put(LocalString.Flag.TAG, Karmiconomy.TAG);
+		info.put(LocalString.Flag.AMOUNT, "" + amount);
+		if(item != null)
+		{
+			info.put(LocalString.Flag.EXTRA, ChatColor.WHITE + "- " + item.name);
+		}
+		else if(command != null)
+		{
+			info.put(LocalString.Flag.EXTRA, ChatColor.WHITE + "- " + command);
+		}
 		if (vault)
 		{
 			EconomyResponse response = null;
@@ -115,11 +127,6 @@ public class KarmicEcon
 			if (response != null)
 			{
 				String message = "";
-				final EnumMap<LocalString.Flag, String> info = new EnumMap<LocalString.Flag, String>(
-						LocalString.Flag.class);
-				info.put(LocalString.Flag.TAG, Karmiconomy.TAG);
-				info.put(LocalString.Flag.AMOUNT, "" + amount);
-				info.put(LocalString.Flag.EVENT, field.name());
 				switch (response.type)
 				{
 					case FAILURE:
@@ -163,9 +170,9 @@ public class KarmicEcon
 											+ "' of amount: " + amount);
 						}
 						paid = true;
-						if(local)
+						if (local)
 						{
-							player.sendMessage(LocalizeConfig.getEventMessage(field, player.getName(), amount));
+							player.sendMessage(LocalString.LOCAL_MESSAGE.parseString(info));
 						}
 					}
 					default:
@@ -186,9 +193,9 @@ public class KarmicEcon
 						plugin.getServer().getConsoleSender(),
 						"points give " + player.getName() + " " + points);
 				paid = true;
-				if(local)
+				if (local)
 				{
-					player.sendMessage(LocalizeConfig.getEventMessage(field, player.getName(), (double) points));
+					player.sendMessage(LocalString.LOCAL_MESSAGE.parseString(info));
 				}
 			}
 		}

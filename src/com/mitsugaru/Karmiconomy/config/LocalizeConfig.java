@@ -11,8 +11,6 @@ import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import com.mitsugaru.Karmiconomy.Karmiconomy;
-import com.mitsugaru.Karmiconomy.LocalString;
-import com.mitsugaru.Karmiconomy.database.Field;
 
 public class LocalizeConfig
 {
@@ -22,7 +20,7 @@ public class LocalizeConfig
 	private static YamlConfiguration config;
 	public static String permissionDeny, lackMessage, reasonMoney, reasonLimit,
 			reasonUnknown, econFailure, unknownCommand, noPermission, helpHelp,
-			helpAdminReload, helpVersion, reloadConfig;
+			helpAdminReload, helpVersion, reloadConfig, localMessage;
 
 	public static void init(Karmiconomy kcon)
 	{
@@ -77,6 +75,8 @@ public class LocalizeConfig
 		// LinkedHashmap of defaults
 		final Map<String, String> defaults = new LinkedHashMap<String, String>();
 		// defaults for all strings
+		defaults.put("message.localMessage",
+				"&a%tag Paid &6$%amount&a for &b%event &c%extra");
 		defaults.put("message.econFailure",
 				"&c%tag Could not pay &6%amount &cfor &b%event");
 		defaults.put("message.lackEvent",
@@ -119,6 +119,8 @@ public class LocalizeConfig
 				"&c%tag Lack permission: %extra");
 		reloadConfig = config.getString("message.reloadConfig",
 				"&a%tag &fConfig reloaded.");
+		localMessage = config.getString("message.localMessage",
+				"&a%tag Paid &6$%amount&a for &b%event &c%extra");
 		/**
 		 * help
 		 */
@@ -134,19 +136,5 @@ public class LocalizeConfig
 		reasonLimit = config.getString("reason.money", "Hit limit");
 		reasonMoney = config.getString("reason.money", "Lack money");
 		reasonUnknown = config.getString("reason.unknown", " Unknown DenyType");
-	}
-
-	public static String getEventMessage(Field field, String name, double amount)
-	{
-		String out = config.getString("event." + field.getConfigPath(), "");
-		if (!out.equals(""))
-		{
-			out = Karmiconomy.colorizeText(out);
-			out = out.replaceAll(LocalString.Flag.TAG.getFlag(), Karmiconomy.TAG);
-			out = out.replaceAll(LocalString.Flag.NAME.getFlag(), name);
-			out = out.replaceAll(LocalString.Flag.AMOUNT.getFlag(),
-					String.format("%.2f", amount));
-		}
-		return out;
 	}
 }
