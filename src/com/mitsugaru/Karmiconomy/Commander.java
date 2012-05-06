@@ -37,7 +37,7 @@ public class Commander implements CommandExecutor
 	/**
 	 * Constructor
 	 * 
-	 * @param karmicShare
+	 * @param Karmiconomy
 	 *            plugin
 	 */
 	public Commander(Karmiconomy plugin)
@@ -268,7 +268,7 @@ public class Commander implements CommandExecutor
 			sender.sendMessage(ChatColor.GREEN + "/ks admin" + ChatColor.YELLOW
 					+ " : List admin commands");
 		}*/
-		if(perm.checkPermission(sender, "Karmiconomy.admin"))
+		if(perm.checkPermission(sender, Permission.ADMIN.getNode()))
 		{
 			sender.sendMessage(LocalString.HELP_ADMIN_RELOAD.parseString(null));
 		}

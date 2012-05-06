@@ -344,11 +344,8 @@ public class Config implements KConfig
 		plugin.reloadConfig();
 		// Grab config
 		ConfigurationSection config = plugin.getConfig();
+		//Load settings
 		this.loadSettings(config);
-		listlimit = config.getInt("listlimit", 10);
-		debugTime = config.getBoolean("debug.time", false);
-		debugEvents = config.getBoolean("debug.events", false);
-		debugEconomy = config.getBoolean("debug.economy", false);
 		// Load config for item specific values
 		this.loadItemValueMap();
 		// Check bounds
