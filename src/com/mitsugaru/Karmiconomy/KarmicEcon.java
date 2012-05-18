@@ -55,8 +55,7 @@ public class KarmicEcon
 		return true;
 	}
 
-	public static boolean denyPay(Player player, double pay,
-			Item item, String command)
+	public static boolean denyPay(Player player, double pay)
 	{
 		boolean paid = false;
 		if (vault)

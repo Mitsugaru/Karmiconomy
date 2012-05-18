@@ -45,7 +45,7 @@ public class EventLogic
 		if (config.getDenyPay(field, item, command))
 		{
 			if (KarmicEcon.denyPay(player,
-					config.getPayValue(field, item, command), item, command))
+					config.getPayValue(field, item, command)))
 			{
 				switch (field.getTable())
 				{
