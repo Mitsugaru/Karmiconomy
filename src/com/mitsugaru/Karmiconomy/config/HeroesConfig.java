@@ -29,7 +29,6 @@ public class HeroesConfig implements KConfig
 				+ "/heroes.yml");
 		config = YamlConfiguration.loadConfiguration(file);
 		loadDefaults();
-		loadVariables();
 	}
 
 	public static void save()
@@ -67,7 +66,6 @@ public class HeroesConfig implements KConfig
 			e.printStackTrace();
 		}
 		loadDefaults();
-		loadVariables();
 	}
 
 	private static void loadDefaults()
@@ -158,11 +156,6 @@ public class HeroesConfig implements KConfig
 			}
 		}
 		save();
-	}
-
-	private static void loadVariables()
-	{
-		// load variables
 	}
 
 	@Override

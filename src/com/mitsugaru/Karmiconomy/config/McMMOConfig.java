@@ -28,7 +28,6 @@ public class McMMOConfig implements KConfig
 		file = new File(plugin.getDataFolder().getAbsolutePath() + "/mcmmo.yml");
 		config = YamlConfiguration.loadConfiguration(file);
 		loadDefaults();
-		loadVariables();
 	}
 
 	public static void save()
@@ -69,7 +68,6 @@ public class McMMOConfig implements KConfig
 			e.printStackTrace();
 		}
 		loadDefaults();
-		loadVariables();
 	}
 
 	private static void loadDefaults()
@@ -210,11 +208,6 @@ public class McMMOConfig implements KConfig
 			}
 		}
 		save();
-	}
-
-	private static void loadVariables()
-	{
-		//loadVariables
 	}
 
 	@Override
