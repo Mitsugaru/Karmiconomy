@@ -343,7 +343,7 @@ public class Config implements KConfig
 		// Initial relaod
 		plugin.reloadConfig();
 		// Grab config
-		ConfigurationSection config = plugin.getConfig();
+		final ConfigurationSection config = plugin.getConfig();
 		//Load settings
 		this.loadSettings(config);
 		// Load config for item specific values

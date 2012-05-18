@@ -32,7 +32,7 @@ public class Commander implements CommandExecutor
 	private final Map<String, Integer> page = new HashMap<String, Integer>();
 	private final Map<String, Integer> cache = new HashMap<String, Integer>();
 	private int limit;
-	private long time;
+	private long time = 0;
 
 	/**
 	 * Constructor
@@ -47,7 +47,6 @@ public class Commander implements CommandExecutor
 		config = plugin.getPluginConfig();
 		perm = plugin.getPermissionHandler();
 		limit = config.listlimit;
-		time = 0;
 	}
 	
 	/**
