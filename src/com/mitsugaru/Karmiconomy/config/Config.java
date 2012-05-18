@@ -1038,8 +1038,6 @@ public class Config implements KConfig
 				this.getPayValue(Field.ITEM_ENCHANT, null, null));
 		final double iPlacePay = config.getDouble(path + ".placePay",
 				this.getPayValue(Field.BLOCK_PLACE, null, null));
-		// final double iIgnitePay = config.getDouble(path + ".ignitePay",
-		// blockIgnitePay);
 		final double iDestroyPay = config.getDouble(path + ".destroyPay",
 				this.getPayValue(Field.BLOCK_DESTROY, null, null));
 		final double iDropPay = config.getDouble(path + ".dropPay",
@@ -1050,8 +1048,6 @@ public class Config implements KConfig
 				this.getLimitValue(Field.ITEM_ENCHANT, null, null));
 		final int iPlaceLimit = config.getInt(path + ".placeLimit",
 				this.getLimitValue(Field.BLOCK_PLACE, null, null));
-		// final int iIgniteLimit = config.getInt(path + ".igniteLimit",
-		// blockIgniteLimit);
 		final int iDestroyLimit = config.getInt(path + ".destroyLimit",
 				this.getLimitValue(Field.BLOCK_DESTROY, null, null));
 		final int iDropLimit = config.getInt(path + ".dropLimit",
