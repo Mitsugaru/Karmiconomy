@@ -746,7 +746,7 @@ public class KarmiconomyListener implements Listener
 			if (event.getOwner() instanceof Player)
 			{
 				boolean cancel = false;
-				final Player player = (Player) event.getEntity();
+				final Player player = (Player) event.getOwner();
 				// Check entity tamed
 				switch (event.getEntityType())
 				{
@@ -822,7 +822,7 @@ public class KarmiconomyListener implements Listener
 			if (event.getOwner() instanceof Player)
 			{
 				// Pay on tame
-				final Player player = (Player) event.getEntity();
+				final Player player = (Player) event.getOwner();
 				// Check entity tamed
 				switch (event.getEntityType())
 				{
