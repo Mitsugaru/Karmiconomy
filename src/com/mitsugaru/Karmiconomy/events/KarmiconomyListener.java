@@ -824,6 +824,7 @@ public class KarmiconomyListener implements Listener
 				// Pay on tame
 				final Player player = (Player) event.getOwner();
 				// Check entity tamed
+				//TODO add extra for defining what they tamed in the message
 				switch (event.getEntityType())
 				{
 					case OCELOT:
