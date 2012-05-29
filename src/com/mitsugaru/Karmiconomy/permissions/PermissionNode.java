@@ -1,12 +1,12 @@
 package com.mitsugaru.Karmiconomy.permissions;
 
-public enum Permission
+public enum PermissionNode
 {
 	ADMIN(".admin");
 	private static final String prefix = "Karmiconomy";
 	private String node;
 
-	private Permission(String node)
+	private PermissionNode(String node)
 	{
 		this.node = prefix + node;
 	}

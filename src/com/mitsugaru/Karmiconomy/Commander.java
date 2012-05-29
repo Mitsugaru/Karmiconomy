@@ -19,7 +19,7 @@ import com.mitsugaru.Karmiconomy.config.HeroesConfig;
 import com.mitsugaru.Karmiconomy.config.LocalizeConfig;
 import com.mitsugaru.Karmiconomy.config.McMMOConfig;
 import com.mitsugaru.Karmiconomy.permissions.PermCheck;
-import com.mitsugaru.Karmiconomy.permissions.Permission;
+import com.mitsugaru.Karmiconomy.permissions.PermissionNode;
 
 @SuppressWarnings("unused")
 public class Commander implements CommandExecutor
@@ -124,7 +124,7 @@ public class Commander implements CommandExecutor
 			}*/
 			else if(com.equals("reload"))
 			{
-				if(perm.checkPermission(sender, Permission.ADMIN.getNode()))
+				if(perm.checkPermission(sender, PermissionNode.ADMIN.getNode()))
 				{
 					config.reloadConfig();
 					LocalizeConfig.reload();
@@ -140,7 +140,7 @@ public class Commander implements CommandExecutor
 				}
 				else
 				{
-					info.put(LocalString.Flag.EXTRA, Permission.ADMIN.getNode());
+					info.put(LocalString.Flag.EXTRA, PermissionNode.ADMIN.getNode());
 					sender.sendMessage(LocalString.PERMISSION_DENY.parseString(info));
 				}
 			}
@@ -267,7 +267,7 @@ public class Commander implements CommandExecutor
 			sender.sendMessage(ChatColor.GREEN + "/ks admin" + ChatColor.YELLOW
 					+ " : List admin commands");
 		}*/
-		if(perm.checkPermission(sender, Permission.ADMIN.getNode()))
+		if(perm.checkPermission(sender, PermissionNode.ADMIN.getNode()))
 		{
 			sender.sendMessage(LocalString.HELP_ADMIN_RELOAD.parseString(null));
 		}
