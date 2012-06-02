@@ -18,7 +18,7 @@ public class LocalizeConfig
 	private static Karmiconomy plugin;
 	private static File file;
 	private static YamlConfiguration config;
-	public static String permissionDeny, lackMessage, reasonMoney, reasonLimit,
+	public static String lackMessage, reasonMoney, reasonLimit,
 			reasonUnknown, econFailure, unknownCommand, noPermission, helpHelp,
 			helpAdminReload, helpVersion, reloadConfig, localMessage;
 
@@ -120,7 +120,7 @@ public class LocalizeConfig
 		reloadConfig = config.getString("message.reloadConfig",
 				"&a%tag &fConfig reloaded.");
 		localMessage = config.getString("message.localMessage",
-				"&a%tag Paid &6$%amount&a for &b%event &c%extra");
+				"&a%tag Paid &6$%amount&a for &b%event &c%extra");;
 		/**
 		 * help
 		 */

@@ -152,6 +152,10 @@ public class Karmiconomy extends JavaPlugin
 	 */
 	public static String colorizeText(String string)
 	{
+		if(string == null)
+		{
+			return "";
+		}
 		/**
 		 * Colors
 		 */

@@ -7,7 +7,7 @@ import com.mitsugaru.Karmiconomy.config.LocalizeConfig;
 
 public enum LocalString
 {
-	PERMISSION_DENY(LocalizeConfig.permissionDeny), LACK_MESSAGE(
+	PERMISSION_DENY(LocalizeConfig.noPermission), LACK_MESSAGE(
 			LocalizeConfig.lackMessage), ECONOMY_FAILURE(
 			LocalizeConfig.econFailure), UNKNOWN_COMMAND(
 			LocalizeConfig.unknownCommand), RELOAD_CONFIG(

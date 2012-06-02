@@ -1977,6 +1977,7 @@ public class KarmiconomyListener implements Listener
 		{
 			final Map<String, String> details = new HashMap<String, String>();
 			details.put("Player", event.getWhoClicked().getName());
+			details.put("Raw slot", "" + event.getRawSlot());
 			EventLogic.debugEvent(event, details);
 		}
 	}
