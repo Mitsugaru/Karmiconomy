@@ -105,6 +105,7 @@ public class KarmicEcon
 		info.put(LocalString.Flag.TAG, Karmiconomy.TAG);
 		info.put(LocalString.Flag.AMOUNT, "" + String.format("%.2f",amount));
 		info.put(LocalString.Flag.EVENT, field.name());
+		info.put(LocalString.Flag.EXTRA, "");
 		if(item != null)
 		{
 			info.put(LocalString.Flag.EXTRA, ChatColor.WHITE + "- " + item.name);

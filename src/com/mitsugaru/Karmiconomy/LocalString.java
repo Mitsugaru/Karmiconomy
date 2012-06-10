@@ -30,7 +30,7 @@ public enum LocalString
 		 * Thanks to @Njol for the following
 		 * http://forums.bukkit.org/threads/multiple-classes-config-colours.79719/#post-1154761
 		 */
-		String out =ChatColor.translateAlternateColorCodes('&', string);
+		String out = ChatColor.translateAlternateColorCodes('&', string);
 		if (replace != null)
 		{
 			for (Entry<Flag, String> entry : replace.entrySet())
