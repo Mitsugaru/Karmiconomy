@@ -5,6 +5,7 @@ import java.util.EnumMap;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
 
+import org.black_ixx.playerPoints.PlayerPointsAPI;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -20,7 +21,6 @@ public class KarmicEcon
 	private static Config rootConfig;
 	private static Economy eco;
 	private static boolean playerpoints, vault;
-	private static Plugin pointsPlugin;
 
 	public KarmicEcon(Karmiconomy plugin)
 	{
@@ -40,11 +40,10 @@ public class KarmicEcon
 			vault = true;
 		}
 		// Check playerpoints
-		Plugin playerPointsPlugin = plugin.getServer().getPluginManager()
+		final Plugin playerPointsPlugin = plugin.getServer().getPluginManager()
 				.getPlugin("PlayerPoints");
 		if (playerPointsPlugin != null)
 		{
-			pointsPlugin = playerPointsPlugin;
 			playerpoints = true;
 		}
 		// None fond
@@ -75,8 +74,7 @@ public class KarmicEcon
 		}
 		if (playerpoints)
 		{
-			final int playerPoints = pointsPlugin.getConfig().getInt(
-					"Points." + player.getName());
+			final int playerPoints = PlayerPointsAPI.look(player.getName());
 			if (pay < 0.0)
 			{
 				pay *= 1;
@@ -103,14 +101,14 @@ public class KarmicEcon
 		final EnumMap<LocalString.Flag, String> info = new EnumMap<LocalString.Flag, String>(
 				LocalString.Flag.class);
 		info.put(LocalString.Flag.TAG, Karmiconomy.TAG);
-		info.put(LocalString.Flag.AMOUNT, "" + String.format("%.2f",amount));
+		info.put(LocalString.Flag.AMOUNT, "" + String.format("%.2f", amount));
 		info.put(LocalString.Flag.EVENT, field.name());
 		info.put(LocalString.Flag.EXTRA, "");
-		if(item != null)
+		if (item != null)
 		{
 			info.put(LocalString.Flag.EXTRA, ChatColor.WHITE + "- " + item.name);
 		}
-		else if(command != null)
+		else if (command != null)
 		{
 			info.put(LocalString.Flag.EXTRA, ChatColor.WHITE + "- " + command);
 		}
@@ -173,7 +171,8 @@ public class KarmicEcon
 						paid = true;
 						if (local)
 						{
-							player.sendMessage(LocalString.LOCAL_MESSAGE.parseString(info));
+							player.sendMessage(LocalString.LOCAL_MESSAGE
+									.parseString(info));
 						}
 					}
 					default:
@@ -190,13 +189,18 @@ public class KarmicEcon
 			}
 			else
 			{
-				plugin.getServer().dispatchCommand(
-						plugin.getServer().getConsoleSender(),
-						"points give " + player.getName() + " " + points);
-				paid = true;
+				if (amount > 0.0)
+				{
+					paid = PlayerPointsAPI.give(player.getName(), points);
+				}
+				else if (amount < 0.0)
+				{
+					paid = PlayerPointsAPI.take(player.getName(), points);
+				}
 				if (local)
 				{
-					player.sendMessage(LocalString.LOCAL_MESSAGE.parseString(info));
+					player.sendMessage(LocalString.LOCAL_MESSAGE
+							.parseString(info));
 				}
 			}
 		}
