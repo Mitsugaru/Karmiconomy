@@ -195,11 +195,25 @@ public class KarmicEcon
 				}
 				else if (amount < 0.0)
 				{
-					paid = PlayerPointsAPI.take(player.getName(), points);
+					// Don't override vault
+					if (paid)
+					{
+						PlayerPointsAPI.take(player.getName(), points);
+					}
+					else
+					{
+						paid = PlayerPointsAPI.take(player.getName(), points);
+					}
 				}
-				if (local)
+				//Send message if enabled
+				if (local && paid)
 				{
 					player.sendMessage(LocalString.LOCAL_MESSAGE
+							.parseString(info));
+				}
+				else if (local)
+				{
+					player.sendMessage(LocalString.ECONOMY_FAILURE
 							.parseString(info));
 				}
 			}
