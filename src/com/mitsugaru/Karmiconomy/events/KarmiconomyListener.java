@@ -36,8 +36,8 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.event.player.PlayerToggleSprintEvent;
-//import org.bukkit.event.vehicle.VehicleEnterEvent;
-//import org.bukkit.event.vehicle.VehicleExitEvent;
+// import org.bukkit.event.vehicle.VehicleEnterEvent;
+// import org.bukkit.event.vehicle.VehicleExitEvent;
 
 import com.mitsugaru.Karmiconomy.Item;
 import com.mitsugaru.Karmiconomy.Karmiconomy;
@@ -169,8 +169,8 @@ public class KarmiconomyListener implements Listener
 					event.getBlockPlaced().getData(), (short) 0);
 			final boolean denyPay = config.getDenyPay(Field.BLOCK_PLACE,
 					placed, null);
-			final boolean denyLimit = config.getDenyLimit(
-					Field.BLOCK_PLACE, placed, null);
+			final boolean denyLimit = config.getDenyLimit(Field.BLOCK_PLACE,
+					placed, null);
 			if ((denyPay || denyLimit) && event.getPlayer() != null)
 			{
 				final Player player = event.getPlayer();
@@ -250,13 +250,13 @@ public class KarmiconomyListener implements Listener
 					.getBlock().getData(), (short) 0);
 			final boolean denyPay = config.getDenyPay(Field.BLOCK_DESTROY,
 					destroyed, null);
-			final boolean denyLimit = config.getDenyLimit(
-					Field.BLOCK_DESTROY, destroyed, null);
+			final boolean denyLimit = config.getDenyLimit(Field.BLOCK_DESTROY,
+					destroyed, null);
 			if ((denyPay || denyLimit) && event.getPlayer() != null)
 			{
 				final Player player = event.getPlayer();
-				if (config.checkWorld(Field.BLOCK_DESTROY, player.getWorld()
-						.getName()))
+				if (config.checkWorld(Field.BLOCK_DESTROY, destroyed, null,
+						player.getWorld().getName()))
 				{
 					if (EventLogic.deny(Field.BLOCK_DESTROY, player, config,
 							destroyed, null))
@@ -289,11 +289,11 @@ public class KarmiconomyListener implements Listener
 		{
 			// Pay on block break
 			final Player player = event.getPlayer();
-			if (config.checkWorld(Field.BLOCK_DESTROY, player.getWorld()
-					.getName()))
+			final Item destroyed = new Item(event.getBlock().getTypeId(), event
+					.getBlock().getData(), (short) 0);
+			if (config.checkWorld(Field.BLOCK_DESTROY, destroyed, null, player
+					.getWorld().getName()))
 			{
-				final Item destroyed = new Item(event.getBlock().getTypeId(),
-						event.getBlock().getData(), (short) 0);
 				EventLogic.hitPayIncrement(Field.BLOCK_DESTROY, player, config,
 						destroyed, null);
 			}
@@ -316,8 +316,8 @@ public class KarmiconomyListener implements Listener
 		if (!event.isCancelled() && config.isEnabled(Field.ITEM_CRAFT))
 		{
 			final Item craft = new Item(event.getRecipe().getResult());
-			final boolean denyPay = config.getDenyPay(Field.ITEM_CRAFT,
-					craft, null);
+			final boolean denyPay = config.getDenyPay(Field.ITEM_CRAFT, craft,
+					null);
 			final boolean denyLimit = config.getDenyLimit(Field.ITEM_CRAFT,
 					craft, null);
 			if ((denyPay || denyLimit) && event.getWhoClicked() != null)
@@ -325,8 +325,8 @@ public class KarmiconomyListener implements Listener
 				if (event.getWhoClicked() instanceof Player)
 				{
 					final Player player = (Player) event.getWhoClicked();
-					if (config.checkWorld(Field.ITEM_CRAFT, player.getWorld()
-							.getName()))
+					if (config.checkWorld(Field.ITEM_CRAFT, craft, null, player
+							.getWorld().getName()))
 					{
 						if (EventLogic.deny(Field.ITEM_CRAFT, player, config,
 								craft, null))
@@ -361,10 +361,10 @@ public class KarmiconomyListener implements Listener
 			if (event.getWhoClicked() instanceof Player)
 			{
 				final Player player = (Player) event.getWhoClicked();
-				if (config.checkWorld(Field.ITEM_CRAFT, player.getWorld()
-						.getName()))
+				final Item craft = new Item(event.getRecipe().getResult());
+				if (config.checkWorld(Field.ITEM_CRAFT, craft, null, player
+						.getWorld().getName()))
 				{
-					final Item craft = new Item(event.getRecipe().getResult());
 					// Pay on craft
 					EventLogic.hitPayIncrement(Field.ITEM_CRAFT, player,
 							config, craft, null);
@@ -393,13 +393,13 @@ public class KarmiconomyListener implements Listener
 			final Item enchant = new Item(event.getItem());
 			final boolean denyPay = config.getDenyPay(Field.ITEM_ENCHANT,
 					enchant, null);
-			final boolean denyLimit = config.getDenyLimit(
-					Field.ITEM_ENCHANT, enchant, null);
+			final boolean denyLimit = config.getDenyLimit(Field.ITEM_ENCHANT,
+					enchant, null);
 			if ((denyPay || denyLimit) && event.getEnchanter() != null)
 			{
 				final Player player = (Player) event.getEnchanter();
-				if (config.checkWorld(Field.ITEM_ENCHANT, player.getWorld()
-						.getName()))
+				if (config.checkWorld(Field.ITEM_ENCHANT, enchant, null, player
+						.getWorld().getName()))
 				{
 					if (EventLogic.deny(Field.ITEM_ENCHANT, player, config,
 							enchant, null))
@@ -437,11 +437,11 @@ public class KarmiconomyListener implements Listener
 				&& event.getEnchanter() != null)
 		{
 			final Player player = event.getEnchanter();
-			if (config.checkWorld(Field.ITEM_ENCHANT, player.getWorld()
-					.getName()))
+			final Item enchant = new Item(event.getItem());
+			if (config.checkWorld(Field.ITEM_ENCHANT, enchant, null, player
+					.getWorld().getName()))
 			{
 				// Pay on enchant
-				final Item enchant = new Item(event.getItem());
 				EventLogic.hitPayIncrement(Field.ITEM_ENCHANT, player, config,
 						enchant, null);
 			}
@@ -824,7 +824,7 @@ public class KarmiconomyListener implements Listener
 				// Pay on tame
 				final Player player = (Player) event.getOwner();
 				// Check entity tamed
-				//TODO add extra for defining what they tamed in the message
+				// TODO add extra for defining what they tamed in the message
 				switch (event.getEntityType())
 				{
 					case OCELOT:
@@ -1390,13 +1390,13 @@ public class KarmiconomyListener implements Listener
 			final Item pickup = new Item(event.getItem().getItemStack());
 			final boolean denyPay = config.getDenyPay(Field.ITEM_PICKUP,
 					pickup, null);
-			final boolean denyLimit = config.getDenyLimit(
-					Field.ITEM_PICKUP, pickup, null);
+			final boolean denyLimit = config.getDenyLimit(Field.ITEM_PICKUP,
+					pickup, null);
 			if ((denyPay || denyLimit) && event.getPlayer() != null)
 			{
 				final Player player = event.getPlayer();
-				if (config.checkWorld(Field.ITEM_PICKUP, player.getWorld()
-						.getName()))
+				if (config.checkWorld(Field.ITEM_PICKUP, pickup, null, player
+						.getWorld().getName()))
 				{
 					if (EventLogic.deny(Field.ITEM_PICKUP, player, config,
 							pickup, null))
@@ -1428,11 +1428,11 @@ public class KarmiconomyListener implements Listener
 				&& event.getPlayer() != null)
 		{
 			final Player player = event.getPlayer();
-			// Pay on drop
-			if (config.checkWorld(Field.ITEM_PICKUP, player.getWorld()
-					.getName()))
+			final Item pickup = new Item(event.getItem().getItemStack());
+			if (config.checkWorld(Field.ITEM_PICKUP, pickup, null, player
+					.getWorld().getName()))
 			{
-				final Item pickup = new Item(event.getItem().getItemStack());
+				// Pay on drop
 				EventLogic.hitPayIncrement(Field.ITEM_PICKUP, player, config,
 						pickup, null);
 			}
@@ -1456,15 +1456,15 @@ public class KarmiconomyListener implements Listener
 		if (!event.isCancelled() && config.isEnabled(Field.ITEM_DROP))
 		{
 			final Item dropped = new Item(event.getItemDrop().getItemStack());
-			final boolean denyPay = config.getDenyPay(Field.ITEM_DROP,
-					dropped, null);
+			final boolean denyPay = config.getDenyPay(Field.ITEM_DROP, dropped,
+					null);
 			final boolean denyLimit = config.getDenyLimit(Field.ITEM_DROP,
 					dropped, null);
 			if ((denyPay || denyLimit) && event.getPlayer() != null)
 			{
 				final Player player = event.getPlayer();
-				if (config.checkWorld(Field.ITEM_DROP, player.getWorld()
-						.getName()))
+				if (config.checkWorld(Field.ITEM_DROP, dropped, null, player
+						.getWorld().getName()))
 				{
 					if (EventLogic.deny(Field.ITEM_DROP, player, config,
 							dropped, null))
@@ -1498,7 +1498,8 @@ public class KarmiconomyListener implements Listener
 			final Player player = event.getPlayer();
 			// Pay on drop
 			final Item dropped = new Item(event.getItemDrop().getItemStack());
-			if (config.checkWorld(Field.ITEM_DROP, player.getWorld().getName()))
+			if (config.checkWorld(Field.ITEM_DROP, dropped, null, player
+					.getWorld().getName()))
 			{
 				EventLogic.hitPayIncrement(Field.ITEM_DROP, player, config,
 						dropped, null);
@@ -1871,104 +1872,47 @@ public class KarmiconomyListener implements Listener
 		}
 	}
 
-	//TODO implement
-	/*@EventHandler(priority = EventPriority.LOWEST)
-	public void vehicleEnterValid(final VehicleEnterEvent event)
-	{
-		if (!event.isCancelled() && config.vehicleEnter
-				&& event.getEntered() != null)
-		{
-			if (event.getEntered() instanceof Player)
-			{
-				final Player player = (Player) event.getEntered();
-				// TODO deny
-				if (config.debugEvents && event.isCancelled())
-				{
-					final Map<String, String> details = new HashMap<String, String>();
-					details.put("Player", player.getName());
-					if (event.getVehicle() != null)
-					{
-						details.put("Vehicle", event.getVehicle().toString());
-					}
-					details.put("Cancelled", "true");
-					EventLogic.debugEvent(event, details);
-				}
-			}
-		}
-	}
-
-	@EventHandler(priority = EventPriority.MONITOR)
-	public void vehicleEnter(final VehicleEnterEvent event)
-	{
-		if (!event.isCancelled() && config.vehicleEnter
-				&& event.getEntered() != null)
-		{
-			if (event.getEntered() instanceof Player)
-			{
-				final Player player = (Player) event.getEntered();
-				// TODO pay on enter
-				if (config.debugEvents)
-				{
-					final Map<String, String> details = new HashMap<String, String>();
-					details.put("Player", player.getName());
-					if (event.getVehicle() != null)
-					{
-						details.put("Vehicle", event.getVehicle().toString());
-					}
-					EventLogic.debugEvent(event, details);
-				}
-			}
-		}
-	}
-
-	@EventHandler(priority = EventPriority.LOWEST)
-	public void vehicleExitValid(final VehicleExitEvent event)
-	{
-		if (!event.isCancelled() && config.vehicleExit
-				&& event.getExited() != null)
-		{
-			if (event.getExited() instanceof Player)
-			{
-				final Player player = (Player) event.getExited();
-				// TODO deny
-				if (config.debugEvents && event.isCancelled())
-				{
-					final Map<String, String> details = new HashMap<String, String>();
-					details.put("Player", player.getName());
-					if (event.getVehicle() != null)
-					{
-						details.put("Vehicle", event.getVehicle().toString());
-					}
-					details.put("Cancelled", "true");
-					EventLogic.debugEvent(event, details);
-				}
-			}
-		}
-	}
-
-	@EventHandler(priority = EventPriority.MONITOR)
-	public void vehicleExit(final VehicleExitEvent event)
-	{
-		if (!event.isCancelled() && config.vehicleExit
-				&& event.getExited() != null)
-		{
-			if (event.getExited() instanceof Player)
-			{
-				final Player player = (Player) event.getExited();
-				// TODO pay on enter
-				if (config.debugEvents)
-				{
-					final Map<String, String> details = new HashMap<String, String>();
-					details.put("Player", player.getName());
-					if (event.getVehicle() != null)
-					{
-						details.put("Vehicle", event.getVehicle().toString());
-					}
-					EventLogic.debugEvent(event, details);
-				}
-			}
-		}
-	}*/
+	// TODO implement
+	/*
+	 * @EventHandler(priority = EventPriority.LOWEST) public void
+	 * vehicleEnterValid(final VehicleEnterEvent event) { if
+	 * (!event.isCancelled() && config.vehicleEnter && event.getEntered() !=
+	 * null) { if (event.getEntered() instanceof Player) { final Player player =
+	 * (Player) event.getEntered(); // TODO deny if (config.debugEvents &&
+	 * event.isCancelled()) { final Map<String, String> details = new
+	 * HashMap<String, String>(); details.put("Player", player.getName()); if
+	 * (event.getVehicle() != null) { details.put("Vehicle",
+	 * event.getVehicle().toString()); } details.put("Cancelled", "true");
+	 * EventLogic.debugEvent(event, details); } } } }
+	 * @EventHandler(priority = EventPriority.MONITOR) public void
+	 * vehicleEnter(final VehicleEnterEvent event) { if (!event.isCancelled() &&
+	 * config.vehicleEnter && event.getEntered() != null) { if
+	 * (event.getEntered() instanceof Player) { final Player player = (Player)
+	 * event.getEntered(); // TODO pay on enter if (config.debugEvents) { final
+	 * Map<String, String> details = new HashMap<String, String>();
+	 * details.put("Player", player.getName()); if (event.getVehicle() != null)
+	 * { details.put("Vehicle", event.getVehicle().toString()); }
+	 * EventLogic.debugEvent(event, details); } } } }
+	 * @EventHandler(priority = EventPriority.LOWEST) public void
+	 * vehicleExitValid(final VehicleExitEvent event) { if (!event.isCancelled()
+	 * && config.vehicleExit && event.getExited() != null) { if
+	 * (event.getExited() instanceof Player) { final Player player = (Player)
+	 * event.getExited(); // TODO deny if (config.debugEvents &&
+	 * event.isCancelled()) { final Map<String, String> details = new
+	 * HashMap<String, String>(); details.put("Player", player.getName()); if
+	 * (event.getVehicle() != null) { details.put("Vehicle",
+	 * event.getVehicle().toString()); } details.put("Cancelled", "true");
+	 * EventLogic.debugEvent(event, details); } } } }
+	 * @EventHandler(priority = EventPriority.MONITOR) public void
+	 * vehicleExit(final VehicleExitEvent event) { if (!event.isCancelled() &&
+	 * config.vehicleExit && event.getExited() != null) { if (event.getExited()
+	 * instanceof Player) { final Player player = (Player) event.getExited(); //
+	 * TODO pay on enter if (config.debugEvents) { final Map<String, String>
+	 * details = new HashMap<String, String>(); details.put("Player",
+	 * player.getName()); if (event.getVehicle() != null) {
+	 * details.put("Vehicle", event.getVehicle().toString()); }
+	 * EventLogic.debugEvent(event, details); } } } }
+	 */
 
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void inventoryClick(final InventoryClickEvent event)
@@ -1986,6 +1930,6 @@ public class KarmiconomyListener implements Listener
 	// event?
 
 	/**
-	 * Missing events: ExpChange Fish LevelChange Move Pickup Shear SignChange
+	 * Missing events: ExpChange Fish LevelChange Pickup Shear SignChange
 	 */
 }

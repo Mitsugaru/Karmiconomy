@@ -6,16 +6,12 @@
  */
 package com.mitsugaru.Karmiconomy.config;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.YamlConfiguration;
 
 import com.mitsugaru.Karmiconomy.Item;
 import com.mitsugaru.Karmiconomy.Karmiconomy;
@@ -25,6 +21,7 @@ public class Config implements KConfig
 {
 	// Class variables
 	private Karmiconomy plugin;
+	private ItemsConfig items;
 	public String host, port, database, user, password;
 	public static String tablePrefix;
 	public boolean debugTime, debugEvents, debugEconomy, debugUnhandled,
@@ -34,7 +31,6 @@ public class Config implements KConfig
 			pickupStatic, shootBowDenyForce;
 	public int listlimit;
 	public double shootBowForce;
-	private final Map<Item, KCItemInfo> values = new HashMap<Item, KCItemInfo>();
 
 	// TODO ability to change config in-game
 	/**
@@ -288,7 +284,8 @@ public class Config implements KConfig
 		// Load all other settings
 		this.loadSettings(config);
 		// Load config for item specific value
-		this.loadItemValueMap();
+		items = new ItemsConfig(plugin);
+		items.loadItemValueMap();
 		// Finally, do a bounds check on parameters to make sure they are legal
 		this.boundsCheck();
 	}
@@ -344,10 +341,10 @@ public class Config implements KConfig
 		plugin.reloadConfig();
 		// Grab config
 		final ConfigurationSection config = plugin.getConfig();
-		//Load settings
+		// Load settings
 		this.loadSettings(config);
 		// Load config for item specific values
-		this.loadItemValueMap();
+		items.loadItemValueMap();
 		// Check bounds
 		this.boundsCheck();
 		plugin.getLogger().info("Config reloaded");
@@ -449,9 +446,9 @@ public class Config implements KConfig
 				{
 					if (!blockPlaceStatic)
 					{
-						if (values.containsKey(item))
+						if (items.containsItem(item))
 						{
-							pay = values.get(item).placePay;
+							pay = items.getPayValue(type, item, null);
 							found = true;
 						}
 					}
@@ -461,9 +458,9 @@ public class Config implements KConfig
 				{
 					if (!blockDestroyStatic)
 					{
-						if (values.containsKey(item))
+						if (items.containsItem(item))
 						{
-							pay = values.get(item).destroyPay;
+							pay = items.getPayValue(type, item, null);
 							found = true;
 						}
 					}
@@ -473,9 +470,9 @@ public class Config implements KConfig
 				{
 					if (!craftItemStatic)
 					{
-						if (values.containsKey(item))
+						if (items.containsItem(item))
 						{
-							pay = values.get(item).craftPay;
+							pay = items.getPayValue(type, item, null);
 							found = true;
 						}
 					}
@@ -485,9 +482,9 @@ public class Config implements KConfig
 				{
 					if (!itemDropStatic)
 					{
-						if (values.containsKey(item))
+						if (items.containsItem(item))
 						{
-							pay = values.get(item).dropPay;
+							pay = items.getPayValue(type, item, null);
 							found = true;
 						}
 					}
@@ -497,9 +494,9 @@ public class Config implements KConfig
 				{
 					if (!enchantItemStatic)
 					{
-						if (values.containsKey(item))
+						if (items.containsItem(item))
 						{
-							pay = values.get(item).enchantPay;
+							pay = items.getPayValue(type, item, null);
 							found = true;
 						}
 					}
@@ -509,9 +506,9 @@ public class Config implements KConfig
 				{
 					if (!pickupStatic)
 					{
-						if (values.containsKey(item))
+						if (items.containsItem(item))
 						{
-							pay = values.get(item).pickupPay;
+							pay = items.getPayValue(type, item, null);
 							found = true;
 						}
 					}
@@ -544,11 +541,12 @@ public class Config implements KConfig
 		}
 		return pay;
 	}
-	
+
 	private double getCommandPay(Field field, String command)
 	{
 		// TODO implement
-		return plugin.getConfig().getDouble(field.getConfigPath() + ".pay", 0.0);
+		return plugin.getConfig()
+				.getDouble(field.getConfigPath() + ".pay", 0.0);
 	}
 
 	@Override
@@ -564,9 +562,9 @@ public class Config implements KConfig
 				{
 					if (!blockPlaceStatic)
 					{
-						if (values.containsKey(item))
+						if (items.containsItem(item))
 						{
-							limit = values.get(item).placeLimit;
+							limit = items.getLimitValue(type, item, null);
 							found = true;
 						}
 					}
@@ -576,9 +574,9 @@ public class Config implements KConfig
 				{
 					if (!blockDestroyStatic)
 					{
-						if (values.containsKey(item))
+						if (items.containsItem(item))
 						{
-							limit = values.get(item).destroyLimit;
+							limit = items.getLimitValue(type, item, null);
 							found = true;
 						}
 					}
@@ -588,9 +586,9 @@ public class Config implements KConfig
 				{
 					if (!craftItemStatic)
 					{
-						if (values.containsKey(item))
+						if (items.containsItem(item))
 						{
-							limit = values.get(item).craftLimit;
+							limit = items.getLimitValue(type, item, null);
 							found = true;
 						}
 					}
@@ -600,9 +598,9 @@ public class Config implements KConfig
 				{
 					if (!itemDropStatic)
 					{
-						if (values.containsKey(item))
+						if (items.containsItem(item))
 						{
-							limit = values.get(item).dropLimit;
+							limit = items.getLimitValue(type, item, null);
 							found = true;
 						}
 					}
@@ -612,9 +610,9 @@ public class Config implements KConfig
 				{
 					if (!enchantItemStatic)
 					{
-						if (values.containsKey(item))
+						if (items.containsItem(item))
 						{
-							limit = values.get(item).enchantLimit;
+							limit = items.getLimitValue(type, item, null);
 							found = true;
 						}
 					}
@@ -624,9 +622,9 @@ public class Config implements KConfig
 				{
 					if (!pickupStatic)
 					{
-						if (values.containsKey(item))
+						if (items.containsItem(item))
 						{
-							limit = values.get(item).pickupLimit;
+							limit = items.getLimitValue(type, item, null);
 							found = true;
 						}
 					}
@@ -659,12 +657,11 @@ public class Config implements KConfig
 		}
 		return limit;
 	}
-	
+
 	private int getCommandLimit(Field field, String command)
 	{
-		//TODO implement
-		return plugin.getConfig().getInt(
-				field.getConfigPath() + ".limit", -1);
+		// TODO implement
+		return plugin.getConfig().getInt(field.getConfigPath() + ".limit", -1);
 	}
 
 	@Override
@@ -700,9 +697,9 @@ public class Config implements KConfig
 			{
 				if (!blockPlaceStatic)
 				{
-					if (values.containsKey(item))
+					if (items.containsItem(item))
 					{
-						return values.get(item).placeDenyPay;
+						return items.getDenyPay(type, item, null);
 					}
 				}
 				break;
@@ -711,9 +708,9 @@ public class Config implements KConfig
 			{
 				if (!blockDestroyStatic)
 				{
-					if (values.containsKey(item))
+					if (items.containsItem(item))
 					{
-						return values.get(item).destroyDenyPay;
+						return items.getDenyPay(type, item, null);
 					}
 				}
 				break;
@@ -722,9 +719,9 @@ public class Config implements KConfig
 			{
 				if (!craftItemStatic)
 				{
-					if (values.containsKey(item))
+					if (items.containsItem(item))
 					{
-						return values.get(item).craftDenyPay;
+						return items.getDenyPay(type, item, null);
 					}
 				}
 				break;
@@ -733,9 +730,9 @@ public class Config implements KConfig
 			{
 				if (!itemDropStatic)
 				{
-					if (values.containsKey(item))
+					if (items.containsItem(item))
 					{
-						return values.get(item).dropDenyPay;
+						return items.getDenyPay(type, item, null);
 					}
 				}
 				break;
@@ -744,9 +741,9 @@ public class Config implements KConfig
 			{
 				if (!enchantItemStatic)
 				{
-					if (values.containsKey(item))
+					if (items.containsItem(item))
 					{
-						return values.get(item).enchantDenyPay;
+						return items.getDenyPay(type, item, null);
 					}
 				}
 				break;
@@ -755,9 +752,9 @@ public class Config implements KConfig
 			{
 				if (!pickupStatic)
 				{
-					if (values.containsKey(item))
+					if (items.containsItem(item))
 					{
-						return values.get(item).pickupDenyPay;
+						return items.getDenyPay(type, item, null);
 					}
 				}
 				break;
@@ -810,9 +807,9 @@ public class Config implements KConfig
 			{
 				if (!blockPlaceStatic)
 				{
-					if (values.containsKey(item))
+					if (items.containsItem(item))
 					{
-						return values.get(item).placeDenyLimit;
+						return items.getDenyLimit(type, item, null);
 					}
 				}
 				break;
@@ -821,9 +818,9 @@ public class Config implements KConfig
 			{
 				if (!blockDestroyStatic)
 				{
-					if (values.containsKey(item))
+					if (items.containsItem(item))
 					{
-						return values.get(item).destroyDenyLimit;
+						return items.getDenyLimit(type, item, null);
 					}
 				}
 				break;
@@ -832,9 +829,9 @@ public class Config implements KConfig
 			{
 				if (!craftItemStatic)
 				{
-					if (values.containsKey(item))
+					if (items.containsItem(item))
 					{
-						return values.get(item).craftDenyLimit;
+						return items.getDenyLimit(type, item, null);
 					}
 				}
 				break;
@@ -843,9 +840,9 @@ public class Config implements KConfig
 			{
 				if (!itemDropStatic)
 				{
-					if (values.containsKey(item))
+					if (items.containsItem(item))
 					{
-						return values.get(item).dropDenyLimit;
+						return items.getDenyLimit(type, item, null);
 					}
 				}
 				break;
@@ -854,9 +851,9 @@ public class Config implements KConfig
 			{
 				if (!enchantItemStatic)
 				{
-					if (values.containsKey(item))
+					if (items.containsItem(item))
 					{
-						return values.get(item).enchantDenyLimit;
+						return items.getDenyLimit(type, item, null);
 					}
 				}
 				break;
@@ -865,9 +862,9 @@ public class Config implements KConfig
 			{
 				if (!pickupStatic)
 				{
-					if (values.containsKey(item))
+					if (items.containsItem(item))
 					{
-						return values.get(item).pickupDenyLimit;
+						return items.getDenyLimit(type, item, null);
 					}
 				}
 				break;
@@ -896,342 +893,52 @@ public class Config implements KConfig
 	@Override
 	public boolean checkWorld(Field field, String worldName)
 	{
+		return checkWorld(field, null, null, worldName);
+	}
+
+	@Override
+	public boolean checkWorld(Field field, Item item, String command,
+			String worldName)
+	{
 		boolean valid = false;
-		final List<String> list = plugin.getConfig().getStringList(
-				field.getConfigPath() + ".worlds");
-		if (list == null)
+		if (item != null)
 		{
-			// No worlds specified, so allow all
-			valid = true;
-		}
-		else if (list.isEmpty())
-		{
-			valid = true;
+			valid = items.checkWorld(field, item, null, worldName);
 		}
 		else
 		{
-			for (String world : list)
+			final List<String> list = plugin.getConfig().getStringList(
+					field.getConfigPath() + ".worlds");
+			if (list == null)
 			{
-				if (world.equalsIgnoreCase(worldName))
+				// No worlds specified, so allow all
+				valid = true;
+			}
+			else if (list.isEmpty())
+			{
+				valid = true;
+			}
+			else
+			{
+				for (String world : list)
 				{
-					valid = true;
-					break;
+					if (world.equalsIgnoreCase(worldName))
+					{
+						valid = true;
+						break;
+					}
 				}
 			}
 		}
 		return valid;
 	}
 
-	/**
-	 * Loads the per-item karma values into a hashmap for later usage
-	 */
-	private void loadItemValueMap()
+	public ItemsConfig getItemsConfig()
 	{
-		// Load karma file
-		final YamlConfiguration valueFile = this.itemValuesFile();
-		// Load custom karma file into map
-		for (final String entry : valueFile.getKeys(false))
-		{
-			try
-			{
-				// Attempt to parse non data value nodes
-				int key = Integer.parseInt(entry);
-				if (key <= 0)
-				{
-					plugin.getLogger().warning(
-							Karmiconomy.TAG
-									+ " Zero or negative item id for entry: "
-									+ entry);
-				}
-				else
-				{
-					// If it has child nodes, parse those as well
-					if (valueFile.isConfigurationSection(entry))
-					{
-						values.put(new Item(key, Byte.parseByte("" + 0),
-								(short) 0), parseInfo(valueFile, entry));
-					}
-					else
-					{
-						plugin.getLogger().warning("No section for " + entry);
-					}
-				}
-			}
-			catch (final NumberFormatException ex)
-			{
-				// Potential data value entry
-				if (entry.contains("&"))
-				{
-					try
-					{
-						final String[] split = entry.split("&");
-						final int item = Integer.parseInt(split[0]);
-						final int data = Integer.parseInt(split[1]);
-						if (item <= 0)
-						{
-							plugin.getLogger()
-									.warning(
-											Karmiconomy.TAG
-													+ " Zero or negative item id for entry: "
-													+ entry);
-						}
-						else
-						{
-							if (valueFile.isConfigurationSection(entry))
-							{
-								if (item != 373)
-								{
-									values.put(
-											new Item(item, Byte.parseByte(""
-													+ data), (short) data),
-											parseInfo(valueFile, entry));
-								}
-								else
-								{
-									values.put(
-											new Item(item, Byte
-													.parseByte("" + 0),
-													(short) data),
-											parseInfo(valueFile, entry));
-								}
-							}
-							else
-							{
-								plugin.getLogger().warning(
-										"No section for " + entry);
-							}
-						}
-					}
-					catch (ArrayIndexOutOfBoundsException a)
-					{
-						plugin.getLogger()
-								.warning(
-										"Wrong format for "
-												+ entry
-												+ ". Must follow '<itemid>&<datavalue>:' entry.");
-					}
-					catch (NumberFormatException exa)
-					{
-						plugin.getLogger().warning(
-								"Non-integer number for " + entry);
-					}
-				}
-				else
-				{
-					plugin.getLogger().warning("Invalid entry for " + entry);
-				}
-			}
-		}
-		plugin.getLogger().info("Loaded custom values");
-	}
-
-	public Map<Item, KCItemInfo> getItemValueMap()
-	{
-		return values;
-	}
-
-	private KCItemInfo parseInfo(YamlConfiguration config, String path)
-	{
-		final double iCraftPay = config.getDouble(path + ".craftPay",
-				this.getPayValue(Field.ITEM_CRAFT, null, null));
-		final double iEnchantPay = config.getDouble(path + ".enchantPay",
-				this.getPayValue(Field.ITEM_ENCHANT, null, null));
-		final double iPlacePay = config.getDouble(path + ".placePay",
-				this.getPayValue(Field.BLOCK_PLACE, null, null));
-		final double iDestroyPay = config.getDouble(path + ".destroyPay",
-				this.getPayValue(Field.BLOCK_DESTROY, null, null));
-		final double iDropPay = config.getDouble(path + ".dropPay",
-				this.getPayValue(Field.ITEM_DROP, null, null));
-		final int iCraftLimit = config.getInt(path + ".craftLimit",
-				this.getLimitValue(Field.ITEM_CRAFT, null, null));
-		final int iEnchantLimit = config.getInt(path + ".enchantLimit",
-				this.getLimitValue(Field.ITEM_ENCHANT, null, null));
-		final int iPlaceLimit = config.getInt(path + ".placeLimit",
-				this.getLimitValue(Field.BLOCK_PLACE, null, null));
-		final int iDestroyLimit = config.getInt(path + ".destroyLimit",
-				this.getLimitValue(Field.BLOCK_DESTROY, null, null));
-		final int iDropLimit = config.getInt(path + ".dropLimit",
-				this.getLimitValue(Field.ITEM_DROP, null, null));
-		final boolean iCraftDenyPay = config.getBoolean(
-				path + ".craftDenyOnPay",
-				plugin.getConfig().getBoolean(
-						Field.ITEM_CRAFT.getConfigPath() + ".denyOnLackPay",
-						false));
-		final boolean iCraftDenyLimit = config.getBoolean(
-				path + ".craftDenyOnLimit",
-				plugin.getConfig().getBoolean(
-						Field.ITEM_CRAFT.getConfigPath() + ".denyOnLimit",
-						false));
-		final boolean iEnchantDenyPay = config.getBoolean(
-				path + ".enchantDenyOnPay",
-				plugin.getConfig().getBoolean(
-						Field.ITEM_ENCHANT.getConfigPath() + ".denyOnLackPay",
-						false));
-		final boolean iEnchantDenyLimit = config.getBoolean(
-				path + ".enchantDenyOnLimit",
-				plugin.getConfig().getBoolean(
-						Field.ITEM_ENCHANT.getConfigPath() + ".denyOnLimit",
-						false));
-		final boolean iPlaceDenyPay = config.getBoolean(
-				path + ".placeDenyOnPay",
-				plugin.getConfig().getBoolean(
-						Field.BLOCK_PLACE.getConfigPath() + ".denyOnLackPay",
-						false));
-		final boolean iPlaceDenyLimit = config.getBoolean(
-				path + ".placeDenyOnLimit",
-				plugin.getConfig().getBoolean(
-						Field.BLOCK_PLACE.getConfigPath() + ".denyOnLimit",
-						false));
-		final boolean iDestroyDenyPay = config.getBoolean(
-				path + ".destroyDenyOnPay",
-				plugin.getConfig().getBoolean(
-						Field.BLOCK_DESTROY.getConfigPath() + ".denyOnLackPay",
-						false));
-		final boolean iDestroyDenyLimit = config.getBoolean(
-				path + ".destroyDenyOnLimit",
-				plugin.getConfig().getBoolean(
-						Field.BLOCK_DESTROY.getConfigPath() + ".denyOnLimit",
-						false));
-		final boolean iDropDenyPay = config.getBoolean(
-				path + ".dropDenyOnPay",
-				plugin.getConfig().getBoolean(
-						Field.ITEM_DROP.getConfigPath() + ".denyOnLackPay",
-						false));
-		final boolean iDropDenyLimit = config.getBoolean(
-				path + ".dropDenyOnLimit",
-				plugin.getConfig().getBoolean(
-						Field.ITEM_PICKUP.getConfigPath() + ".denyOnLimit",
-						false));
-		final int iPickupLimit = config.getInt(path + ".pickupLimit",
-				this.getLimitValue(Field.ITEM_PICKUP, null, null));
-		final double iPickupPay = config.getDouble(path + ".pickupPay",
-				this.getPayValue(Field.ITEM_PICKUP, null, null));
-		final boolean iPickupDenyPay = config.getBoolean(
-				path + ".pickupDenyOnPay",
-				plugin.getConfig().getBoolean(
-						Field.ITEM_PICKUP.getConfigPath() + ".denyOnLackPay",
-						false));
-		final boolean iPickupDenyLimit = config.getBoolean(
-				path + ".pickupDenyOnLimit",
-				plugin.getConfig().getBoolean(
-						Field.ITEM_PICKUP.getConfigPath() + ".denyOnLimit",
-						false));
-		KCItemInfo info = new KCItemInfo(iCraftLimit, iCraftPay, iCraftDenyPay,
-				iCraftDenyLimit, iEnchantLimit, iEnchantPay, iEnchantDenyPay,
-				iEnchantDenyLimit, iPlaceLimit, iPlacePay, iPlaceDenyPay,
-				iPlaceDenyLimit, iDestroyLimit, iDestroyPay, iDestroyDenyPay,
-				iDestroyDenyLimit, iDropLimit, iDropPay, iDropDenyPay,
-				iDropDenyLimit, iPickupLimit, iPickupPay, iPickupDenyPay,
-				iPickupDenyLimit);
-		return info;
+		return items;
 	}
 
 	// TODO command value file
-
-	/**
-	 * Loads the value file. Contains default values If the value file isn't
-	 * there, or if its empty, then load defaults.
-	 * 
-	 * @return YamlConfiguration file
-	 */
-	private YamlConfiguration itemValuesFile()
-	{
-		final File file = new File(plugin.getDataFolder().getAbsolutePath()
-				+ "/values.yml");
-		// TODO rename
-		final YamlConfiguration valueFile = YamlConfiguration
-				.loadConfiguration(file);
-		if (valueFile.getKeys(false).isEmpty())
-		{
-			// Defaults
-			valueFile.set("14.dropPay", 0.0);
-			valueFile.set("14.dropDenyOnPay", false);
-			valueFile.set("14.dropDenyOnLimit", false);
-			valueFile.set("14.dropLimit", 0);
-			valueFile.set("14.placePay", 0.0);
-			valueFile.set("14.placeDenyOnPay", false);
-			valueFile.set("14.placeDenyOnLimit", false);
-			valueFile.set("14.placeLimit", 0);
-			valueFile.set("14.pickupPay", 0.0);
-			valueFile.set("14.pickupDenyOnPay", false);
-			valueFile.set("14.pickupDenyOnLimit", false);
-			valueFile.set("14.pickupLimit", 0);
-			valueFile.set("35&7.destroyPay", 5.0);
-			valueFile.set("35&7.destroyDenyOnPay", false);
-			valueFile.set("35&7.destroyDenyOnLimit", false);
-			valueFile.set("35&7.destroyLimit", 0);
-			valueFile.set("290.craftPay", 0);
-			valueFile.set("290.craftDenyOnPay", false);
-			valueFile.set("290.craftDenyOnLimit", false);
-			valueFile.set("290.craftLimit", 0);
-			valueFile.set("290.enchantPay", 0.0);
-			valueFile.set("290.enchantDenyOnPay", false);
-			valueFile.set("290.enchantDenyOnLimit", false);
-			valueFile.set("290.enchantLimit", 0);
-			// Insert defaults into file if they're not present
-			try
-			{
-				// Save the file
-				valueFile.save(file);
-			}
-			catch (IOException e1)
-			{
-				plugin.getLogger().warning(
-						"File I/O Exception on saving karma list");
-				e1.printStackTrace();
-			}
-		}
-		return valueFile;
-	}
-
-	// Private class to hold item specific information
-	public class KCItemInfo
-	{
-		public double craftPay, enchantPay, placePay, destroyPay, dropPay,
-				pickupPay;
-		public int craftLimit, enchantLimit, placeLimit, destroyLimit,
-				dropLimit, pickupLimit;
-		public boolean craftDenyPay, craftDenyLimit, enchantDenyPay,
-				enchantDenyLimit, destroyDenyPay, destroyDenyLimit,
-				placeDenyPay, placeDenyLimit, dropDenyPay, dropDenyLimit,
-				pickupDenyPay, pickupDenyLimit;
-
-		public KCItemInfo(int craftLimit, double craftPay,
-				boolean craftDenyPay, boolean craftDenyLimit, int enchantLimit,
-				double enchantPay, boolean enchantDenyPay,
-				boolean enchantDenyLimit, int placeLimit, double placePay,
-				boolean placeDenyPay, boolean placeDenyLimit, int destroyLimit,
-				double destroyPay, boolean destroyDenyPay,
-				boolean destroyDenyLimit, int dropLimit, double dropPay,
-				boolean dropDenyPay, boolean dropDenyLimit, int pickupLimit,
-				double pickupPay, boolean pickupDenyPay, boolean pickupDenyLimit)
-		{
-			this.craftPay = craftPay;
-			this.enchantPay = enchantPay;
-			this.placePay = placePay;
-			this.destroyPay = destroyPay;
-			this.dropPay = dropPay;
-			this.craftLimit = craftLimit;
-			this.enchantLimit = enchantLimit;
-			this.placeLimit = placeLimit;
-			this.destroyLimit = destroyLimit;
-			this.dropLimit = dropLimit;
-			this.craftDenyPay = craftDenyPay;
-			this.craftDenyLimit = craftDenyLimit;
-			this.enchantDenyPay = enchantDenyPay;
-			this.enchantDenyLimit = enchantDenyLimit;
-			this.destroyDenyPay = destroyDenyPay;
-			this.destroyDenyLimit = destroyDenyLimit;
-			this.placeDenyPay = placeDenyPay;
-			this.placeDenyLimit = placeDenyLimit;
-			this.dropDenyPay = dropDenyPay;
-			this.dropDenyLimit = dropDenyLimit;
-			this.pickupLimit = pickupLimit;
-			this.pickupPay = pickupPay;
-			this.pickupDenyLimit = pickupDenyLimit;
-			this.pickupDenyPay = pickupDenyPay;
-		}
-	}
 
 	@Override
 	public boolean isEnabled(Field field)

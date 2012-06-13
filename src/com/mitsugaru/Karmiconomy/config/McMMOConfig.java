@@ -232,6 +232,12 @@ public class McMMOConfig implements KConfig
 	@Override
 	public boolean checkWorld(Field field, String worldName)
 	{
+		return checkWorld(field, null, null, worldName);
+	}
+	
+	@Override
+	public boolean checkWorld(Field field, Item item, String command, String worldName)
+	{
 		boolean valid = false;
 		final List<String> list = config.getStringList(field.getConfigPath() + ".worlds");
 		if(list == null)

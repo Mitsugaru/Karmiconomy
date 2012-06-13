@@ -16,6 +16,8 @@ public interface KConfig
 	public abstract double getPayValue(Field field, Item item, String command);
 
 	public abstract boolean sendBroadcast(Field field);
-
+	
 	public abstract boolean checkWorld(Field field, String worldName);
+
+	public abstract boolean checkWorld(Field field, Item item, String command, String worldName);
 }
