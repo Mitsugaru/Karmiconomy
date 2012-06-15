@@ -9,10 +9,10 @@ import java.util.Date;
 import com.mitsugaru.Karmiconomy.Item;
 import com.mitsugaru.Karmiconomy.Karmiconomy;
 import com.mitsugaru.Karmiconomy.config.Config;
+import com.mitsugaru.Karmiconomy.database.SQLibrary.MySQL;
+import com.mitsugaru.Karmiconomy.database.SQLibrary.SQLite;
+import com.mitsugaru.Karmiconomy.database.SQLibrary.Database.Query;
 
-import lib.Mitsugaru.SQLibrary.MySQL;
-import lib.Mitsugaru.SQLibrary.SQLite;
-import lib.Mitsugaru.SQLibrary.Database.Query;
 
 public class DatabaseHandler
 {
