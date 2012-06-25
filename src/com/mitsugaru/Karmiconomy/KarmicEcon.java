@@ -33,7 +33,7 @@ public class KarmicEcon
 		// Check vault
 		RegisteredServiceProvider<Economy> economyProvider = plugin.getServer()
 				.getServicesManager()
-				.getRegistration(net.milkbowl.vault.economy.Economy.class);
+				.getRegistration(Economy.class);
 		if (economyProvider != null)
 		{
 			eco = economyProvider.getProvider();
@@ -77,7 +77,7 @@ public class KarmicEcon
 			final int playerPoints = PlayerPointsAPI.look(player.getName());
 			if (pay < 0.0)
 			{
-				pay *= 1;
+				pay *= -1;
 				if (pay > playerPoints)
 				{
 					paid = true;
