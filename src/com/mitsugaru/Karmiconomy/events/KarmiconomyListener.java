@@ -108,12 +108,22 @@ public class KarmiconomyListener implements Listener{
             || event.getPlayer() == null){
          return;
       }
+      if(config.debugEvents){
+         plugin.getLogger().info("has player");
+      }
       final Player player = event.getPlayer();
-      if(!config.checkWorld(Field.COMMAND, null, event.getMessage(), player.getWorld().getName())){
+      if(!config.checkWorld(Field.COMMAND, null, event.getMessage(), player
+            .getWorld().getName())){
          return;
+      }
+      if(config.debugEvents){
+         plugin.getLogger().info("valid world");
       }
       if(EventLogic.bypass(player, Field.COMMAND, null, event.getMessage())){
          return;
+      }
+      if(config.debugEvents){
+         plugin.getLogger().info("not bypassed");
       }
       if(EventLogic.deny(Field.COMMAND, player, config, null,
             event.getMessage())){
@@ -136,7 +146,8 @@ public class KarmiconomyListener implements Listener{
          return;
       }
       final Player player = event.getPlayer();
-      if(config.checkWorld(Field.COMMAND, null, event.getMessage(), player.getWorld().getName())){
+      if(config.checkWorld(Field.COMMAND, null, event.getMessage(), player
+            .getWorld().getName())){
          EventLogic.hitPayIncrement(Field.COMMAND, player, config, null,
                event.getMessage());
       }
@@ -198,9 +209,10 @@ public class KarmiconomyListener implements Listener{
 
       final Player player = event.getPlayer();
       final Item placed = new Item(event.getBlockPlaced().getTypeId(), event
-               .getBlockPlaced().getData(), (short) 0);
-      if(config.checkWorld(Field.BLOCK_PLACE, placed, null, player.getWorld().getName())){
-         
+            .getBlockPlaced().getData(), (short) 0);
+      if(config.checkWorld(Field.BLOCK_PLACE, placed, null, player.getWorld()
+            .getName())){
+
          EventLogic.hitPayIncrement(Field.BLOCK_PLACE, player, config, placed,
                null);
       }
