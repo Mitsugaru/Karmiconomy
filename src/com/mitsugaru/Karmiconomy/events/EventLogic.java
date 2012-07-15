@@ -16,6 +16,7 @@ import com.mitsugaru.Karmiconomy.config.KConfig;
 import com.mitsugaru.Karmiconomy.config.LocalizeConfig;
 import com.mitsugaru.Karmiconomy.database.DatabaseHandler;
 import com.mitsugaru.Karmiconomy.database.Field;
+import com.mitsugaru.Karmiconomy.permissions.PermissionHandler;
 
 public class EventLogic
 {
@@ -159,6 +160,10 @@ public class EventLogic
 	private static boolean hitLimit(Field field, Player player,
 			int configLimit, Item item, String command)
 	{
+	   if(bypass(player, field, item, command))
+	   {
+	      return false;
+	   }
 		final int limit = db.getData(field, player.getName(), item, command);
 		if (configLimit >= 0)
 		{
@@ -175,14 +180,19 @@ public class EventLogic
 			KConfig config, Item item, String command)
 	{
 		final int configLimit = config.getLimitValue(field, item, command);
+		String compCommand = command;
+		if(command != null)
+		{
+		   compCommand = rootConfig.getCommandsConfig().getComparableCommand(command).toString();
+		}
 		// Check if hit limit
-		if (!EventLogic.hitLimit(field, player, configLimit, item, command))
+		if (!EventLogic.hitLimit(field, player, configLimit, item, compCommand))
 		{
 			// Attempt to pay
-			if (KarmicEcon.pay(field, player, config, item, command))
+			if (KarmicEcon.pay(field, player, config, item, compCommand))
 			{
 				// Increment
-				db.incrementData(field, player.getName(), item, command);
+				db.incrementData(field, player.getName(), item, compCommand);
 			}
 		}
 	}
@@ -227,6 +237,28 @@ public class EventLogic
 			player.sendMessage(out);
 		}
 
+	}
+	
+	public static boolean bypass(Player player, Field field, Item item, String command)
+	{
+	   boolean bypass = false;
+	   if(item != null)
+	   {
+	      final String itemBypass = rootConfig.getItemBypass(item);
+	      if(itemBypass != null && !itemBypass.equals(""))
+	      {
+	         bypass = PermissionHandler.checkPermission(player, itemBypass);
+	      }
+	   }
+	   else if(command != null)
+	   {
+	      //TODO handle command bypass
+	   }
+	   if(!bypass)
+	   {
+	      bypass = PermissionHandler.checkPermission(player, field.getBypassNode());
+	   }
+	   return bypass;
 	}
 
 	public enum DenyType

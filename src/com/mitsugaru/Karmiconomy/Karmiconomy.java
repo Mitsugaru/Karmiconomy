@@ -13,14 +13,13 @@ import com.mitsugaru.Karmiconomy.events.HeroesListener;
 import com.mitsugaru.Karmiconomy.events.KarmiconomyListener;
 import com.mitsugaru.Karmiconomy.events.EventLogic;
 import com.mitsugaru.Karmiconomy.events.McMMOListener;
-import com.mitsugaru.Karmiconomy.permissions.PermCheck;
+import com.mitsugaru.Karmiconomy.permissions.PermissionHandler;
 
 public class Karmiconomy extends JavaPlugin
 {
 	public static final String TAG = "[Karmiconomy]";
 	private Commander commander;
 	private Config config;
-	private PermCheck perm;
 	private DatabaseHandler database;
 	private boolean economyFound;
 	public boolean mcmmo, heroes;
@@ -73,7 +72,7 @@ public class Karmiconomy extends JavaPlugin
 		}
 
 		// Set permission handler
-		perm = new PermCheck(this);
+		PermissionHandler.init(this);
 
 		// Setup commander
 		commander = new Commander(this);
@@ -113,11 +112,6 @@ public class Karmiconomy extends JavaPlugin
 	public Commander getCommander()
 	{
 		return commander;
-	}
-
-	public PermCheck getPermissionHandler()
-	{
-		return perm;
 	}
 
 	/**

@@ -18,7 +18,7 @@ import com.mitsugaru.Karmiconomy.config.Config;
 import com.mitsugaru.Karmiconomy.config.HeroesConfig;
 import com.mitsugaru.Karmiconomy.config.LocalizeConfig;
 import com.mitsugaru.Karmiconomy.config.McMMOConfig;
-import com.mitsugaru.Karmiconomy.permissions.PermCheck;
+import com.mitsugaru.Karmiconomy.permissions.PermissionHandler;
 import com.mitsugaru.Karmiconomy.permissions.PermissionNode;
 
 @SuppressWarnings("unused")
@@ -26,7 +26,6 @@ public class Commander implements CommandExecutor
 {
 	// Class variables
 	private final Karmiconomy plugin;
-	private final PermCheck perm;
 	private final static String bar = "======================";
 	private final Config config;
 	private final Map<String, Integer> page = new HashMap<String, Integer>();
@@ -45,7 +44,6 @@ public class Commander implements CommandExecutor
 		// Instantiate variables
 		this.plugin = plugin;
 		config = plugin.getPluginConfig();
-		perm = plugin.getPermissionHandler();
 		limit = config.listlimit;
 	}
 	
@@ -124,7 +122,7 @@ public class Commander implements CommandExecutor
 			}*/
 			else if(com.equals("reload"))
 			{
-				if(perm.checkPermission(sender, PermissionNode.ADMIN.getNode()))
+				if(PermissionHandler.checkPermission(sender, PermissionNode.ADMIN.getNode()))
 				{
 					config.reloadConfig();
 					LocalizeConfig.reload();
@@ -267,7 +265,7 @@ public class Commander implements CommandExecutor
 			sender.sendMessage(ChatColor.GREEN + "/ks admin" + ChatColor.YELLOW
 					+ " : List admin commands");
 		}*/
-		if(perm.checkPermission(sender, PermissionNode.ADMIN.getNode()))
+		if(PermissionHandler.checkPermission(sender, PermissionNode.ADMIN.getNode()))
 		{
 			sender.sendMessage(LocalString.HELP_ADMIN_RELOAD.parseString(null));
 		}

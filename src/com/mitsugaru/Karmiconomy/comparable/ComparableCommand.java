@@ -15,14 +15,31 @@ public class ComparableCommand implements Comparable<ComparableCommand>
 		return this.command.length();
 	}
 
-	public String getCommand()
-	{
-		return command;
-	}
-
 	public String[] split()
 	{
 		return command.split(" ");
+	}
+
+	@Override
+	public int hashCode() {
+	    return command.hashCode();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+	    if(obj instanceof ComparableCommand)
+	    {
+		if(command.equalsIgnoreCase(((ComparableCommand) obj).toString()))
+		{
+		    return true;
+		}
+	    }
+	    return false;
+	}
+
+	@Override
+	public String toString() {
+	    return command;
 	}
 
 	private boolean partialCompare(String a, String b)
