@@ -109,7 +109,7 @@ public class KarmiconomyListener implements Listener{
          return;
       }
       final Player player = event.getPlayer();
-      if(!config.checkWorld(Field.COMMAND, player.getWorld().getName())){
+      if(!config.checkWorld(Field.COMMAND, null, event.getMessage(), player.getWorld().getName())){
          return;
       }
       if(EventLogic.bypass(player, Field.COMMAND, null, event.getMessage())){
@@ -136,7 +136,7 @@ public class KarmiconomyListener implements Listener{
          return;
       }
       final Player player = event.getPlayer();
-      if(config.checkWorld(Field.COMMAND, player.getWorld().getName())){
+      if(config.checkWorld(Field.COMMAND, null, event.getMessage(), player.getWorld().getName())){
          EventLogic.hitPayIncrement(Field.COMMAND, player, config, null,
                event.getMessage());
       }
@@ -197,9 +197,10 @@ public class KarmiconomyListener implements Listener{
       // Pay on block place
 
       final Player player = event.getPlayer();
-      if(config.checkWorld(Field.BLOCK_PLACE, player.getWorld().getName())){
-         final Item placed = new Item(event.getBlockPlaced().getTypeId(), event
+      final Item placed = new Item(event.getBlockPlaced().getTypeId(), event
                .getBlockPlaced().getData(), (short) 0);
+      if(config.checkWorld(Field.BLOCK_PLACE, placed, null, player.getWorld().getName())){
+         
          EventLogic.hitPayIncrement(Field.BLOCK_PLACE, player, config, placed,
                null);
       }

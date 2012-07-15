@@ -70,8 +70,9 @@ public class EventLogic{
          }
       }
       if(rootConfig.debugEvents){
-         plugin.getLogger().info(
-               "Check deny limit: " + config.getDenyLimit(field, item, command));
+         plugin.getLogger()
+               .info("Check deny limit: "
+                     + config.getDenyLimit(field, item, command));
       }
       if(config.getDenyLimit(field, item, command)){
          final int configLimit = config.getLimitValue(field, item, command);
@@ -103,16 +104,14 @@ public class EventLogic{
             return true;
          }else if(configLimit > 0){
             String dbCom = command;
-            if(command != null)
-            {
-               dbCom = rootConfig.getCommandsConfig().getComparableCommand(command).toString();
+            if(command != null){
+               dbCom = rootConfig.getCommandsConfig()
+                     .getComparableCommand(command).toString();
             }
             // Deny by player limit
-            final int limit = db
-                  .getData(field, player.getName(), item, dbCom);
+            final int limit = db.getData(field, player.getName(), item, dbCom);
             if(rootConfig.debugEvents){
-               plugin.getLogger().info(
-                     "Current Limit: " + limit);
+               plugin.getLogger().info("Current Limit: " + limit);
             }
             if(limit >= configLimit){
                switch(field.getTable()){
@@ -220,11 +219,17 @@ public class EventLogic{
             bypass = PermissionHandler.checkPermission(player, itemBypass);
          }
       }else if(command != null){
-         // TODO handle command bypass
+         final String comBypass = rootConfig.getCommandBypass(command);
+         if(comBypass != null && !comBypass.equals("")){
+            bypass = PermissionHandler.checkPermission(player, comBypass);
+         }
       }
       if(!bypass){
          bypass = PermissionHandler.checkPermission(player,
                field.getBypassNode());
+      }
+      if(rootConfig.debugEvents){
+         plugin.getLogger().info("Bypass: " + bypass);
       }
       return bypass;
    }
