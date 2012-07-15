@@ -825,7 +825,7 @@ public class DatabaseHandler
 									+ field.getTable().getName() + " SET "
 									+ field.getColumnName() + "='" + value
 									+ "' WHERE id='" + id + "' AND itemid='"
-									+ item.itemId() + "';");
+									+ item.getId() + "';");
 						}
 						else if (item.isPotion())
 						{
@@ -834,10 +834,10 @@ public class DatabaseHandler
 									+ field.getTable().getName() + " SET "
 									+ field.getColumnName() + "='" + value
 									+ "' WHERE id='" + id + "' AND itemid='"
-									+ item.itemId() + "' AND data='"
-									+ item.itemDurability()
+									+ item.getId() + "' AND data='"
+									+ item.getDurability()
 									+ "' AND durability='"
-									+ item.itemDurability() + "';");
+									+ item.getDurability() + "';");
 						}
 						else
 						{
@@ -846,9 +846,9 @@ public class DatabaseHandler
 									+ field.getTable().getName() + " SET "
 									+ field.getColumnName() + "='" + value
 									+ "' WHERE id='" + id + "' AND itemid='"
-									+ item.itemId() + "' AND data='"
-									+ item.itemData() + "' AND durability='"
-									+ item.itemDurability() + "';");
+									+ item.getId() + "' AND data='"
+									+ item.getData() + "' AND durability='"
+									+ item.getDurability() + "';");
 						}
 					}
 					else
@@ -980,7 +980,7 @@ public class DatabaseHandler
 								query = select("SELECT * FROM "
 										+ field.getTable().getName()
 										+ " WHERE id='" + id + "' AND itemid='"
-										+ item.itemId() + "';");
+										+ item.getId() + "';");
 								if (query.getResult().next())
 								{
 									found = true;
@@ -1001,7 +1001,7 @@ public class DatabaseHandler
 											+ " (id,itemid,data,durability,place,destroy,craft,enchant,playerDrop,pickup) VALUES('"
 											+ id
 											+ "','"
-											+ item.itemId()
+											+ item.getId()
 											+ "','0','0','0','0','0','0','0','0');");
 								}
 							}
@@ -1011,10 +1011,10 @@ public class DatabaseHandler
 								query = select("SELECT * FROM "
 										+ field.getTable().getName()
 										+ " WHERE id='" + id + "' AND itemid='"
-										+ item.itemId() + "' AND data='"
-										+ item.itemDurability()
+										+ item.getId() + "' AND data='"
+										+ item.getDurability()
 										+ "' AND durability='"
-										+ item.itemDurability() + "';");
+										+ item.getDurability() + "';");
 								if (query.getResult().next())
 								{
 									found = true;
@@ -1034,9 +1034,9 @@ public class DatabaseHandler
 									standardQuery("INSERT INTO "
 											+ field.getTable().getName()
 											+ " (id,itemid,data,durability,place,destroy,craft,enchant,playerDrop,pickup) VALUES('"
-											+ id + "','" + item.itemId()
-											+ "','" + item.itemDurability()
-											+ "','" + item.itemDurability()
+											+ id + "','" + item.getId()
+											+ "','" + item.getDurability()
+											+ "','" + item.getDurability()
 											+ "','0','0','0','0','0','0');");
 								}
 							}
@@ -1046,10 +1046,10 @@ public class DatabaseHandler
 								query = select("SELECT * FROM "
 										+ field.getTable().getName()
 										+ " WHERE id='" + id + "' AND itemid='"
-										+ item.itemId() + "' AND data='"
-										+ item.itemData()
+										+ item.getId() + "' AND data='"
+										+ item.getData()
 										+ "' AND durability='"
-										+ item.itemDurability() + "';");
+										+ item.getDurability() + "';");
 								if (query.getResult().next())
 								{
 									found = true;
@@ -1069,9 +1069,9 @@ public class DatabaseHandler
 									standardQuery("INSERT INTO "
 											+ field.getTable().getName()
 											+ " (id,itemid,data,durability,place,destroy,craft,enchant,playerDrop,pickup) VALUES('"
-											+ id + "','" + item.itemId()
-											+ "','" + item.itemData() + "','"
-											+ item.itemDurability()
+											+ id + "','" + item.getId()
+											+ "','" + item.getData() + "','"
+											+ item.getDurability()
 											+ "','0','0','0','0','0','0');");
 								}
 							}

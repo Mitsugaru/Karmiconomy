@@ -58,7 +58,7 @@ public class EventLogic
 					case ITEMS:
 					{
 						sendLackMessage(player, DenyType.MONEY, field.name(),
-								item.name);
+								item.toString());
 						break;
 					}
 					default:
@@ -95,7 +95,7 @@ public class EventLogic
 					case ITEMS:
 					{
 						sendLackMessage(player, DenyType.LIMIT, field.name(),
-								item.name);
+								item.toString());
 						break;
 					}
 					default:
@@ -132,7 +132,7 @@ public class EventLogic
 						case ITEMS:
 						{
 							sendLackMessage(player, DenyType.LIMIT,
-									field.name(), item.name);
+									field.name(), item.toString());
 							break;
 						}
 						default:

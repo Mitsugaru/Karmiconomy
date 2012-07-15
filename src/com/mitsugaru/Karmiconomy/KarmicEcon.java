@@ -106,7 +106,7 @@ public class KarmicEcon
 		info.put(LocalString.Flag.EXTRA, "");
 		if (item != null)
 		{
-			info.put(LocalString.Flag.EXTRA, ChatColor.WHITE + "- " + item.name);
+			info.put(LocalString.Flag.EXTRA, ChatColor.WHITE + "- " + item.toString());
 		}
 		else if (command != null)
 		{
