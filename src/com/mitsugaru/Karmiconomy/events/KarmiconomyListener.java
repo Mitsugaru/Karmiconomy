@@ -115,7 +115,6 @@ public class KarmiconomyListener implements Listener{
       if(EventLogic.bypass(player, Field.COMMAND, null, event.getMessage())){
          return;
       }
-      //TODO check if there is a valid comparable command to send to deny
       if(EventLogic.deny(Field.COMMAND, player, config, null,
             event.getMessage())){
          // Deny
@@ -134,22 +133,19 @@ public class KarmiconomyListener implements Listener{
    public void command(final PlayerCommandPreprocessEvent event){
       if(event.isCancelled() || !config.isEnabled(Field.COMMAND)
             || event.getPlayer() == null){
-         
+         return;
       }
-         final Player player = event.getPlayer();
-         // Pay on command
-         // Check if hit limit
-       //TODO check if there is a valid comparable command to send to deny
-         if(config.checkWorld(Field.COMMAND, player.getWorld().getName())){
-            EventLogic.hitPayIncrement(Field.COMMAND, player, config, null,
-                  event.getMessage());
-         }
-         if(config.debugEvents){
-            final Map<String, String> details = new HashMap<String, String>();
-            details.put("Player", player.getName());
-            details.put("Message", event.getMessage());
-            EventLogic.debugEvent(event, details);
-         }
+      final Player player = event.getPlayer();
+      if(config.checkWorld(Field.COMMAND, player.getWorld().getName())){
+         EventLogic.hitPayIncrement(Field.COMMAND, player, config, null,
+               event.getMessage());
+      }
+      if(config.debugEvents){
+         final Map<String, String> details = new HashMap<String, String>();
+         details.put("Player", player.getName());
+         details.put("Message", event.getMessage());
+         EventLogic.debugEvent(event, details);
+      }
    }
 
    @EventHandler(priority = EventPriority.LOWEST)

@@ -56,7 +56,7 @@ public class KarmicEcon
 
 	public static boolean denyPay(Player player, double pay)
 	{
-		boolean paid = false;
+		boolean deny = false;
 		if (vault)
 		{
 			// Deny by player balance
@@ -68,7 +68,7 @@ public class KarmicEcon
 				pay *= -1;
 				if (pay > balance)
 				{
-					paid = true;
+				   deny = true;
 				}
 			}
 		}
@@ -80,11 +80,11 @@ public class KarmicEcon
 				pay *= -1;
 				if (pay > playerPoints)
 				{
-					paid = true;
+				   deny = true;
 				}
 			}
 		}
-		return paid;
+		return deny;
 	}
 
 	public static boolean pay(Field field, Player player, KConfig config,
