@@ -55,6 +55,7 @@ public class Karmiconomy extends JavaPlugin
 	{
 		// Config
 		config = new Config(this);
+		config.init();
 		// Grab database
 		database = new DatabaseHandler(this, config);
 		// Check update

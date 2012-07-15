@@ -383,25 +383,25 @@ public class ItemsConfig implements KConfig{
    private KCItemInfo parseInfo(YamlConfiguration config, String path){
       final String bypass = config.getString(path + ".bypass", "");
       final double iCraftPay = config.getDouble(path + ".craftPay",
-            this.getPayValue(Field.ITEM_CRAFT, null, null));
+            plugin.getPluginConfig().getPayValue(Field.ITEM_CRAFT, null, null));
       final double iEnchantPay = config.getDouble(path + ".enchantPay",
-            this.getPayValue(Field.ITEM_ENCHANT, null, null));
+            plugin.getPluginConfig().getPayValue(Field.ITEM_ENCHANT, null, null));
       final double iPlacePay = config.getDouble(path + ".placePay",
-            this.getPayValue(Field.BLOCK_PLACE, null, null));
+            plugin.getPluginConfig().getPayValue(Field.BLOCK_PLACE, null, null));
       final double iDestroyPay = config.getDouble(path + ".destroyPay",
-            this.getPayValue(Field.BLOCK_DESTROY, null, null));
+            plugin.getPluginConfig().getPayValue(Field.BLOCK_DESTROY, null, null));
       final double iDropPay = config.getDouble(path + ".dropPay",
-            this.getPayValue(Field.ITEM_DROP, null, null));
+            plugin.getPluginConfig().getPayValue(Field.ITEM_DROP, null, null));
       final int iCraftLimit = config.getInt(path + ".craftLimit",
-            this.getLimitValue(Field.ITEM_CRAFT, null, null));
+            plugin.getPluginConfig().getLimitValue(Field.ITEM_CRAFT, null, null));
       final int iEnchantLimit = config.getInt(path + ".enchantLimit",
-            this.getLimitValue(Field.ITEM_ENCHANT, null, null));
+            plugin.getPluginConfig().getLimitValue(Field.ITEM_ENCHANT, null, null));
       final int iPlaceLimit = config.getInt(path + ".placeLimit",
-            this.getLimitValue(Field.BLOCK_PLACE, null, null));
+            plugin.getPluginConfig().getLimitValue(Field.BLOCK_PLACE, null, null));
       final int iDestroyLimit = config.getInt(path + ".destroyLimit",
-            this.getLimitValue(Field.BLOCK_DESTROY, null, null));
+            plugin.getPluginConfig().getLimitValue(Field.BLOCK_DESTROY, null, null));
       final int iDropLimit = config.getInt(path + ".dropLimit",
-            this.getLimitValue(Field.ITEM_DROP, null, null));
+            plugin.getPluginConfig().getLimitValue(Field.ITEM_DROP, null, null));
       final boolean iCraftDenyPay = config.getBoolean(
             path + ".craftDenyOnPay",
             plugin.getConfig().getBoolean(

@@ -41,6 +41,9 @@ public class Config implements KConfig{
     */
    public Config(Karmiconomy plugin){
       this.plugin = plugin;
+   }
+
+   public void init(){
       // Grab config
       final ConfigurationSection config = plugin.getConfig();
       // LinkedHashmap of defaults
