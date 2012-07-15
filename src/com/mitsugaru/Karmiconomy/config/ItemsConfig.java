@@ -261,7 +261,6 @@ public class ItemsConfig implements KConfig{
    public boolean checkWorld(Field field, Item item, String command,
          String worldName){
       boolean valid = false, noList = false;
-      ;
       if(item == null){
          return valid;
       }
