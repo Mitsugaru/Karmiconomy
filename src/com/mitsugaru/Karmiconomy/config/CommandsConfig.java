@@ -179,7 +179,7 @@ public class CommandsConfig implements KConfig{
             return com2;
          }
       }
-      return null;
+      return com;
    }
 
    public String getBypass(String command){
