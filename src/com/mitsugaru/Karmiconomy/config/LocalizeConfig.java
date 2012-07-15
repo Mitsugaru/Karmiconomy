@@ -133,7 +133,7 @@ public class LocalizeConfig
 		/**
 		 * Reasons
 		 */
-		reasonLimit = config.getString("reason.money", "Hit limit");
+		reasonLimit = config.getString("reason.limit", "Hit limit");
 		reasonMoney = config.getString("reason.money", "Lack money");
 		reasonUnknown = config.getString("reason.unknown", " Unknown DenyType");
 	}

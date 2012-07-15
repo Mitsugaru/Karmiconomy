@@ -111,9 +111,6 @@ public class CommandsConfig implements KConfig{
          String worldName){
       boolean valid = false, noList = false;
       if(command == null){
-         if(plugin.getPluginConfig().debugEvents){
-            plugin.getLogger().info("null command");
-         }
          return valid;
       }
       final ComparableCommand com = new ComparableCommand(command);
@@ -127,9 +124,6 @@ public class CommandsConfig implements KConfig{
          }else if(list.isEmpty()){
             valid = true;
          }else{
-            if(plugin.getPluginConfig().debugEvents){
-               plugin.getLogger().info("has custom world list");
-            }
             for(String world : list){
                if(world.equalsIgnoreCase(worldName)){
                   valid = true;
@@ -141,9 +135,6 @@ public class CommandsConfig implements KConfig{
          noList = true;
       }
       if(noList){
-         if(plugin.getPluginConfig().debugEvents){
-            plugin.getLogger().info("nolist");
-         }
          final List<String> list = plugin.getConfig().getStringList(
                field.getConfigPath() + ".worlds");
          if(list == null){
@@ -159,9 +150,6 @@ public class CommandsConfig implements KConfig{
                }
             }
          }
-      }
-      if(plugin.getPluginConfig().debugEvents){
-         plugin.getLogger().info("valid world: " + valid);
       }
       return valid;
    }

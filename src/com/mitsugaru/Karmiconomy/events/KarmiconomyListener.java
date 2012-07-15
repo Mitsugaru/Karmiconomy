@@ -108,22 +108,13 @@ public class KarmiconomyListener implements Listener{
             || event.getPlayer() == null){
          return;
       }
-      if(config.debugEvents){
-         plugin.getLogger().info("has player");
-      }
       final Player player = event.getPlayer();
       if(!config.checkWorld(Field.COMMAND, null, event.getMessage(), player
             .getWorld().getName())){
          return;
       }
-      if(config.debugEvents){
-         plugin.getLogger().info("valid world");
-      }
       if(EventLogic.bypass(player, Field.COMMAND, null, event.getMessage())){
          return;
-      }
-      if(config.debugEvents){
-         plugin.getLogger().info("not bypassed");
       }
       if(EventLogic.deny(Field.COMMAND, player, config, null,
             event.getMessage())){
