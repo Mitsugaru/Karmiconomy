@@ -14,3 +14,567 @@ permissions:
   Karmiconomy.admin:
     description: Administrate plugin
     default: op
+  Karmiconomy.bypass.bed.enter:
+    description: bypass bed enter
+    default: op
+  Karmiconomy.bypass.bed.leave:
+    description: bypass bed leave
+    default: op
+  Karmiconomy.bypass.bed.*:
+    description: bypass bed events
+    default: op
+    children:
+       Karmiconomy.bypass.bed.enter: true
+       Karmiconomy.bypass.bed.leave: true
+  Karmiconomy.bypass.block.destroy:
+    description: bypass block destroy
+    default: op
+  Karmiconomy.bypass.block.place:
+    description: bypass block place
+    default: op
+  Karmiconomy.bypass.block.*:
+    description: bypass block events
+    default op:
+    children:
+       Karmiconomy.bypass.block.place: true
+       Karmiconomy.bypass.block.destroy: true
+  Karmiconomy.bypass.bucket.empty.lava:
+    description: bypass bucket empty lava
+    default: op
+  Karmiconomy.bypass.bucket.empty.water:
+    description: bypass bucket empty water
+    default: op
+  Karmiconomy.bypass.bucket.empty.*:
+    description: bypass bucket empty events
+    default: op
+    children:
+       Karmiconomy.bypass.bucket.empty.lava: true
+       Karmiconomy.bypass.bucket.empty.water: true
+  Karmiconomy.bypass.bucket.fill.lava:
+    description: bypass bucket fill lava
+    default: op
+  Karmiconomy.bypass.bucket.fill.water:
+    description: bypass bucket fill water
+    default: op
+  Karmiconomy.bypass.bucket.fill.*:
+    description: bypass bucket fill events
+    default: op
+    children:
+       Karmiconomy.bypass.bucket.fill.lava: true
+       Karmiconomy.bypass.bucket.fill.water: true
+  Karmiconomy.bypass.bucket.*:
+    description: bypass bucket events
+    default: op
+    children:
+       Karmiconomy.bypass.bucket.empty.lava: true
+       Karmiconomy.bypass.bucket.empty.water: true
+       Karmiconomy.bypass.bucket.fill.water: true
+       Karmiconomy.bypass.bucket.fill.lava: true
+  Karmiconomy.bypass.item.craft:
+    description: bypass item craft
+    default: op
+  Karmiconomy.bypass.item.enchant:
+    description: bypass item enchant
+    default: op
+  Karmiconomy.bypass.item.drop:
+    description: bypass item drop
+    default: op
+  Karmiconomy.bypass.item.pickup:
+    description: bypass item pickup
+    default: op
+  Karmiconomy.bypass.item.egg:
+    description: bypass item egg
+    default: op
+  Karmiconomy.bypass.item.*:
+    description: bypass item events
+    default: op
+    children:
+       Karmiconomy.bypass.item.craft: true
+       Karmiconomy.bypass.item.enchant: true
+       Karmiconomy.bypass.item.drop: true
+       Karmiconomy.bypass.item.pickup: true
+       Karmiconomy.bypass.item.egg: true
+  Karmiconomy.bypass.painting:
+    description: bypass painting place
+    default: op
+  Karmiconomy.bypass.player.chat:
+    description: bypass player chat
+    default: op
+  Karmiconomy.bypass.player.command:
+    description: bypass player command
+    default: op
+  Karmiconomy.bypass.player.death:
+    description: bypass player death
+    default: op
+  Karmiconomy.bypass.player.gamemode.creative:
+    description: bypass gamemode creative
+    default: op
+  Karmiconomy.bypass.player.gamemode.survival:
+    description: bypass gamemode survival
+    default: op
+  Karmiconomy.bypass.player.gamemode.*:
+    description: bypass gamemode events
+    default: op
+    children:
+       Karmiconomy.bypass.player.gamemode.creative: true
+       Karmiconomy.bypass.player.gamemode.survival: true
+  Karmiconomy.bypass.player.join:
+    description: bypass player join
+    default: op
+  Karmiconommy.bypass.player.kick:
+    description: bypass player kick
+    default: op
+  Karmiconomy.bypass.player.quit:
+    description: bypass player quit
+    default: op
+  Karmiconomy.bypass.player.respawn:
+    description: bypass player respawn
+    default: op
+  Karmiconomy.bypass.player.sneak:
+    description: bypass player sneak
+    default: op
+  Karmiconomy.bypass.player.sprint:
+    description: bypass player sprint
+    default: op
+  Karmiconomy.bypass.player.*:
+    description: bypass player events
+    default: op
+    children:
+       Karmiconomy.bypass.player.chat: true
+       Karmiconomy.bypass.player.command: true
+       Karmiconomy.bypass.player.death: true
+       Karmiconomy.bypass.player.gamemode.creative: true
+       Karmiconomy.bypass.player.gamemode.survival: true
+       Karmiconomy.bypass.player.join: true
+       Karmiconomy.bypass.player.kick: true
+       Karmiconomy.bypass.player.quit: true
+       Karmiconomy.bypass.player.respawn: true
+       Karmiconomy.bypass.player.sneak: true
+       Karmiconomy.bypass.player.sprint: true
+  Karmiconomy.bypass.portal.nether:
+    description: bypass nether portal
+    default: op
+  Karmiconomy.bypass.portal.end:
+    description: bypass end portal
+    default: op
+  Karmiconomy.bypass.portal.custom:
+    description: bypass custom porta
+    default: op
+  Karmiconomy.bypass.portal.enter:
+    description: bypass portal enter
+    default: op
+  Karmiconomy.bypass.portal.*:
+    description: bypass portal events
+    default: op
+    children:
+       Karmiconomy.bypass.portal.nether: true
+       Karmiconomy.bypass.portal.end: true
+       Karmiconomy.bypass.portal.custom: true
+       Karmiconomy.bypass.portal.enter: true
+  Karmiconomy.bypass.tame.ocelot:
+    description: bypass tame ocelot
+    default: op
+  Karmiconomy.bypass.tame.wolf:
+    description: bypass tame wolf
+    default: op
+  Karmiconomy.bypass.tame.*:
+    description: bypass tame events
+    default: op
+    children:
+       Karmiconomy.bypass.tame.ocelot: true
+       Karmiconomy.bypass.tame.wolf: true
+  Karmiconomy.bypass.world.change:
+    description: bypass world change
+    default: op
+  Karmiconomy.bypass.normal:
+    description: Bypass normal node
+    default: op
+    children:
+       Karmiconomy.bypass.bed.enter: true
+       Karmiconomy.bypass.bed.leave: true
+       Karmiconomy.bypass.block.place: true
+       Karmiconomy.bypass.block.destroy: true
+       Karmiconomy.bypass.bucket.empty.lava: true
+       Karmiconomy.bypass.bucket.empty.water: true
+       Karmiconomy.bypass.bucket.fill.water: true
+       Karmiconomy.bypass.bucket.fill.lava: true
+       Karmiconomy.bypass.item.craft: true
+       Karmiconomy.bypass.item.enchant: true
+       Karmiconomy.bypass.item.drop: true
+       Karmiconomy.bypass.item.pickup: true
+       Karmiconomy.bypass.item.egg: true
+       Karmiconomy.bypass.painting: true
+       Karmiconomy.bypass.player.chat: true
+       Karmiconomy.bypass.player.command: true
+       Karmiconomy.bypass.player.death: true
+       Karmiconomy.bypass.player.gamemode.creative: true
+       Karmiconomy.bypass.player.gamemode.survival: true
+       Karmiconomy.bypass.player.join: true
+       Karmiconomy.bypass.player.kick: true
+       Karmiconomy.bypass.player.quit: true
+       Karmiconomy.bypass.player.respawn: true
+       Karmiconomy.bypass.player.sneak: true
+       Karmiconomy.bypass.player.sprint: true
+       Karmiconomy.bypass.portal.nether: true
+       Karmiconomy.bypass.portal.end: true
+       Karmiconomy.bypass.portal.custom: true
+       Karmiconomy.bypass.portal.enter: true
+       Karmiconomy.bypass.tame.ocelot: true
+       Karmiconomy.bypass.tame.wolf: true
+       Karmiconomy.bypass.world.change: true
+  Karmiconomy.bypass.mcmmo.party.join:
+    description: bypass mcmmo party join
+    default: op
+  Karmiconomy.bypass.mcmmo.party.leave:
+    description: bypass mcmmo party leave
+    default: op
+  Karmiconomy.bypass.mcmmo.party.kick:
+    description: bypass mcmmo party kick
+    default: op
+  Karmiconomy.bypass.mcmmo.party.change:
+    description: bypass mcmmo party change
+    default: op
+  Karmiconomy.bypass.mcmmo.party.teleport:
+    description: bypass mcmmo party teleport
+    default: op
+  Karmiconomy.bypass.mcmmo.party.*:
+    description: bypass mcmmo party events
+    default: op
+    children:
+       Karmiconomy.bypass.mcmmo.party.join: true
+       Karmiconomy.bypass.mcmmo.party.leave: true
+       Karmiconomy.bypass.mcmmo.party.kick: true
+       Karmiconomy.bypass.mcmmo.party.change: true
+       Karmiconomy.bypass.mcmmo.party.teleport: true
+  Karmiconomy.bypass.mcmmo.level.acrobatics:
+    description: bypass mcmmo level acrobatics
+    default: op
+  Karmiconomy.bypass.mcmmo.level.archery:
+    description: bypass mcmmo level archer
+    default: op
+  Karmiconomy.bypass.mcmmo.level.axes:
+    description: bypass mcmmo level axes
+    default: op
+  Karmiconomy.bypass.mcmmo.level.excavation:
+    description: bypass mcmmo level excavation
+    default: op
+  Karmiconomy.bypass.mcmmo.level.fishing:
+    description: bypass mcmmo level fishing
+    default: op
+  Karmiconomy.bypass.mcmmo.level.herbalism:
+    description: bypass mcmmo level herbalism
+    default: op
+  Karmiconomy.bypass.mcmmo.level.mining:
+    description: bypass mcmmo level mining
+    default: op
+  Karmiconomy.bypass.mcmmo.level.repair:
+    description: bypass mcmmo level repair
+    default: op
+  Karmiconomy.bypass.mcmmo.level.swords:
+    description: bypass mcmmo level swords
+    default: op
+  Karmiconomy.bypass.mcmmo.level.taming:
+    description: bypass mcmmo level taming
+    default: op
+  Karmiconomy.bypass.mcmmo.level.unarmed:
+    description: bypass mcmmo level unarmed
+    default: op
+  Karmiconomy.bypass.mcmmo.level.woodcutting:
+    description: bypass mcmmo level woodcutting
+    default: op
+  Karmiconomy.bypass.mcmmo.level.*:
+    description: bypass mcmmo level events
+    default: op
+    children:
+       Karmiconomy.bypass.mcmmo.level.acrobatics: true
+       Karmiconomy.bypass.mcmmo.level.archery: true
+       Karmiconomy.bypass.mcmmo.level.axes: true
+       Karmiconomy.bypass.mcmmo.level.excavation: true
+       Karmiconomy.bypass.mcmmo.level.fishing: true
+       Karmiconomy.bypass.mcmmo.level.herbalism: true
+       Karmiconomy.bypass.mcmmo.level.mining: true
+       Karmiconomy.bypass.mcmmo.level.repair: true
+       Karmiconomy.bypass.mcmmo.level.swords: true
+       Karmiconomy.bypass.mcmmo.level.taming: true
+       Karmiconomy.bypass.mcmmo.level.unarmed: true
+       Karmiconomy.bypass.mcmmo.level.woodcutting: true
+  Karmiconomy.bypass.mcmmo.xp.acrobatics:
+    description: bypass mcmmo xp acrobatics
+    default: op
+  Karmiconomy.bypass.mcmmo.xp.archery:
+    description: bypass mcmmo xp archer
+    default: op
+  Karmiconomy.bypass.mcmmo.xp.axes:
+    description: bypass mcmmo xp axes
+    default: op
+  Karmiconomy.bypass.mcmmo.xp.excavation:
+    description: bypass mcmmo xp excavation
+    default: op
+  Karmiconomy.bypass.mcmmo.xp.fishing:
+    description: bypass mcmmo xp fishing
+    default: op
+  Karmiconomy.bypass.mcmmo.xp.herbalism:
+    description: bypass mcmmo xp herbalism
+    default: op
+  Karmiconomy.bypass.mcmmo.xp.mining:
+    description: bypass mcmmo xp mining
+    default: op
+  Karmiconomy.bypass.mcmmo.xp.repair:
+    description: bypass mcmmo xp repair
+    default: op
+  Karmiconomy.bypass.mcmmo.xp.swords:
+    description: bypass mcmmo xp swords
+    default: op
+  Karmiconomy.bypass.mcmmo.xp.taming:
+    description: bypass mcmmo xp taming
+    default: op
+  Karmiconomy.bypass.mcmmo.xp.unarmed:
+    description: bypass mcmmo xp unarmed
+    default: op
+  Karmiconomy.bypass.mcmmo.xp.woodcutting:
+    description: bypass mcmmo xp woodcutting
+    default: op
+  Karmiconomy.bypass.mcmmo.xp.*:
+    description: bypass mcmmo xp events
+    default: op
+    children:
+       Karmiconomy.bypass.mcmmo.xp.acrobatics: true
+       Karmiconomy.bypass.mcmmo.xp.archery: true
+       Karmiconomy.bypass.mcmmo.xp.axes: true
+       Karmiconomy.bypass.mcmmo.xp.excavation: true
+       Karmiconomy.bypass.mcmmo.xp.fishing: true
+       Karmiconomy.bypass.mcmmo.xp.herbalism: true
+       Karmiconomy.bypass.mcmmo.xp.mining: true
+       Karmiconomy.bypass.mcmmo.xp.repair: true
+       Karmiconomy.bypass.mcmmo.xp.swords: true
+       Karmiconomy.bypass.mcmmo.xp.taming: true
+       Karmiconomy.bypass.mcmmo.xp.unarmed: true
+       Karmiconomy.bypass.mcmmo.xp.woodcutting: true
+  Karmiconomy.bypass.mcmmo.*:
+    description: Bypass mcmmo node
+    default: op
+    children:
+       Karmiconomy.bypass.mcmmo.party.join: true
+       Karmiconomy.bypass.mcmmo.party.leave: true
+       Karmiconomy.bypass.mcmmo.party.kick: true
+       Karmiconomy.bypass.mcmmo.party.change: true
+       Karmiconomy.bypass.mcmmo.party.teleport: true
+       Karmiconomy.bypass.mcmmo.level.acrobatics: true
+       Karmiconomy.bypass.mcmmo.level.archery: true
+       Karmiconomy.bypass.mcmmo.level.axes: true
+       Karmiconomy.bypass.mcmmo.level.excavation: true
+       Karmiconomy.bypass.mcmmo.level.fishing: true
+       Karmiconomy.bypass.mcmmo.level.herbalism: true
+       Karmiconomy.bypass.mcmmo.level.mining: true
+       Karmiconomy.bypass.mcmmo.level.repair: true
+       Karmiconomy.bypass.mcmmo.level.swords: true
+       Karmiconomy.bypass.mcmmo.level.taming: true
+       Karmiconomy.bypass.mcmmo.level.unarmed: true
+       Karmiconomy.bypass.mcmmo.level.woodcutting: true
+       Karmiconomy.bypass.mcmmo.xp.acrobatics: true
+       Karmiconomy.bypass.mcmmo.xp.archery: true
+       Karmiconomy.bypass.mcmmo.xp.axes: true
+       Karmiconomy.bypass.mcmmo.xp.excavation: true
+       Karmiconomy.bypass.mcmmo.xp.fishing: true
+       Karmiconomy.bypass.mcmmo.xp.herbalism: true
+       Karmiconomy.bypass.mcmmo.xp.mining: true
+       Karmiconomy.bypass.mcmmo.xp.repair: true
+       Karmiconomy.bypass.mcmmo.xp.swords: true
+       Karmiconomy.bypass.mcmmo.xp.taming: true
+       Karmiconomy.bypass.mcmmo.xp.unarmed: true
+       Karmiconomy.bypass.mcmmo.xp.woodcutting: true
+  Karmiconomy.bypass.heroes.change.class:
+    description: bypass heroes change class
+    default: op
+  Karmiconomy.bypass.heroes.change.exp:
+    description: bypass heroes change exp
+    default: op
+  Karmiconomy.bypass.heroes.change.level:
+    description: bypass heroes change level
+    default: op
+  Karmiconomy.bypass.heroes.change.*:
+    description: bypass heroes change events
+    default: op
+    children:
+       Karmiconomy.bypass.heroes.change.class: true
+       Karmiconomy.bypass.heroes.change.exp: true
+       Karmiconomy.bypass.heroes.change.level: true
+  Karmiconomy.bypass.heroes.combat.enter:
+    description: bypass heroes combat enter
+    default: op
+  Karmiconomy.bypass.heroes.combat.leave:
+    description: bypass heroes combat leave
+    default: op
+  Karmiconomy.bypass.heroes.combat.*:
+    description: bypass heroes combat events
+    default: op
+    children:
+       Karmiconomy.bypass.heroes.combat.enter: true
+       Karmiconomy.bypass.heroes.combat.leave: true
+  Karmiconomy.bypass.heroes.kill.attack.player:
+    description: bypass heroes kill attack player
+    default: op
+  Karmiconomy.bypass.heroes.kill.attack.mob:
+    description: bypass heroes kill attack mob
+    default: op
+  Karmiconomy.bypass.heroes.kill.attack.*:
+    description: bypass heroes kill attack events
+    default: op
+    children:
+       Karmiconomy.bypass.heroes.kill.attack.player: true
+       Karmiconomy.bypass.heroes.kill.attack.mob: true
+  Karmiconomy.bypass.heroes.kill.defend.player:
+    description: bypass heroes kill defend player
+    default: op
+  Karmiconomy.bypass.heroes.kill.defend.mob:
+    description: bypass heroes kill defend mob
+    default: op
+  Karmiconomy.bypass.heroes.kill.defend.*:
+    description: bypass heroes kill defend events
+    default: op
+    children:
+       Karmiconomy.bypass.heroes.kill.defend.player: true
+       Karmiconomy.bypass.heroes.kill.defend.mob: true
+  Karmiconomy.bypass.heroes.kill.*:
+    description: bypass heroes kill events
+    default: op
+    children:
+       Karmiconomy.bypass.heroes.kill.attack.player: true
+       Karmiconomy.bypass.heroes.kill.attack.mob: true
+       Karmiconomy.bypass.heroes.kill.defend.player: true
+       Karmiconomy.bypass.heroes.kill.defend.mob: true
+  Karmiconomy.bypass.heroes.party.join:
+    description: bypass heroes party join
+    default: op
+  Karmiconomy.bypass.heroes.party.leave:
+    description: bypass heroes party leave
+    default: op
+  Karmiconomy.bypass.heroes.party.*:
+    description: bypass heroes party events
+    default: op
+    children:
+       Karmiconomy.bypass.heroes.party.join: true
+       Karmiconomy.bypass.heroes.party.leave: true
+  Karmiconomy.bypass.heroes.regain.health:
+    description: bypass heroes regain health
+    default: op
+  Karmiconomy.bypass.heroes.regain.mana:
+    description: bypass heroes regain mana
+    default: op
+  Karmiconomy.bypass.heroes.regain.*:
+    description: bypass heroes regain events
+    default: op
+    children:
+       Karmiconomy.bypass.heroes.regain.health: true
+       Karmiconomy.bypass.heroes.regain.mana: true
+  Karmiconomy.bypass.heroes.skill.complete:
+    description: bypass heroes skill complete
+    default: op
+  Karmiconomy.bypass.heroes.skill.use:
+    description: bypass heroes skill use
+    default: op
+  Karmiconomy.bypass.heroes.skill.*:
+    description: bypass heroes skill events
+    default: op
+    children:
+       Karmiconomy.bypass.heroes.skill.complete: true
+       Karmiconomy.bypass.heroes.skill.use: true
+  Karmiconomy.bypass.heroes.*:
+    description: Bypass heroes node
+    default: op
+    children:
+       Karmiconomy.bypass.heroes.change.class: true
+       Karmiconomy.bypass.heroes.change.exp: true
+       Karmiconomy.bypass.heroes.change.level: true
+       Karmiconomy.bypass.heroes.combat.enter: true
+       Karmiconomy.bypass.heroes.combat.leave: true
+       Karmiconomy.bypass.heroes.kill.attack.player: true
+       Karmiconomy.bypass.heroes.kill.attack.mob: true
+       Karmiconomy.bypass.heroes.kill.defend.player: true
+       Karmiconomy.bypass.heroes.kill.defend.mob: true
+       Karmiconomy.bypass.heroes.party.join: true
+       Karmiconomy.bypass.heroes.party.leave: true
+       Karmiconomy.bypass.heroes.regain.health: true
+       Karmiconomy.bypass.heroes.regain.mana: true
+       Karmiconomy.bypass.heroes.skill.complete: true
+       Karmiconomy.bypass.heroes.skill.use: true
+  Karmiconomy.bypass.*:
+    description: Bypass super node
+    default: op
+    children:
+       Karmiconomy.bypass.bed.enter: true
+       Karmiconomy.bypass.bed.leave: true
+       Karmiconomy.bypass.block.place: true
+       Karmiconomy.bypass.block.destroy: true
+       Karmiconomy.bypass.bucket.empty.lava: true
+       Karmiconomy.bypass.bucket.empty.water: true
+       Karmiconomy.bypass.bucket.fill.water: true
+       Karmiconomy.bypass.bucket.fill.lava: true
+       Karmiconomy.bypass.item.craft: true
+       Karmiconomy.bypass.item.enchant: true
+       Karmiconomy.bypass.item.drop: true
+       Karmiconomy.bypass.item.pickup: true
+       Karmiconomy.bypass.item.egg: true
+       Karmiconomy.bypass.painting: true
+       Karmiconomy.bypass.player.chat: true
+       Karmiconomy.bypass.player.command: true
+       Karmiconomy.bypass.player.death: true
+       Karmiconomy.bypass.player.gamemode.creative: true
+       Karmiconomy.bypass.player.gamemode.survival: true
+       Karmiconomy.bypass.player.join: true
+       Karmiconomy.bypass.player.kick: true
+       Karmiconomy.bypass.player.quit: true
+       Karmiconomy.bypass.player.respawn: true
+       Karmiconomy.bypass.player.sneak: true
+       Karmiconomy.bypass.player.sprint: true
+       Karmiconomy.bypass.portal.nether: true
+       Karmiconomy.bypass.portal.end: true
+       Karmiconomy.bypass.portal.custom: true
+       Karmiconomy.bypass.portal.enter: true
+       Karmiconomy.bypass.tame.ocelot: true
+       Karmiconomy.bypass.tame.wolf: true
+       Karmiconomy.bypass.world.change: true
+       Karmiconomy.bypass.mcmmo.party.join: true
+       Karmiconomy.bypass.mcmmo.party.leave: true
+       Karmiconomy.bypass.mcmmo.party.kick: true
+       Karmiconomy.bypass.mcmmo.party.change: true
+       Karmiconomy.bypass.mcmmo.party.teleport: true
+       Karmiconomy.bypass.mcmmo.level.acrobatics: true
+       Karmiconomy.bypass.mcmmo.level.archery: true
+       Karmiconomy.bypass.mcmmo.level.axes: true
+       Karmiconomy.bypass.mcmmo.level.excavation: true
+       Karmiconomy.bypass.mcmmo.level.fishing: true
+       Karmiconomy.bypass.mcmmo.level.herbalism: true
+       Karmiconomy.bypass.mcmmo.level.mining: true
+       Karmiconomy.bypass.mcmmo.level.repair: true
+       Karmiconomy.bypass.mcmmo.level.swords: true
+       Karmiconomy.bypass.mcmmo.level.taming: true
+       Karmiconomy.bypass.mcmmo.level.unarmed: true
+       Karmiconomy.bypass.mcmmo.level.woodcutting: true
+       Karmiconomy.bypass.mcmmo.xp.acrobatics: true
+       Karmiconomy.bypass.mcmmo.xp.archery: true
+       Karmiconomy.bypass.mcmmo.xp.axes: true
+       Karmiconomy.bypass.mcmmo.xp.excavation: true
+       Karmiconomy.bypass.mcmmo.xp.fishing: true
+       Karmiconomy.bypass.mcmmo.xp.herbalism: true
+       Karmiconomy.bypass.mcmmo.xp.mining: true
+       Karmiconomy.bypass.mcmmo.xp.repair: true
+       Karmiconomy.bypass.mcmmo.xp.swords: true
+       Karmiconomy.bypass.mcmmo.xp.taming: true
+       Karmiconomy.bypass.mcmmo.xp.unarmed: true
+       Karmiconomy.bypass.mcmmo.xp.woodcutting: true
+       Karmiconomy.bypass.heroes.change.class: true
+       Karmiconomy.bypass.heroes.change.exp: true
+       Karmiconomy.bypass.heroes.change.level: true
+       Karmiconomy.bypass.heroes.combat.enter: true
+       Karmiconomy.bypass.heroes.combat.leave: true
+       Karmiconomy.bypass.heroes.kill.attack.player: true
+       Karmiconomy.bypass.heroes.kill.attack.mob: true
+       Karmiconomy.bypass.heroes.kill.defend.player: true
+       Karmiconomy.bypass.heroes.kill.defend.mob: true
+       Karmiconomy.bypass.heroes.party.join: true
+       Karmiconomy.bypass.heroes.party.leave: true
+       Karmiconomy.bypass.heroes.regain.health: true
+       Karmiconomy.bypass.heroes.regain.mana: true
+       Karmiconomy.bypass.heroes.skill.complete: true
+       Karmiconomy.bypass.heroes.skill.use: true

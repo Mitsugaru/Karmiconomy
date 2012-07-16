@@ -6,7 +6,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.permissions.Permission;
 
 import com.mitsugaru.Karmiconomy.Item;
 import com.mitsugaru.Karmiconomy.Karmiconomy;
@@ -212,6 +214,12 @@ public class CommandsConfig implements KConfig{
          return;
       }
       final String bypass = config.getString(entry + ".bypass", "");
+      try{
+         Bukkit.getServer().getPluginManager()
+               .addPermission(new Permission(bypass));
+      }catch(IllegalArgumentException ia){
+         // IGNORE
+      }
       final double pay = config.getDouble(entry + ".pay", plugin
             .getPluginConfig().getPayValue(Field.COMMAND, null, null));
       final int limit = config.getInt(entry + ".limit", plugin
