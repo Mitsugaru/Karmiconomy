@@ -34,7 +34,7 @@ public class KarmicEcon
 		RegisteredServiceProvider<Economy> economyProvider = plugin.getServer()
 				.getServicesManager()
 				.getRegistration(Economy.class);
-		if (economyProvider != null)
+		if (economyProvider != null && plugin.getPluginConfig().payVault)
 		{
 			eco = economyProvider.getProvider();
 			vault = true;
@@ -42,7 +42,7 @@ public class KarmicEcon
 		// Check playerpoints
 		final Plugin playerPointsPlugin = plugin.getServer().getPluginManager()
 				.getPlugin("PlayerPoints");
-		if (playerPointsPlugin != null)
+		if (playerPointsPlugin != null && plugin.getPluginConfig().payPoints)
 		{
 			playerpoints = true;
 		}

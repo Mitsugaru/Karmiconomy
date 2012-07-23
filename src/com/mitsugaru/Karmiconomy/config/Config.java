@@ -28,7 +28,7 @@ public class Config implements KConfig{
          useMySQL, importSQL, portalCreateNether, portalCreateEnd,
          portalCreateCustom, blockPlaceStatic, blockDestroyStatic,
          craftItemStatic, enchantItemStatic, itemDropStatic, commandStatic,
-         pickupStatic, shootBowDenyForce;
+         pickupStatic, shootBowDenyForce, payVault, payPoints;
    public int listlimit;
    public double shootBowForce;
 
@@ -248,6 +248,8 @@ public class Config implements KConfig{
       defaults.put("world.change.limit", 15);
       defaults.put("world.change.pay", 1.0);
       defaults.put("world.change.localMessage", false);
+      defaults.put("economy.vault", true);
+      defaults.put("economy.playerpoints", true);
       defaults.put("mysql.use", false);
       defaults.put("mysql.host", "localhost");
       defaults.put("mysql.port", 3306);
@@ -419,6 +421,11 @@ public class Config implements KConfig{
        * vehicleExitLimit = config.getInt("vehicle.exit.limit", 100);
        * vehicleExitPay = config.getDouble("vehicle.exit.pay", 0.1);
        */
+      /**
+       * Economy
+       */
+      payVault = config.getBoolean("economy.vault", true);
+      payPoints = config.getBoolean("economy.playerpoints", true);
    }
 
    /**
