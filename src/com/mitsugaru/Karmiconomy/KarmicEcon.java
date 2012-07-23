@@ -34,7 +34,7 @@ public class KarmicEcon
 		RegisteredServiceProvider<Economy> economyProvider = plugin.getServer()
 				.getServicesManager()
 				.getRegistration(Economy.class);
-		if (economyProvider != null && plugin.getPluginConfig().payVault)
+		if (economyProvider != null)
 		{
 			eco = economyProvider.getProvider();
 			vault = true;
@@ -42,7 +42,7 @@ public class KarmicEcon
 		// Check playerpoints
 		final Plugin playerPointsPlugin = plugin.getServer().getPluginManager()
 				.getPlugin("PlayerPoints");
-		if (playerPointsPlugin != null && plugin.getPluginConfig().payPoints)
+		if (playerPointsPlugin != null)
 		{
 			playerpoints = true;
 		}
@@ -57,7 +57,7 @@ public class KarmicEcon
 	public static boolean denyPay(Player player, double pay)
 	{
 		boolean deny = false;
-		if (vault)
+		if (vault && plugin.getPluginConfig().payVault)
 		{
 			// Deny by player balance
 			final double balance = eco.getBalance(player.getName());
@@ -72,7 +72,7 @@ public class KarmicEcon
 				}
 			}
 		}
-		if (playerpoints)
+		if (playerpoints && plugin.getPluginConfig().payPoints)
 		{
 			final int playerPoints = PlayerPointsAPI.look(player.getName());
 			if (pay < 0.0)
@@ -112,7 +112,7 @@ public class KarmicEcon
 		{
 			info.put(LocalString.Flag.EXTRA, ChatColor.WHITE + "- " + command);
 		}
-		if (vault)
+		if (vault && plugin.getPluginConfig().payVault)
 		{
 			EconomyResponse response = null;
 			if (amount > 0.0)
@@ -180,7 +180,7 @@ public class KarmicEcon
 				}
 			}
 		}
-		if (playerpoints)
+		if (playerpoints && plugin.getPluginConfig().payPoints)
 		{
 			int points = (int) amount;
 			if (points == 0)
