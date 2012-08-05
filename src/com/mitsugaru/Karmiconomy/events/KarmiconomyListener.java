@@ -24,7 +24,7 @@ import org.bukkit.event.player.PlayerBedLeaveEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerBucketFillEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
-import org.bukkit.event.player.PlayerChatEvent;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerEggThrowEvent;
@@ -58,7 +58,7 @@ public class KarmiconomyListener implements Listener{
    }
 
    @EventHandler(priority = EventPriority.LOWEST)
-   public void chatValid(final PlayerChatEvent event){
+   public void chatValid(final AsyncPlayerChatEvent event){
       if(event.isCancelled() || !config.isEnabled(Field.CHAT)
             || event.getPlayer() == null){
          return;
@@ -84,7 +84,7 @@ public class KarmiconomyListener implements Listener{
    }
 
    @EventHandler(priority = EventPriority.MONITOR)
-   public void chat(final PlayerChatEvent event){
+   public void chat(final AsyncPlayerChatEvent event){
       if(event.isCancelled() || !config.isEnabled(Field.CHAT)
             || event.getPlayer() == null){
          return;
