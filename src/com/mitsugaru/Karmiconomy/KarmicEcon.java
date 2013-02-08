@@ -5,7 +5,7 @@ import java.util.EnumMap;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
 
-import org.black_ixx.playerPoints.PlayerPointsAPI;
+import org.black_ixx.playerPoints.PlayerPoints;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -20,6 +20,7 @@ public class KarmicEcon
 	private static Karmiconomy plugin;
 	private static Config rootConfig;
 	private static Economy eco;
+	private static PlayerPoints pointsPlugin;
 	private static boolean playerpoints, vault;
 
 	public KarmicEcon(Karmiconomy plugin)
@@ -44,6 +45,7 @@ public class KarmicEcon
 				.getPlugin("PlayerPoints");
 		if (playerPointsPlugin != null)
 		{
+		   pointsPlugin = (PlayerPoints) playerPointsPlugin;
 			playerpoints = true;
 		}
 		// None fond
@@ -74,7 +76,7 @@ public class KarmicEcon
 		}
 		if (playerpoints && plugin.getPluginConfig().payPoints)
 		{
-			final int playerPoints = PlayerPointsAPI.look(player.getName());
+			final int playerPoints = pointsPlugin.getAPI().look(player.getName());
 			if (pay < 0.0)
 			{
 				pay *= -1;
@@ -191,18 +193,18 @@ public class KarmicEcon
 			{
 				if (amount > 0.0)
 				{
-					paid = PlayerPointsAPI.give(player.getName(), points);
+					paid = pointsPlugin.getAPI().give(player.getName(), points);
 				}
 				else if (amount < 0.0)
 				{
 					// Don't override vault
 					if (paid)
 					{
-						PlayerPointsAPI.take(player.getName(), points);
+					   pointsPlugin.getAPI().take(player.getName(), points);
 					}
 					else
 					{
-						paid = PlayerPointsAPI.take(player.getName(), points);
+						paid = pointsPlugin.getAPI().take(player.getName(), points);
 					}
 				}
 				//Send message if enabled
