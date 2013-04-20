@@ -39,6 +39,11 @@ public class KarmicEcon {
       if(playerPointsPlugin != null) {
          pointsPlugin = (PlayerPoints) playerPointsPlugin;
          playerpoints = true;
+         if(rootConfig.debugEconomy) {
+            plugin.getLogger().info("Found PlayerPoints");
+         }
+      } else if(rootConfig.debugEconomy) {
+         plugin.getLogger().severe("PlayerPoints not found!");
       }
       // None fond
       if(!playerpoints && !vault) {
@@ -80,6 +85,9 @@ public class KarmicEcon {
       if(amount == 0.0) {
          // Just record that it happened
          return true;
+      }
+      if(rootConfig.debugEconomy) {
+         plugin.getLogger().info("Attempting to pay " + player.getName() + " for " + field.toString() + " with amount " + amount);
       }
       final EnumMap<LocalString.Flag, String> info = new EnumMap<LocalString.Flag, String>(LocalString.Flag.class);
       info.put(LocalString.Flag.TAG, Karmiconomy.TAG);
@@ -137,6 +145,9 @@ public class KarmicEcon {
       }
       if(playerpoints && plugin.getPluginConfig().payPoints) {
          int points = (int) amount;
+         if(rootConfig.debugEconomy) {
+            plugin.getLogger().info("Attempting to use Player Points with " + points +"  points");
+         }
          if(points == 0) {
             return true;
          } else {
@@ -158,10 +169,10 @@ public class KarmicEcon {
             }
          }
       }
+      if(rootConfig.debugEconomy) {
+         plugin.getLogger().info("Result: " + paid);
+      }
       return paid;
    }
 
-   public static void payMessage(Field field, Player player, double amount, Item item, String command) {
-      // If message is enabled, notify player
-   }
 }
