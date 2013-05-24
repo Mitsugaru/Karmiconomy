@@ -2,7 +2,7 @@
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <artifactId>Karmiconomy</artifactId>
-    <version>0.175-SNAPSHOT</version>
+    <version>0.176</version>
     <name>Karmiconomy</name>
     <description>Action/Event based economy</description>
 
@@ -48,7 +48,7 @@
         <dependency>
             <groupId>org.black_ixx</groupId>
             <artifactId>PlayerPoints</artifactId>
-            <version>1.54</version>
+            <version>1.6</version>
             <scope>system</scope>
             <systemPath>${project.basedir}/lib/PlayerPoints.jar</systemPath>
         </dependency>
