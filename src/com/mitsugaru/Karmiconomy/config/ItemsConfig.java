@@ -14,64 +14,64 @@ import com.mitsugaru.Karmiconomy.Item;
 import com.mitsugaru.Karmiconomy.Karmiconomy;
 import com.mitsugaru.Karmiconomy.database.Field;
 
-public class ItemsConfig implements KConfig{
+public class ItemsConfig implements KConfig {
    private Karmiconomy plugin;
    private final Map<Item, KCItemInfo> items = new HashMap<Item, KCItemInfo>();
 
-   public ItemsConfig(Karmiconomy plugin){
+   public ItemsConfig(Karmiconomy plugin) {
       this.plugin = plugin;
    }
 
    @Override
-   public boolean isEnabled(Field field){
+   public boolean isEnabled(Field field) {
       return true;
    }
 
    @Override
-   public boolean getDenyPay(Field field, Item item, String command){
+   public boolean getDenyPay(Field field, Item item, String command) {
       boolean deny = false;
-      if(item == null){
+      if(item == null) {
          return deny;
       }
-      switch(field){
-      case BLOCK_PLACE:{
-         if(items.containsKey(item)){
-            deny = items.get(item).placeDenyPay;
+      switch(field) {
+      case BLOCK_PLACE: {
+         if(containsItem(item)) {
+            deny = matchItem(item).placeDenyPay;
          }
          break;
       }
-      case BLOCK_DESTROY:{
-         if(items.containsKey(item)){
-            deny = items.get(item).destroyDenyPay;
+      case BLOCK_DESTROY: {
+         if(containsItem(item)) {
+            deny = matchItem(item).destroyDenyPay;
          }
          break;
       }
-      case ITEM_CRAFT:{
-         if(items.containsKey(item)){
-            deny = items.get(item).craftDenyPay;
+      case ITEM_CRAFT: {
+         if(containsItem(item)) {
+            deny = matchItem(item).craftDenyPay;
          }
          break;
       }
-      case ITEM_DROP:{
-         if(items.containsKey(item)){
-            deny = items.get(item).dropDenyPay;
+      case ITEM_DROP: {
+         if(containsItem(item)) {
+            deny = matchItem(item).dropDenyPay;
          }
          break;
       }
-      case ITEM_ENCHANT:{
-         if(items.containsKey(item)){
-            deny = items.get(item).enchantDenyPay;
+      case ITEM_ENCHANT: {
+         if(containsItem(item)) {
+            deny = matchItem(item).enchantDenyPay;
          }
          break;
       }
-      case ITEM_PICKUP:{
-         if(items.containsKey(item)){
-            deny = items.get(item).pickupDenyPay;
+      case ITEM_PICKUP: {
+         if(containsItem(item)) {
+            deny = matchItem(item).pickupDenyPay;
          }
          break;
       }
-      default:{
-         if(plugin.getPluginConfig().debugUnhandled){
+      default: {
+         if(plugin.getPluginConfig().debugUnhandled) {
             plugin.getLogger().warning(
                   "Unhandled pay for field " + field.name());
          }
@@ -82,50 +82,50 @@ public class ItemsConfig implements KConfig{
    }
 
    @Override
-   public boolean getDenyLimit(Field field, Item item, String command){
+   public boolean getDenyLimit(Field field, Item item, String command) {
       boolean deny = false;
-      if(item == null){
+      if(item == null) {
          return deny;
       }
-      switch(field){
-      case BLOCK_PLACE:{
-         if(items.containsKey(item)){
-            deny = items.get(item).placeDenyLimit;
+      switch(field) {
+      case BLOCK_PLACE: {
+         if(containsItem(item)) {
+            deny = matchItem(item).placeDenyLimit;
          }
          break;
       }
-      case BLOCK_DESTROY:{
-         if(items.containsKey(item)){
-            deny = items.get(item).destroyDenyLimit;
+      case BLOCK_DESTROY: {
+         if(containsItem(item)) {
+            deny = matchItem(item).destroyDenyLimit;
          }
          break;
       }
-      case ITEM_CRAFT:{
-         if(items.containsKey(item)){
-            deny = items.get(item).craftDenyLimit;
+      case ITEM_CRAFT: {
+         if(containsItem(item)) {
+            deny = matchItem(item).craftDenyLimit;
          }
          break;
       }
-      case ITEM_DROP:{
-         if(items.containsKey(item)){
-            deny = items.get(item).dropDenyLimit;
+      case ITEM_DROP: {
+         if(containsItem(item)) {
+            deny = matchItem(item).dropDenyLimit;
          }
          break;
       }
-      case ITEM_ENCHANT:{
-         if(items.containsKey(item)){
-            deny = items.get(item).enchantDenyLimit;
+      case ITEM_ENCHANT: {
+         if(containsItem(item)) {
+            deny = matchItem(item).enchantDenyLimit;
          }
          break;
       }
-      case ITEM_PICKUP:{
-         if(items.containsKey(item)){
-            deny = items.get(item).pickupDenyLimit;
+      case ITEM_PICKUP: {
+         if(containsItem(item)) {
+            deny = matchItem(item).pickupDenyLimit;
          }
          break;
       }
-      default:{
-         if(plugin.getPluginConfig().debugUnhandled){
+      default: {
+         if(plugin.getPluginConfig().debugUnhandled) {
             plugin.getLogger().warning(
                   "Unhandled pay for field " + field.name());
          }
@@ -136,50 +136,50 @@ public class ItemsConfig implements KConfig{
    }
 
    @Override
-   public int getLimitValue(Field field, Item item, String command){
+   public int getLimitValue(Field field, Item item, String command) {
       int limit = 0;
-      if(item == null){
+      if(item == null) {
          return limit;
       }
-      switch(field){
-      case BLOCK_PLACE:{
-         if(items.containsKey(item)){
-            limit = items.get(item).placeLimit;
+      switch(field) {
+      case BLOCK_PLACE: {
+         if(containsItem(item)) {
+            limit = matchItem(item).placeLimit;
          }
          break;
       }
-      case BLOCK_DESTROY:{
-         if(items.containsKey(item)){
-            limit = items.get(item).destroyLimit;
+      case BLOCK_DESTROY: {
+         if(containsItem(item)) {
+            limit = matchItem(item).destroyLimit;
          }
          break;
       }
-      case ITEM_CRAFT:{
-         if(items.containsKey(item)){
-            limit = items.get(item).craftLimit;
+      case ITEM_CRAFT: {
+         if(containsItem(item)) {
+            limit = matchItem(item).craftLimit;
          }
          break;
       }
-      case ITEM_DROP:{
-         if(items.containsKey(item)){
-            limit = items.get(item).dropLimit;
+      case ITEM_DROP: {
+         if(containsItem(item)) {
+            limit = matchItem(item).dropLimit;
          }
          break;
       }
-      case ITEM_ENCHANT:{
-         if(items.containsKey(item)){
-            limit = items.get(item).enchantLimit;
+      case ITEM_ENCHANT: {
+         if(containsItem(item)) {
+            limit = matchItem(item).enchantLimit;
          }
          break;
       }
-      case ITEM_PICKUP:{
-         if(items.containsKey(item)){
-            limit = items.get(item).pickupLimit;
+      case ITEM_PICKUP: {
+         if(containsItem(item)) {
+            limit = matchItem(item).pickupLimit;
          }
          break;
       }
-      default:{
-         if(plugin.getPluginConfig().debugUnhandled){
+      default: {
+         if(plugin.getPluginConfig().debugUnhandled) {
             plugin.getLogger().warning(
                   "Unhandled pay for field " + field.name());
          }
@@ -190,51 +190,51 @@ public class ItemsConfig implements KConfig{
    }
 
    @Override
-   public double getPayValue(Field field, Item item, String command){
+   public double getPayValue(Field field, Item item, String command) {
       // TODO Auto-generated method stub
       double pay = 0.0;
-      if(item == null){
+      if(item == null) {
          return pay;
       }
-      switch(field){
-      case BLOCK_PLACE:{
-         if(items.containsKey(item)){
-            pay = items.get(item).placePay;
+      switch(field) {
+      case BLOCK_PLACE: {
+         if(containsItem(item)) {
+            pay = matchItem(item).placePay;
          }
          break;
       }
-      case BLOCK_DESTROY:{
-         if(items.containsKey(item)){
-            pay = items.get(item).destroyPay;
+      case BLOCK_DESTROY: {
+         if(containsItem(item)) {
+            pay = matchItem(item).destroyPay;
          }
          break;
       }
-      case ITEM_CRAFT:{
-         if(items.containsKey(item)){
-            pay = items.get(item).craftPay;
+      case ITEM_CRAFT: {
+         if(containsItem(item)) {
+            pay = matchItem(item).craftPay;
          }
          break;
       }
-      case ITEM_DROP:{
-         if(items.containsKey(item)){
-            pay = items.get(item).dropPay;
+      case ITEM_DROP: {
+         if(containsItem(item)) {
+            pay = matchItem(item).dropPay;
          }
          break;
       }
-      case ITEM_ENCHANT:{
-         if(items.containsKey(item)){
-            pay = items.get(item).enchantPay;
+      case ITEM_ENCHANT: {
+         if(containsItem(item)) {
+            pay = matchItem(item).enchantPay;
          }
          break;
       }
-      case ITEM_PICKUP:{
-         if(items.containsKey(item)){
-            pay = items.get(item).pickupPay;
+      case ITEM_PICKUP: {
+         if(containsItem(item)) {
+            pay = matchItem(item).pickupPay;
          }
          break;
       }
-      default:{
-         if(plugin.getPluginConfig().debugUnhandled){
+      default: {
+         if(plugin.getPluginConfig().debugUnhandled) {
             plugin.getLogger().warning(
                   "Unhandled pay for field " + field.name());
          }
@@ -244,59 +244,59 @@ public class ItemsConfig implements KConfig{
       return pay;
    }
 
-   public String getBypass(Item item){
-      return items.get(item).bypass;
+   public String getBypass(Item item) {
+      return matchItem(item).bypass;
    }
 
    @Override
-   public boolean sendBroadcast(Field field){
+   public boolean sendBroadcast(Field field) {
       // TODO Auto-generated method stub
       return false;
    }
 
    @Override
-   public boolean checkWorld(Field field, String worldName){
+   public boolean checkWorld(Field field, String worldName) {
       return checkWorld(field, null, null, worldName);
    }
 
    @Override
    public boolean checkWorld(Field field, Item item, String command,
-         String worldName){
+         String worldName) {
       boolean valid = false, noList = false;
-      if(item == null){
+      if(item == null) {
          return valid;
       }
-      if(items.containsKey(item)){
+      if(containsItem(item)) {
          final YamlConfiguration valueFile = this.itemValuesFile();
-         final List<String> list = valueFile.getStringList(items.get(item).path
+         final List<String> list = valueFile.getStringList(matchItem(item).path
                + ".worlds");
-         if(list == null){
+         if(list == null) {
             // Check base
             noList = true;
-         }else if(list.isEmpty()){
+         } else if(list.isEmpty()) {
             valid = true;
-         }else{
-            for(String world : list){
-               if(world.equalsIgnoreCase(worldName)){
+         } else {
+            for(String world : list) {
+               if(world.equalsIgnoreCase(worldName)) {
                   valid = true;
                   break;
                }
             }
          }
-      }else{
+      } else {
          noList = true;
       }
-      if(noList){
+      if(noList) {
          final List<String> list = plugin.getConfig().getStringList(
                field.getConfigPath() + ".worlds");
-         if(list == null){
+         if(list == null) {
             // No worlds specified, so allow all
             valid = true;
-         }else if(list.isEmpty()){
+         } else if(list.isEmpty()) {
             valid = true;
-         }else{
-            for(String world : list){
-               if(world.equalsIgnoreCase(worldName)){
+         } else {
+            for(String world : list) {
+               if(world.equalsIgnoreCase(worldName)) {
                   valid = true;
                   break;
                }
@@ -306,76 +306,101 @@ public class ItemsConfig implements KConfig{
       return valid;
    }
 
-   public boolean containsItem(Item item){
-      if(item == null){
+   public boolean containsItem(Item item) {
+      if(item == null) {
          return false;
       }
-      return items.containsKey(item);
+      for(Item target : items.keySet()) {
+         if(target.areSame(item)) {
+            return true;
+         }
+      }
+      return false;
    }
 
-   public Map<Item, KCItemInfo> getItemValueMap(){
+   public KCItemInfo matchItem(Item item) {
+      Item last = null;
+      KCItemInfo info = null;
+
+      for(Map.Entry<Item, KCItemInfo> entry : items.entrySet()) {
+         Item target = entry.getKey();
+         if(target.areSame(item)) {
+            if(info == null) {
+               info = entry.getValue();
+               last = target;
+            } else if(last.getData() == 0) {
+               info = entry.getValue();
+               last = target;
+            }
+         }
+      }
+
+      return info;
+   }
+
+   public Map<Item, KCItemInfo> getItemValueMap() {
       return items;
    }
 
    /**
     * Loads the per-item karma values into a hashmap for later usage
     */
-   void loadItemValueMap(){
+   void loadItemValueMap() {
       // Flush old config
       items.clear();
       // Load karma file
       final YamlConfiguration valueFile = this.itemValuesFile();
       // Load custom karma file into map
-      for(final String entry : valueFile.getKeys(false)){
-         try{
+      for(final String entry : valueFile.getKeys(false)) {
+         try {
             // Attempt to parse non data value nodes
             int key = Integer.parseInt(entry);
-            if(key <= 0){
+            if(key <= 0) {
                plugin.getLogger().warning(
                      Karmiconomy.TAG + " Zero or negative item id for entry: "
                            + entry);
-            }else{
+            } else {
                // If it has child nodes, parse those as well
-               if(valueFile.isConfigurationSection(entry)){
+               if(valueFile.isConfigurationSection(entry)) {
                   items.put(new Item(key, Byte.parseByte("" + 0), (short) 0),
                         parseInfo(valueFile, entry));
-               }else{
+               } else {
                   plugin.getLogger().warning("No section for " + entry);
                }
             }
-         }catch(final NumberFormatException ex){
+         } catch(final NumberFormatException ex) {
             // Potential data value entry
-            if(entry.contains("&")){
-               try{
+            if(entry.contains("&")) {
+               try {
                   final String[] split = entry.split("&");
                   final int item = Integer.parseInt(split[0]);
                   final int data = Integer.parseInt(split[1]);
-                  if(item <= 0){
+                  if(item <= 0) {
                      plugin.getLogger().warning(
                            Karmiconomy.TAG
                                  + " Zero or negative item id for entry: "
                                  + entry);
-                  }else{
-                     if(valueFile.isConfigurationSection(entry)){
-                        if(item != 373){
+                  } else {
+                     if(valueFile.isConfigurationSection(entry)) {
+                        if(item != 373) {
                            items.put(new Item(item, Byte.parseByte("" + data),
                                  (short) data), parseInfo(valueFile, entry));
-                        }else{
+                        } else {
                            items.put(new Item(item, Byte.parseByte("" + 0),
                                  (short) data), parseInfo(valueFile, entry));
                         }
-                     }else{
+                     } else {
                         plugin.getLogger().warning("No section for " + entry);
                      }
                   }
-               }catch(ArrayIndexOutOfBoundsException a){
+               } catch(ArrayIndexOutOfBoundsException a) {
                   plugin.getLogger().warning(
                         "Wrong format for " + entry
                               + ". Must follow '<itemid>&<datavalue>:' entry.");
-               }catch(NumberFormatException exa){
+               } catch(NumberFormatException exa) {
                   plugin.getLogger().warning("Non-integer number for " + entry);
                }
-            }else{
+            } else {
                plugin.getLogger().warning("Invalid entry for " + entry);
             }
          }
@@ -383,12 +408,12 @@ public class ItemsConfig implements KConfig{
       plugin.getLogger().info("Loaded custom values");
    }
 
-   private KCItemInfo parseInfo(YamlConfiguration config, String path){
+   private KCItemInfo parseInfo(YamlConfiguration config, String path) {
       final String bypass = config.getString(path + ".bypass", "");
-      try{
+      try {
          Bukkit.getServer().getPluginManager()
                .addPermission(new Permission(bypass));
-      }catch(IllegalArgumentException ia){
+      } catch(IllegalArgumentException ia) {
          // IGNORE
       }
       final double iCraftPay = config.getDouble(path + ".craftPay", plugin
@@ -483,12 +508,12 @@ public class ItemsConfig implements KConfig{
     * 
     * @return YamlConfiguration file
     */
-   private YamlConfiguration itemValuesFile(){
+   private YamlConfiguration itemValuesFile() {
       final File file = new File(plugin.getDataFolder().getAbsolutePath()
             + "/values.yml");
       final YamlConfiguration valueFile = YamlConfiguration
             .loadConfiguration(file);
-      if(valueFile.getKeys(false).isEmpty()){
+      if(valueFile.getKeys(false).isEmpty()) {
          // Defaults
          valueFile.set("14.dropPay", 0.0);
          valueFile.set("14.dropDenyOnPay", false);
@@ -515,10 +540,10 @@ public class ItemsConfig implements KConfig{
          valueFile.set("290.enchantDenyOnLimit", false);
          valueFile.set("290.enchantLimit", 0);
          // Insert defaults into file if they're not present
-         try{
+         try {
             // Save the file
             valueFile.save(file);
-         }catch(IOException e1){
+         } catch(IOException e1) {
             plugin.getLogger().warning(
                   "File I/O Exception on saving karma list");
             e1.printStackTrace();
@@ -528,7 +553,7 @@ public class ItemsConfig implements KConfig{
    }
 
    // Private class to hold item specific information
-   public class KCItemInfo{
+   public class KCItemInfo {
       public String path, bypass;
       public double craftPay, enchantPay, placePay, destroyPay, dropPay,
             pickupPay;
@@ -547,7 +572,7 @@ public class ItemsConfig implements KConfig{
             double destroyPay, boolean destroyDenyPay,
             boolean destroyDenyLimit, int dropLimit, double dropPay,
             boolean dropDenyPay, boolean dropDenyLimit, int pickupLimit,
-            double pickupPay, boolean pickupDenyPay, boolean pickupDenyLimit){
+            double pickupPay, boolean pickupDenyPay, boolean pickupDenyLimit) {
          this.path = path;
          this.bypass = bypass;
          this.craftPay = craftPay;
