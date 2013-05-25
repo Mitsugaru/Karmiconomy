@@ -81,6 +81,16 @@ public class Item extends MaterialData {
                if(this.getId() == 9) {
                   // Ignore data for leaves
                   return true;
+               } else if(this.getId() == 17) {
+                  // Handle logs with data values
+                  int targetData = (int) ((Item) obj).getData();
+                  if(targetData == this.getData()) {
+                     return true;
+                  } else if((targetData - this.getData()) % 4 == 0) {
+                     return true;
+                  } else if(this.getData() == 0) {
+                     return true;
+                  }
                }
                if(this.getData() == ((Item) obj).getData()) {
                   return true;
